@@ -3,9 +3,10 @@
 https://github.com/Aerthas/Aerthas-Unity-Shaders
 
 
-## Arc System Works Shader - Completely remade from scratch!
-![OldVsNew](https://imgur.com/mE8WeCI.png)<br/><br/>
-[See it in motion](https://i.imgur.com/SKmJzZ2.mp4)<br/><br/>
+## [Arc System Works Shader - Completely remade from scratch!](https://github.com/Aerthas/Aerthas-Unity-Shaders/blob/master/Arc%20System%20Works%20Shader/Arc%20System%20Works%20-%20Merged%20Light.shader)
+![OldVsNew](https://i.imgur.com/NUNoAfp.png)<br/><br/>
+![OldVsNew](https://i.imgur.com/Q1A18FX.png)<br/><br/>
+[See it in motion!](https://i.imgur.com/3gExH4Y.mp4)<br/><br/>
 Emulates the look of the FABULOUS Arc System Works games.<br/><br/>
 *Shader will utilize the world lighting if there is a world light, or will switch to its own internal shading automatically if there isn't one.*
 
