@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Reflection;
+using AmplifyShaderEditor;
  
 public class ASWShaderGUI : ShaderGUI
 {
@@ -24,6 +25,7 @@ public class ASWShaderGUI : ShaderGUI
     }
 
     MaterialProperty _ForceFakeLight = null;
+    MaterialProperty _FakeLightFallbackDirToggle = null;
     MaterialProperty _ENABLETHISFORGUILTYGEAR = null;
     MaterialProperty _Base = null;
     MaterialProperty _SSS = null;
@@ -63,19 +65,17 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _GranblueFresnelScale = null;
     MaterialProperty _GranblueFresnelPower = null;
 
-
-    bool showOutlineSettings = false;
-    bool showFakeLightSettings = false;
-    bool showSpecularSettings = false;
-    bool showCredits = false;
+    static bool showGlobalSettings = false;
+    static bool showOutlineSettings = false;
+    static bool showMainTextures = true;
+    static bool showLightSettings = true;
+    static bool showFakeLightSettings = false;
+    static bool showSpecularSettings = false;
+    static bool showHighlightFresnelSettings = false;
+    static bool showCredits = false;
 
     public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] props)
     {
-    	//foreach (MaterialProperty property in props)
-        //	materialEditor.ShaderProperty(property, property.displayName);
-		// Renders the default GUI
-        //base.OnGUI (materialEditor, props);
-
         Material material = materialEditor.target as Material;
 		Shader shader = material.shader;
 
@@ -86,105 +86,129 @@ public class ASWShaderGUI : ShaderGUI
                 property.SetValue(this, FindProperty(property.Name, props));
             }
         }
+
         //Findprops(props);              // Find props
         EditorGUIUtility.labelWidth = 300f;   // Use default labelWidth
         EditorGUIUtility.fieldWidth = 50f;   // Use default labelWidth
 
 		EditorGUI.BeginChangeCheck();
-				{
+		{
+			ASWstyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light v" + "<color=#ff0000ff> 6.4.0</color>" + "<color=#000000ff>  }</color>");
+
 	        // Global props
-	        GUILayout.Label("Global Settings", EditorStyles.boldLabel);
-	        materialEditor.ShaderProperty(_ForceFakeLight, _ForceFakeLight.displayName);
-	        materialEditor.ShaderProperty(_ENABLETHISFORGUILTYGEAR, _ENABLETHISFORGUILTYGEAR.displayName);
+	        showGlobalSettings = ASWstyles.ShurikenFoldout("Global Settings", showGlobalSettings);
+	        if (showGlobalSettings) {
+		        //materialEditor.ShaderProperty(_ForceFakeLight, _ForceFakeLight.displayName);
+		        materialEditor.ShaderProperty(_ENABLETHISFORGUILTYGEAR, "Enable this if your vertex colors are wrong");
+		        materialEditor.ShaderProperty(_ForceFakeLight, new GUIContent(_ForceFakeLight.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
+		        materialEditor.ShaderProperty(_FakeLightFallbackDirToggle, new GUIContent(_FakeLightFallbackDirToggle.displayName, "Toggle between different light directions if the scene/world has no light source."));
+			
+		        // Outline props
+		        showOutlineSettings = ASWstyles.ShurikenFoldout("Outline Settings", showOutlineSettings);
+				//showOutlineSettings = GUILayout.Toggle(showOutlineSettings, "Looking for outline settings? They're removed.");
+				if( showOutlineSettings == true ) {
+					GUILayout.Label("I have removed the outline settings as there is no way to properly do the outlines as they should look without frayed points, and broken tips of hair.\nTo reduce the render load caused by still having an inverted hull mesh even if it is set to 0, I've just decided to remove it.\nClick the button below for a guide on how to properly set up your outlines.",EditorStyles.helpBox);
+			        if (GUILayout.Button("How to properly set up your outlines") == true)
+			        {
+			        	Application.OpenURL("https://www.youtube.com/watch?v=SYS3XlRmDaA");
+			            Debug.Log("Opened external url: https://www.youtube.com/watch?v=SYS3XlRmDaA");
+			        }
+			    }
+	        }
 
 	        // Primary props
-	        GUILayout.Label("Main Textures", EditorStyles.boldLabel);
-
-	        materialEditor.TexturePropertySingleLine(Styles.baseText, _Base);
-	        materialEditor.TexturePropertySingleLine(Styles.sssText, _SSS);
-	        materialEditor.TexturePropertySingleLine(Styles.ilmText, _ILM);
-	        materialEditor.TexturePropertySingleLine(Styles.detailText, _Detail);
-	        materialEditor.ShaderProperty(_EnableMetalMatcap, _EnableMetalMatcap.displayName);
-	        if ( _EnableMetalMatcap.floatValue == 1)
-	        {
-	        	materialEditor.TexturePropertySingleLine(Styles._MetalMatcapText, _MetalMatcap, _MetalAIntensity, _MetalBIntensity);
+	        showMainTextures = ASWstyles.ShurikenFoldout("Main Textures", showMainTextures);
+	        if (showMainTextures){
+		        materialEditor.TexturePropertySingleLine(Styles.baseText, _Base);
+		        materialEditor.TexturePropertySingleLine(Styles.sssText, _SSS);
+		        materialEditor.TexturePropertySingleLine(Styles.ilmText, _ILM);
+		        materialEditor.TexturePropertySingleLine(Styles.detailText, _Detail);
+		        materialEditor.ShaderProperty(_EnableMetalMatcap, _EnableMetalMatcap.displayName);
+		        if ( _EnableMetalMatcap.floatValue == 1)
+		        {
+		        	materialEditor.TexturePropertySingleLine(Styles._MetalMatcapText, _MetalMatcap, _MetalAIntensity, _MetalBIntensity);
+		        }
 	        }
 	        
-	        // Outline props
-	        GUILayout.Label("Outline Settings", EditorStyles.boldLabel);
-
-			showOutlineSettings = GUILayout.Toggle(showOutlineSettings, "Looking for outline settings? They're removed.");
-			if( showOutlineSettings == true ) {
-				GUILayout.Label("I have removed the outline settings as there is no way to properly do the outlines as they should look without frayed points, and broken tips of hair.\nTo reduce the render load caused by still having an inverted hull mesh even if it is set to 0, I've just decided to remove it.\nClick the button below for a guide on how to properly set up your outlines.",EditorStyles.helpBox);
-		        if (GUILayout.Button("How to properly set up your outlines") == true)
-		        {
-		        	Application.OpenURL("https://www.youtube.com/watch?v=SYS3XlRmDaA");
-		            Debug.Log("Opened external url: https://www.youtube.com/watch?v=SYS3XlRmDaA");
-		        }
-		    }
+	        
 
 		    //Light Layer Proprties
-	        GUILayout.Label("Light Settings", EditorStyles.boldLabel);
-			showFakeLightSettings = GUILayout.Toggle(showFakeLightSettings, "Show Fake Light Settings");
-			if( showFakeLightSettings == true ){
-				materialEditor.ShaderProperty(_FakeLightIntensity, _FakeLightIntensity.displayName);
-				materialEditor.ShaderProperty(_FakeLightColor, _FakeLightColor.displayName);
-				materialEditor.ShaderProperty(_FakeLightDirX, _FakeLightDirX.displayName);
-				materialEditor.ShaderProperty(_FakeLightDirY, _FakeLightDirY.displayName);
+	        showLightSettings = ASWstyles.ShurikenFoldout("Light Settings", showLightSettings);
+	        if(showLightSettings){
+				materialEditor.ShaderProperty(_ShadowBrightness, _ShadowBrightness.displayName);
+	        	ASWstyles.PartingLine();
+	        	showFakeLightSettings = ASWstyles.ShurikenFoldout("Fake Light Settings", showFakeLightSettings);
+				if( showFakeLightSettings == true ){
+					materialEditor.ShaderProperty(_FakeLightIntensity, _FakeLightIntensity.displayName);
+					materialEditor.ShaderProperty(_FakeLightColor, _FakeLightColor.displayName);
+					materialEditor.ShaderProperty(_FakeLightDirX, _FakeLightDirX.displayName);
+					materialEditor.ShaderProperty(_FakeLightDirY, _FakeLightDirY.displayName);
+				}
+	        	ASWstyles.PartingLine();
+				
+				materialEditor.ShaderProperty(_ShadowLayer1Push, _ShadowLayer1Push.displayName);
+				materialEditor.ShaderProperty(_ShadowLayer1Gate, _ShadowLayer1Gate.displayName);
+				materialEditor.ShaderProperty(_ShadowLayer1Fuzziness, _ShadowLayer1Fuzziness.displayName);
+				materialEditor.ShaderProperty(_ShadowLayer1Intensity, _ShadowLayer1Intensity.displayName);
+				materialEditor.ShaderProperty(_ILMLayer1, _ILMLayer1.displayName);
+				materialEditor.ShaderProperty(_VertexLayer1, _VertexLayer1.displayName);
+
+				ASWstyles.PartingLine();
+
+				materialEditor.ShaderProperty(_ShadowLayer2Push, _ShadowLayer2Push.displayName);
+				materialEditor.ShaderProperty(_ShadowLayer2Gate, _ShadowLayer2Gate.displayName);
+				materialEditor.ShaderProperty(_ShadowLayer2Fuzziness, _ShadowLayer2Fuzziness.displayName);
+				materialEditor.ShaderProperty(_ShadowLayer2Intensity, _ShadowLayer2Intensity.displayName);
+				materialEditor.ShaderProperty(_ILMLayer2, _ILMLayer2.displayName);
+				materialEditor.ShaderProperty(_VertexLayer2, _VertexLayer2.displayName);
 			}
-			materialEditor.ShaderProperty(_ShadowBrightness, _ShadowBrightness.displayName);
-			
-			materialEditor.ShaderProperty(_ShadowLayer1Push, _ShadowLayer1Push.displayName);
-			materialEditor.ShaderProperty(_ShadowLayer1Gate, _ShadowLayer1Gate.displayName);
-			materialEditor.ShaderProperty(_ShadowLayer1Fuzziness, _ShadowLayer1Fuzziness.displayName);
-			materialEditor.ShaderProperty(_ShadowLayer1Intensity, _ShadowLayer1Intensity.displayName);
-
-			materialEditor.ShaderProperty(_ShadowLayer2Push, _ShadowLayer2Push.displayName);
-			materialEditor.ShaderProperty(_ShadowLayer2Gate, _ShadowLayer2Gate.displayName);
-			materialEditor.ShaderProperty(_ShadowLayer2Fuzziness, _ShadowLayer2Fuzziness.displayName);
-			materialEditor.ShaderProperty(_ShadowLayer2Intensity, _ShadowLayer2Intensity.displayName);
-
-			materialEditor.ShaderProperty(_ILMLayer1, _ILMLayer1.displayName);
-			materialEditor.ShaderProperty(_ILMLayer2, _ILMLayer2.displayName);
-
-			materialEditor.ShaderProperty(_VertexLayer1, _VertexLayer1.displayName);
-			materialEditor.ShaderProperty(_VertexLayer2, _VertexLayer2.displayName);
 
 
 			//Specular Settings
-			GUILayout.Label("Specular Settings", EditorStyles.boldLabel);
-			showSpecularSettings = GUILayout.Toggle(showSpecularSettings, "Show Specular Settings");
+			showSpecularSettings = ASWstyles.ShurikenFoldout("Specular Settings", showSpecularSettings);
 			if( showSpecularSettings == true ){
 				materialEditor.ShaderProperty(_SpecularIntensity, _SpecularIntensity.displayName);
 				materialEditor.ShaderProperty(_SpecularSize, _SpecularSize.displayName);
 				materialEditor.ShaderProperty(_SpecularFuzzy, _SpecularFuzzy.displayName);
 			}
 
-			GUILayout.Label("Highlight Fresnel Settings", EditorStyles.boldLabel);
-	        materialEditor.ShaderProperty(_EnableFresnelHighlight, _EnableFresnelHighlight.displayName);
-			if ( _EnableFresnelHighlight.floatValue == 1){
-				materialEditor.ShaderProperty(_DarkHighlightMult, _DarkHighlightMult.displayName);
-				materialEditor.ShaderProperty(_HighlightPower, _HighlightPower.displayName);
-				materialEditor.ShaderProperty(_HighlightFreselFuzzy, _HighlightFreselFuzzy.displayName);
-				materialEditor.ShaderProperty(_HighlightIntensity, _HighlightIntensity.displayName);
-				materialEditor.ShaderProperty(_HighlightScale, _HighlightScale.displayName);
-			}
-			materialEditor.ShaderProperty(_EnableGranblueBlackFresnel, _EnableGranblueBlackFresnel.displayName);
-			if ( _EnableGranblueBlackFresnel.floatValue == 1){
-				materialEditor.ShaderProperty(_GranblueFresnelScale, _GranblueFresnelScale.displayName);
-				materialEditor.ShaderProperty(_GranblueFresnelPower, _GranblueFresnelPower.displayName);
+			showHighlightFresnelSettings = ASWstyles.ShurikenFoldout("Highlight Fresnel Settings", showHighlightFresnelSettings);
+			if(showHighlightFresnelSettings){
+		        materialEditor.ShaderProperty(_EnableFresnelHighlight, _EnableFresnelHighlight.displayName);
+				if ( _EnableFresnelHighlight.floatValue == 1){
+					materialEditor.ShaderProperty(_DarkHighlightMult, _DarkHighlightMult.displayName);
+					materialEditor.ShaderProperty(_HighlightPower, _HighlightPower.displayName);
+					materialEditor.ShaderProperty(_HighlightFreselFuzzy, _HighlightFreselFuzzy.displayName);
+					materialEditor.ShaderProperty(_HighlightIntensity, _HighlightIntensity.displayName);
+					materialEditor.ShaderProperty(_HighlightScale, _HighlightScale.displayName);
+				}
+				ASWstyles.PartingLine();
+				materialEditor.ShaderProperty(_EnableGranblueBlackFresnel, _EnableGranblueBlackFresnel.displayName);
+				if ( _EnableGranblueBlackFresnel.floatValue == 1){
+					materialEditor.ShaderProperty(_GranblueFresnelScale, _GranblueFresnelScale.displayName);
+					materialEditor.ShaderProperty(_GranblueFresnelPower, _GranblueFresnelPower.displayName);
+				}
 			}
 
-			GUILayout.Label("Credits", EditorStyles.boldLabel);
-			showCredits = GUILayout.Toggle(showCredits,"Show credits");
+			
+			showCredits = ASWstyles.ShurikenFoldout("Credits", showCredits);
 			if ( showCredits == true){
-				if (GUILayout.Button("My Discord about about this shader") == true)
-		        {
-		        	Application.OpenURL("https://discord.gg/EkCSZg8");
-		            Debug.Log("Opened external url: https://discord.gg/EkCSZg8");
-		        }
-				GUILayout.Label("»Thanks to Shamwow for the absolute first guide on the absolute first initial version of the shader.\n\n»Thanks to VCD/Velon for his constant riding of me to keep working on my shader\n\n»Thanks to Nars290 for his constant positivity and assistance with testing and debugging\n\n»Thanks to EdwardsVSGaming for taking an old version of my shader, editing it a small ammount, claiming the entire thing as his own without credit to me, and using deceptive comparisons between that shader and mine forcing me to get off my lazy streak and actually work on my shader again. *clap* *clap* Good job.", EditorStyles.textArea);
+				GUILayout.Label("»Thanks to Shamwow for the absolute first guide on the absolute first initial version of the shader.\n\n»Thanks to VCD/Velon for his constant riding of me to keep working on my shader\n\n»Thanks to Nars290 for his constant positivity and assistance with testing and debugging\n\n»Thanks to EdwardsVSGaming for taking an old version of my shader, editing it a small ammount, claiming the entire thing as his own without credit to me, and using deceptive comparisons between that shader and mine forcing me to get off my lazy streak and actually work on my shader again. *clap* *clap* Good job.\n\n»Dolce Swenos for being a grammar nazi. \n\n»Thanks to Morioh for showing me how to use custom editor styles and letting me use his Shuriken functions. Really helped make the shader UI look a lot better!", EditorStyles.textArea);
 			}
+			ASWstyles.DrawButtons();
+			GUILayout.BeginHorizontal();
+        	GUILayout.FlexibleSpace();
+			if (GUILayout.Button("Open in Shader Editor (Requires Amplify Shader Editor)", GUILayout.Width(350), GUILayout.Height(30)))
+	        {
+	            #if UNITY_2018_3_OR_NEWER
+	                ASEPackageManagerHelper.SetupLateMaterial( material );
+
+	            #else
+	                AmplifyShaderEditorWindow.LoadMaterialToASE( material );
+	            #endif
+	        }
+	        GUILayout.FlexibleSpace();
+			GUILayout.EndHorizontal();
 		}
     }
 }
