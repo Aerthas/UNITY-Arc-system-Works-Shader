@@ -33,17 +33,16 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _MetalMatcap = null;
     MaterialProperty _MetalAIntensity = null;
     MaterialProperty _MetalBIntensity = null;
-    MaterialProperty _OutlineColor = null;
-    MaterialProperty _OutlineThickness = null;
-    MaterialProperty _OutlineDiffuseMultEnable = null;
     MaterialProperty _FakeLightColor = null;
     MaterialProperty _FakeLightDirX = null;
     MaterialProperty _FakeLightDirY = null;
     MaterialProperty _FakeLightIntensity = null;
     MaterialProperty _ShadowLayer1Push = null;
+    MaterialProperty _ShadowLayer1Gate = null;
     MaterialProperty _ShadowLayer1Fuzziness = null;
     MaterialProperty _ShadowLayer1Intensity = null;
     MaterialProperty _ShadowLayer2Push = null;
+    MaterialProperty _ShadowLayer2Gate = null;
     MaterialProperty _ShadowLayer2Fuzziness = null;
     MaterialProperty _ShadowLayer2Intensity = null;
     MaterialProperty _ILMLayer1 = null;
@@ -114,17 +113,14 @@ public class ASWShaderGUI : ShaderGUI
 	        // Outline props
 	        GUILayout.Label("Outline Settings", EditorStyles.boldLabel);
 
-			showOutlineSettings = GUILayout.Toggle(showOutlineSettings, "Show Outline Settings");
+			showOutlineSettings = GUILayout.Toggle(showOutlineSettings, "Looking for outline settings? They're removed.");
 			if( showOutlineSettings == true ) {
-				GUILayout.Label("Do not use these unless you want to have broken edge outlines. Click the button below for a guide on how to properly set up your outlines.",EditorStyles.helpBox);
+				GUILayout.Label("I have removed the outline settings as there is no way to properly do the outlines as they should look without frayed points, and broken tips of hair.\nTo reduce the render load caused by still having an inverted hull mesh even if it is set to 0, I've just decided to remove it.\nClick the button below for a guide on how to properly set up your outlines.",EditorStyles.helpBox);
 		        if (GUILayout.Button("How to properly set up your outlines") == true)
 		        {
 		        	Application.OpenURL("https://www.youtube.com/watch?v=SYS3XlRmDaA");
 		            Debug.Log("Opened external url: https://www.youtube.com/watch?v=SYS3XlRmDaA");
 		        }
-		        materialEditor.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
-		        materialEditor.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
-		        materialEditor.ShaderProperty(_OutlineDiffuseMultEnable, _OutlineDiffuseMultEnable.displayName);
 		    }
 
 		    //Light Layer Proprties
@@ -139,10 +135,12 @@ public class ASWShaderGUI : ShaderGUI
 			materialEditor.ShaderProperty(_ShadowBrightness, _ShadowBrightness.displayName);
 			
 			materialEditor.ShaderProperty(_ShadowLayer1Push, _ShadowLayer1Push.displayName);
+			materialEditor.ShaderProperty(_ShadowLayer1Gate, _ShadowLayer1Gate.displayName);
 			materialEditor.ShaderProperty(_ShadowLayer1Fuzziness, _ShadowLayer1Fuzziness.displayName);
 			materialEditor.ShaderProperty(_ShadowLayer1Intensity, _ShadowLayer1Intensity.displayName);
 
 			materialEditor.ShaderProperty(_ShadowLayer2Push, _ShadowLayer2Push.displayName);
+			materialEditor.ShaderProperty(_ShadowLayer2Gate, _ShadowLayer2Gate.displayName);
 			materialEditor.ShaderProperty(_ShadowLayer2Fuzziness, _ShadowLayer2Fuzziness.displayName);
 			materialEditor.ShaderProperty(_ShadowLayer2Intensity, _ShadowLayer2Intensity.displayName);
 

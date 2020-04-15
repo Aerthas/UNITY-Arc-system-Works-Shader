@@ -9,7 +9,7 @@ Shader ".Aerthas/Arc System Works/Decal"
 		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
 		[PerRendererData] _AlphaTex ("External Alpha", 2D) = "white" {}
 		_Decal("Decal", 2D) = "white" {}
-		_DecalTint("Decal Tint", Color) = (0,0,0,1)
+		_DecalTint("Decal Tint", Color) = (1,1,1,1)
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 
 	}
@@ -115,13 +115,13 @@ Shader ".Aerthas/Arc System Works/Decal"
 }
 /*ASEBEGIN
 Version=17800
-598;385;1187;720;353.5879;133.5607;1.122418;True;True
-Node;AmplifyShaderEditor.SamplerNode;1;-80.64584,126.1201;Inherit;True;Property;_Decal;Decal;0;0;Create;True;0;0;False;0;-1;None;45b5999bd54fa814c82733e2530192af;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.ColorNode;28;45.9929,415.3016;Inherit;False;Property;_DecalTint;Decal Tint;1;0;Create;True;0;0;False;0;0,0,0,1;0,0,0,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+163.2;168.8;1385;690;405.3502;93.16226;1;True;True
+Node;AmplifyShaderEditor.SamplerNode;1;-80.64584,126.1201;Inherit;True;Property;_Decal;Decal;0;0;Create;True;0;0;False;0;-1;None;a0611f96a96790149a45cce425b67321;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.ColorNode;28;46.9929,415.3016;Inherit;False;Property;_DecalTint;Decal Tint;1;0;Create;True;0;0;False;0;1,1,1,1;1,1,1,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;26;276.0885,152.656;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;25;537.4999,197.4;Float;False;True;-1;2;ASEMaterialInspector;0;6;.Aerthas/Arc System Works/Decal;0f8ba0101102bb14ebf021ddadce9b49;True;SubShader 0 Pass 0;0;0;SubShader 0 Pass 0;2;True;3;1;False;-1;10;False;-1;0;1;False;-1;0;False;-1;False;False;True;2;False;-1;False;False;True;2;False;-1;False;False;True;5;Queue=Transparent=Queue=0;IgnoreProjector=True;RenderType=Transparent=RenderType;PreviewType=Plane;CanUseSpriteAtlas=True;False;0;False;False;False;False;False;False;False;False;False;False;True;2;0;;0;0;Standard;0;0;1;True;False;;0
 WireConnection;26;0;1;0
 WireConnection;26;1;28;0
 WireConnection;25;0;26;0
 ASEEND*/
-//CHKSM=AA4CB0317A6DCA2A4348AA59E07F7A1FD807410C
+//CHKSM=9608CB16D6454607C4FCB8BBA3B189CE943F2BC7
