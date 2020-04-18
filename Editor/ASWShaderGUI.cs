@@ -1,10 +1,8 @@
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 using System;
 using System.Reflection;
-using AmplifyShaderEditor;
  
 public class ASWShaderGUI : ShaderGUI
 {
@@ -20,18 +18,21 @@ public class ASWShaderGUI : ShaderGUI
         public static GUIContent sssText = new GUIContent("SSS Texture", "[Character Indentifier]_SSS");
         public static GUIContent ilmText = new GUIContent("ILM Texture", "[Character Indentifier]_ILM");
         public static GUIContent detailText = new GUIContent("Detail Texture", "[Character Indentifier]_Detail");
-        public static GUIContent _MetalMatcapText = new GUIContent("Metal Texture  |  A Intensity  |  B Intensity", "metal. Only used by Frieza and Cooler from DBFZ as far as I am aware");
-        public static GUIContent _FakeLightText = new GUIContent("Color  |  X Dir  |  Y Dir  |  Intensity", "");
+        public static GUIContent _MetalMatcapText = new GUIContent("Metal Texture", "metal. Only used by Frieza and Cooler from DBFZ as far as I am aware");
     }
 
     MaterialProperty _ForceFakeLight = null;
     MaterialProperty _FakeLightFallbackDirToggle = null;
-    MaterialProperty _ENABLETHISFORGUILTYGEAR = null;
+    MaterialProperty _WrongVertexColors = null;
+    MaterialProperty _EnableOutline = null;
+    MaterialProperty _OutlineThickness = null;
+    MaterialProperty _OutlineColor = null;
+    MaterialProperty _EnableBaseColorMult = null;
     MaterialProperty _Base = null;
     MaterialProperty _SSS = null;
     MaterialProperty _ILM = null;
     MaterialProperty _Detail = null;
-    MaterialProperty _EnableMetalMatcap = null;
+    MaterialProperty _METALLICGLOSSMAP = null;
     MaterialProperty _MetalMatcap = null;
     MaterialProperty _MetalAIntensity = null;
     MaterialProperty _MetalBIntensity = null;
@@ -55,29 +56,31 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _SpecularSize = null;
     MaterialProperty _SpecularIntensity = null;
     MaterialProperty _SpecularFuzzy = null;
-    MaterialProperty _EnableFresnelHighlight = null;
+    MaterialProperty _COLOROVERLAY = null;
     MaterialProperty _DarkHighlightMult = null;
     MaterialProperty _HighlightPower = null;
     MaterialProperty _HighlightFreselFuzzy = null;
     MaterialProperty _HighlightIntensity = null;
     MaterialProperty _HighlightScale = null;
-    MaterialProperty _EnableGranblueBlackFresnel = null;
+    MaterialProperty _FADING = null;
     MaterialProperty _GranblueFresnelScale = null;
     MaterialProperty _GranblueFresnelPower = null;
 
     static bool showGlobalSettings = false;
-    static bool showOutlineSettings = false;
     static bool showMainTextures = true;
+    static bool showMatcap = false;
     static bool showLightSettings = true;
     static bool showFakeLightSettings = false;
     static bool showSpecularSettings = false;
     static bool showHighlightFresnelSettings = false;
+    static bool showHighlightFresnel = false;
+    static bool showGranblueFresnel = false;
+    static bool showOutlineSettings = false;
     static bool showCredits = false;
 
     public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] props)
     {
-        Material material = materialEditor.target as Material;
-		Shader shader = material.shader;
+        Material mat = (Material)materialEditor.target;
 
     	foreach (var property in GetType().GetFields(bindingFlags)) 
         {                                                           
@@ -93,58 +96,52 @@ public class ASWShaderGUI : ShaderGUI
 
 		EditorGUI.BeginChangeCheck();
 		{
-			ASWstyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light v" + "<color=#ff0000ff> 6.4.0</color>" + "<color=#000000ff>  }</color>");
-
+			ASWstyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light v" + "<color=#ff0000ff> 6.5.0</color>" + "<color=#000000ff>  }</color>");
 	        // Global props
-	        showGlobalSettings = ASWstyles.ShurikenFoldout("Global Settings", showGlobalSettings);
-	        if (showGlobalSettings) {
+	        showGlobalSettings = ASWstyles.Foldout("Global Settings", showGlobalSettings, materialEditor, Color.white);
+	        //if (showGlobalSettings) {
+			if (showGlobalSettings){
 		        //materialEditor.ShaderProperty(_ForceFakeLight, _ForceFakeLight.displayName);
-		        materialEditor.ShaderProperty(_ENABLETHISFORGUILTYGEAR, "Enable this if your vertex colors are wrong");
+		        materialEditor.ShaderProperty(_WrongVertexColors, "Are your vertex colors correct?");
 		        materialEditor.ShaderProperty(_ForceFakeLight, new GUIContent(_ForceFakeLight.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
 		        materialEditor.ShaderProperty(_FakeLightFallbackDirToggle, new GUIContent(_FakeLightFallbackDirToggle.displayName, "Toggle between different light directions if the scene/world has no light source."));
-			
-		        // Outline props
-		        showOutlineSettings = ASWstyles.ShurikenFoldout("Outline Settings", showOutlineSettings);
-				//showOutlineSettings = GUILayout.Toggle(showOutlineSettings, "Looking for outline settings? They're removed.");
-				if( showOutlineSettings == true ) {
-					GUILayout.Label("I have removed the outline settings as there is no way to properly do the outlines as they should look without frayed points, and broken tips of hair.\nTo reduce the render load caused by still having an inverted hull mesh even if it is set to 0, I've just decided to remove it.\nClick the button below for a guide on how to properly set up your outlines.",EditorStyles.helpBox);
-			        if (GUILayout.Button("How to properly set up your outlines") == true)
-			        {
-			        	Application.OpenURL("https://www.youtube.com/watch?v=SYS3XlRmDaA");
-			            Debug.Log("Opened external url: https://www.youtube.com/watch?v=SYS3XlRmDaA");
-			        }
-			    }
+	        
+	        	showFakeLightSettings = ASWstyles.MediumFoldout("Fake Light Settings", showFakeLightSettings, materialEditor, Color.yellow);
+	        	GUILayout.Space(24);
+				if( showFakeLightSettings == true ){
+					materialEditor.ShaderProperty(_FakeLightIntensity, _FakeLightIntensity.displayName);
+					materialEditor.ShaderProperty(_FakeLightColor, _FakeLightColor.displayName);
+					if(_FakeLightFallbackDirToggle.floatValue == 0){
+						materialEditor.ShaderProperty(_FakeLightDirX, _FakeLightDirX.displayName);
+						materialEditor.ShaderProperty(_FakeLightDirY, _FakeLightDirY.displayName);
+					}
+				}
 	        }
-
 	        // Primary props
-	        showMainTextures = ASWstyles.ShurikenFoldout("Main Textures", showMainTextures);
+	        showMainTextures = ASWstyles.Foldout("Main Textures", showMainTextures, materialEditor, Color.white);
 	        if (showMainTextures){
 		        materialEditor.TexturePropertySingleLine(Styles.baseText, _Base);
 		        materialEditor.TexturePropertySingleLine(Styles.sssText, _SSS);
 		        materialEditor.TexturePropertySingleLine(Styles.ilmText, _ILM);
 		        materialEditor.TexturePropertySingleLine(Styles.detailText, _Detail);
-		        materialEditor.ShaderProperty(_EnableMetalMatcap, _EnableMetalMatcap.displayName);
-		        if ( _EnableMetalMatcap.floatValue == 1)
-		        {
-		        	materialEditor.TexturePropertySingleLine(Styles._MetalMatcapText, _MetalMatcap, _MetalAIntensity, _MetalBIntensity);
+
+		        showMatcap = ASWstyles.MediumFoldout("Metal Matcap", showMatcap, materialEditor, Color.cyan);
+	        	GUILayout.Space(1);
+				materialEditor.ShaderProperty(_METALLICGLOSSMAP, " ");
+	        	GUILayout.Space(2);
+		        if ( showMatcap ){
+		        	materialEditor.TexturePropertySingleLine(Styles._MetalMatcapText, _MetalMatcap);
+		        	materialEditor.ShaderProperty(_MetalAIntensity, _MetalAIntensity.displayName);
+		        	materialEditor.ShaderProperty(_MetalBIntensity, _MetalBIntensity.displayName);
 		        }
 	        }
 	        
 	        
 
 		    //Light Layer Proprties
-	        showLightSettings = ASWstyles.ShurikenFoldout("Light Settings", showLightSettings);
+	        showLightSettings = ASWstyles.Foldout("Light Settings", showLightSettings, materialEditor, Color.white);
 	        if(showLightSettings){
 				materialEditor.ShaderProperty(_ShadowBrightness, _ShadowBrightness.displayName);
-	        	ASWstyles.PartingLine();
-	        	showFakeLightSettings = ASWstyles.ShurikenFoldout("Fake Light Settings", showFakeLightSettings);
-				if( showFakeLightSettings == true ){
-					materialEditor.ShaderProperty(_FakeLightIntensity, _FakeLightIntensity.displayName);
-					materialEditor.ShaderProperty(_FakeLightColor, _FakeLightColor.displayName);
-					materialEditor.ShaderProperty(_FakeLightDirX, _FakeLightDirX.displayName);
-					materialEditor.ShaderProperty(_FakeLightDirY, _FakeLightDirY.displayName);
-				}
-	        	ASWstyles.PartingLine();
 				
 				materialEditor.ShaderProperty(_ShadowLayer1Push, _ShadowLayer1Push.displayName);
 				materialEditor.ShaderProperty(_ShadowLayer1Gate, _ShadowLayer1Gate.displayName);
@@ -161,54 +158,67 @@ public class ASWShaderGUI : ShaderGUI
 				materialEditor.ShaderProperty(_ShadowLayer2Intensity, _ShadowLayer2Intensity.displayName);
 				materialEditor.ShaderProperty(_ILMLayer2, _ILMLayer2.displayName);
 				materialEditor.ShaderProperty(_VertexLayer2, _VertexLayer2.displayName);
+
+				//Specular Settings
+				showSpecularSettings = ASWstyles.MediumFoldout("Specular Settings", showSpecularSettings, materialEditor, new Color(1,1,0));
+	        	GUILayout.Space(24);
+				if( showSpecularSettings == true ){
+					materialEditor.ShaderProperty(_SpecularIntensity, _SpecularIntensity.displayName);
+					materialEditor.ShaderProperty(_SpecularSize, _SpecularSize.displayName);
+					materialEditor.ShaderProperty(_SpecularFuzzy, _SpecularFuzzy.displayName);
+				}
 			}
 
-
-			//Specular Settings
-			showSpecularSettings = ASWstyles.ShurikenFoldout("Specular Settings", showSpecularSettings);
-			if( showSpecularSettings == true ){
-				materialEditor.ShaderProperty(_SpecularIntensity, _SpecularIntensity.displayName);
-				materialEditor.ShaderProperty(_SpecularSize, _SpecularSize.displayName);
-				materialEditor.ShaderProperty(_SpecularFuzzy, _SpecularFuzzy.displayName);
-			}
-
-			showHighlightFresnelSettings = ASWstyles.ShurikenFoldout("Highlight Fresnel Settings", showHighlightFresnelSettings);
+			showHighlightFresnelSettings = ASWstyles.Foldout("Highlight Fresnel Settings", showHighlightFresnelSettings, materialEditor, Color.white);
 			if(showHighlightFresnelSettings){
-		        materialEditor.ShaderProperty(_EnableFresnelHighlight, _EnableFresnelHighlight.displayName);
-				if ( _EnableFresnelHighlight.floatValue == 1){
+				showHighlightFresnel = ASWstyles.MediumFoldout("Highlight Fresnel", showHighlightFresnel, materialEditor, Color.cyan);
+	        	GUILayout.Space(1);
+				materialEditor.ShaderProperty(_COLOROVERLAY, " ");
+	        	GUILayout.Space(2);
+				if ( showHighlightFresnel){
 					materialEditor.ShaderProperty(_DarkHighlightMult, _DarkHighlightMult.displayName);
 					materialEditor.ShaderProperty(_HighlightPower, _HighlightPower.displayName);
 					materialEditor.ShaderProperty(_HighlightFreselFuzzy, _HighlightFreselFuzzy.displayName);
 					materialEditor.ShaderProperty(_HighlightIntensity, _HighlightIntensity.displayName);
 					materialEditor.ShaderProperty(_HighlightScale, _HighlightScale.displayName);
 				}
-				ASWstyles.PartingLine();
-				materialEditor.ShaderProperty(_EnableGranblueBlackFresnel, _EnableGranblueBlackFresnel.displayName);
-				if ( _EnableGranblueBlackFresnel.floatValue == 1){
+				showGranblueFresnel = ASWstyles.MediumFoldout("Granblue Darken Fresnel", showGranblueFresnel, materialEditor, Color.cyan);
+	        	GUILayout.Space(1);
+				materialEditor.ShaderProperty(_FADING, " ");
+	        	GUILayout.Space(2);
+				if ( showGranblueFresnel ){
 					materialEditor.ShaderProperty(_GranblueFresnelScale, _GranblueFresnelScale.displayName);
 					materialEditor.ShaderProperty(_GranblueFresnelPower, _GranblueFresnelPower.displayName);
 				}
 			}
 
-			
-			showCredits = ASWstyles.ShurikenFoldout("Credits", showCredits);
+	        // Outline props
+	        showOutlineSettings = ASWstyles.Foldout("Outline Settings", showOutlineSettings, materialEditor, Color.white);
+			//showOutlineSettings = GUILayout.Toggle(showOutlineSettings, "Looking for outline settings? They're removed.");
+			if( showOutlineSettings == true ) {
+				ASWstyles.PartingLine();
+				EditorGUILayout.BeginHorizontal();
+        		GUILayout.FlexibleSpace();
+				if (GUILayout.Button("DO NOT USE THIS UNLESS YOU ARE SUPER LAZY\nCLICK THIS TO LEARN HOW TO\nPROPERLY SET UP YOUR OUTLINES", GUILayout.Width(400), GUILayout.Height(50)) == true){
+		        	Application.OpenURL("https://www.youtube.com/watch?v=SYS3XlRmDaA");
+		            Debug.Log("Opened external url: https://www.youtube.com/watch?v=SYS3XlRmDaA");
+		        }
+		        GUILayout.FlexibleSpace();
+		        EditorGUILayout.EndHorizontal();
+				ASWstyles.PartingLine();
+				materialEditor.ShaderProperty(_EnableOutline, _EnableOutline.displayName);
+				if (_EnableOutline.floatValue == 1){
+					materialEditor.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
+					materialEditor.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
+					materialEditor.ShaderProperty(_EnableBaseColorMult, _EnableBaseColorMult.displayName);
+				}
+		    }
+
+			showCredits = ASWstyles.Foldout("Credits", showCredits, materialEditor, Color.white);
 			if ( showCredits == true){
 				GUILayout.Label("»Thanks to Shamwow for the absolute first guide on the absolute first initial version of the shader.\n\n»Thanks to VCD/Velon for his constant riding of me to keep working on my shader\n\n»Thanks to Nars290 for his constant positivity and assistance with testing and debugging\n\n»Thanks to EdwardsVSGaming for taking an old version of my shader, editing it a small ammount, claiming the entire thing as his own without credit to me, and using deceptive comparisons between that shader and mine forcing me to get off my lazy streak and actually work on my shader again. *clap* *clap* Good job.\n\n»Dolce Swenos for being a grammar nazi. \n\n»Thanks to Morioh for showing me how to use custom editor styles and letting me use his Shuriken functions. Really helped make the shader UI look a lot better!", EditorStyles.textArea);
 			}
 			ASWstyles.DrawButtons();
-			GUILayout.BeginHorizontal();
-        	GUILayout.FlexibleSpace();
-			if (GUILayout.Button("Open in Shader Editor (Requires Amplify Shader Editor)", GUILayout.Width(350), GUILayout.Height(30)))
-	        {
-	            #if UNITY_2018_3_OR_NEWER
-	                ASEPackageManagerHelper.SetupLateMaterial( material );
-
-	            #else
-	                AmplifyShaderEditorWindow.LoadMaterialToASE( material );
-	            #endif
-	        }
-	        GUILayout.FlexibleSpace();
-			GUILayout.EndHorizontal();
 		}
     }
 }
@@ -240,13 +250,13 @@ public class ASWShaderTransparentGUI : ShaderGUI
         EditorGUIUtility.fieldWidth = 50f;   // Use default labelWidth
 
 	    MaterialProperty _ForceFakeLight = ShaderGUI.FindProperty("_ForceFakeLight",props);
-	    MaterialProperty _ENABLETHISFORGUILTYGEAR = ShaderGUI.FindProperty("_ENABLETHISFORGUILTYGEAR",props);
+	    MaterialProperty _WrongVertexColors = ShaderGUI.FindProperty("_WrongVertexColors",props);
 	    MaterialProperty _Opacity = ShaderGUI.FindProperty("_Opacity",props);
 	    MaterialProperty _Base = ShaderGUI.FindProperty("_Base",props);
 	    MaterialProperty _SSS = ShaderGUI.FindProperty("_SSS",props);
 	    MaterialProperty _ILM = ShaderGUI.FindProperty("_ILM",props);
 	    MaterialProperty _Detail = ShaderGUI.FindProperty("_Detail",props);
-	    MaterialProperty _EnableMetalMatcap = ShaderGUI.FindProperty("_EnableMetalMatcap",props);
+	    MaterialProperty _METALLICGLOSSMAP = ShaderGUI.FindProperty("_METALLICGLOSSMAP",props);
 	    MaterialProperty _MetalMatcap = ShaderGUI.FindProperty("_MetalMatcap",props);
 	    MaterialProperty _MetalAIntensity = ShaderGUI.FindProperty("_MetalAIntensity",props);
 	    MaterialProperty _MetalBIntensity = ShaderGUI.FindProperty("_MetalBIntensity",props);
@@ -268,7 +278,7 @@ public class ASWShaderTransparentGUI : ShaderGUI
 	    MaterialProperty _SpecularSize = ShaderGUI.FindProperty("_SpecularSize",props);
 	    MaterialProperty _SpecularIntensity = ShaderGUI.FindProperty("_SpecularIntensity",props);
 	    MaterialProperty _SpecularFuzzy = ShaderGUI.FindProperty("_SpecularFuzzy",props);
-	    MaterialProperty _EnableFresnelHighlight = ShaderGUI.FindProperty("_EnableFresnelHighlight",props);
+	    MaterialProperty _COLOROVERLAY = ShaderGUI.FindProperty("_COLOROVERLAY",props);
 	    MaterialProperty _DarkHighlightMult = ShaderGUI.FindProperty("_DarkHighlightMult",props);
 	    MaterialProperty _HighlightPower = ShaderGUI.FindProperty("_HighlightPower",props);
 	    MaterialProperty _HighlightFreselFuzzy = ShaderGUI.FindProperty("_HighlightFreselFuzzy",props);
@@ -281,7 +291,7 @@ public class ASWShaderTransparentGUI : ShaderGUI
         // Global props
         GUILayout.Label("Global Settings", EditorStyles.boldLabel);
         materialEditor.ShaderProperty(_ForceFakeLight, _ForceFakeLight.displayName);
-        materialEditor.ShaderProperty(_ENABLETHISFORGUILTYGEAR, _ENABLETHISFORGUILTYGEAR.displayName);
+        materialEditor.ShaderProperty(_WrongVertexColors, _WrongVertexColors.displayName);
         materialEditor.ShaderProperty(_Opacity, _Opacity.displayName);
 
         // Primary props
@@ -291,8 +301,8 @@ public class ASWShaderTransparentGUI : ShaderGUI
         materialEditor.TexturePropertySingleLine(Styles.sssText, _SSS);
         materialEditor.TexturePropertySingleLine(Styles.ilmText, _ILM);
         materialEditor.TexturePropertySingleLine(Styles.detailText, _Detail);
-        materialEditor.ShaderProperty(_EnableMetalMatcap, _EnableMetalMatcap.displayName);
-        if ( _EnableMetalMatcap.floatValue == 1)
+        materialEditor.ShaderProperty(_METALLICGLOSSMAP, _METALLICGLOSSMAP.displayName);
+        if ( _METALLICGLOSSMAP.floatValue == 1)
         {
         	materialEditor.TexturePropertySingleLine(Styles._MetalMatcapText, _MetalMatcap, _MetalAIntensity, _MetalBIntensity);
         }
@@ -333,8 +343,8 @@ public class ASWShaderTransparentGUI : ShaderGUI
 		}
 
 		GUILayout.Label("Highlight Fresnel Settings", EditorStyles.boldLabel);
-        materialEditor.ShaderProperty(_EnableFresnelHighlight, _EnableFresnelHighlight.displayName);
-		if ( _EnableFresnelHighlight.floatValue == 1){
+        materialEditor.ShaderProperty(_COLOROVERLAY, _COLOROVERLAY.displayName);
+		if ( _COLOROVERLAY.floatValue == 1){
 			materialEditor.ShaderProperty(_DarkHighlightMult, _DarkHighlightMult.displayName);
 			materialEditor.ShaderProperty(_HighlightPower, _HighlightPower.displayName);
 			materialEditor.ShaderProperty(_HighlightFreselFuzzy, _HighlightFreselFuzzy.displayName);
@@ -380,13 +390,14 @@ public class ASWOutlineGUI : ShaderGUI
         EditorGUIUtility.labelWidth = 300f;   // Use default labelWidth
         EditorGUIUtility.fieldWidth = 50f;   // Use default labelWidth
 
-	    MaterialProperty _ENABLETHISFORGUILTYGEAR = ShaderGUI.FindProperty("_ENABLETHISFORGUILTYGEAR",props);
+	    MaterialProperty _WrongVertexColors = ShaderGUI.FindProperty("_WrongVertexColors",props);
 	    MaterialProperty _OutlineColor = ShaderGUI.FindProperty("_OutlineColor",props);
 	    MaterialProperty _OutlineThickness = ShaderGUI.FindProperty("_OutlineThickness",props);
 	    MaterialProperty _EnableBaseColorMult = ShaderGUI.FindProperty("_EnableBaseColorMult",props);
 	    MaterialProperty _Base = ShaderGUI.FindProperty("_Base",props);
+
+	    ASWstyles.ShurikenHeaderCentered("Arc System Works Outline");
         
-        materialEditor.ShaderProperty(_ENABLETHISFORGUILTYGEAR, _ENABLETHISFORGUILTYGEAR.displayName);
 	    if (GUILayout.Button("How to properly set up your outlines") == true)
         {
         	Application.OpenURL("https://www.youtube.com/watch?v=SYS3XlRmDaA");
@@ -395,6 +406,7 @@ public class ASWOutlineGUI : ShaderGUI
 
         // Outline props
         GUILayout.Label("Outline Settings", EditorStyles.boldLabel);
+        materialEditor.ShaderProperty(_WrongVertexColors, "Are your vertex colors correct?");
         materialEditor.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
         materialEditor.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
         materialEditor.ShaderProperty(_EnableBaseColorMult, _EnableBaseColorMult.displayName);

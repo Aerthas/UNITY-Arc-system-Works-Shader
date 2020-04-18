@@ -7,19 +7,63 @@ using System.IO;
 [InitializeOnLoad]
 public class ASWstyles : MonoBehaviour
 {
-    private static Rect DrawShuriken(string title, Vector2 contentOffset, int HeaderHeight)
-    {
-        var style = new GUIStyle("ShurikenModuleTitle");
-        style.font = new GUIStyle(EditorStyles.boldLabel).font;
-        style.border = new RectOffset(15, 7, 4, 4);
-        style.fixedHeight = HeaderHeight;
-        style.contentOffset = contentOffset;
-        var rect = GUILayoutUtility.GetRect(16f, HeaderHeight, style);
 
-        GUI.Box(rect, title, style);
-        return rect;
+    private static bool foldoutClicked = false;
+
+    public static bool FoldoutToggle(Rect rect, Event evt, bool mouseOver, bool display, int size){
+
+        float space = 0;
+        float offset = 0;
+        switch (size){
+            case 0: 
+                offset = 4f;
+                space = -2f;
+                break;
+            case 1: 
+                offset = 2f;
+                space = -22f; 
+                break;
+            case 2: 
+                space = -18f; 
+                break;
+            default: break;
+        }
+
+        Rect arrowRect = new Rect(rect.x+offset, rect.y+offset, 0f, 0f);
+        switch(evt.type){
+
+            case EventType.Repaint:
+                EditorStyles.foldout.Draw(arrowRect, false, false, display, false);
+                break;
+
+            case EventType.MouseUp:
+                if (mouseOver){
+                    display = !display;
+                    foldoutClicked = false;
+                    evt.Use();
+                }
+                break;
+
+            case EventType.DragUpdated:
+                if (mouseOver && !display){
+                    display = true;
+                    evt.Use();
+                }
+                break;
+
+            default: break;
+        }
+        GUILayout.Space(space);
+        return display;
     }
 
+    public static float GetInspectorWidth(){
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        EditorGUILayout.EndHorizontal();
+        return GUILayoutUtility.GetLastRect().width;
+    }
+    //Header Centered
     private static Rect DrawShurikenCenteredTitle(string title, Vector2 contentOffset, int HeaderHeight)
     {
         var style = new GUIStyle("ShurikenModuleTitle");
@@ -33,39 +77,79 @@ public class ASWstyles : MonoBehaviour
         GUI.Box(rect, title, style);
         return rect;
     }
+    //End Header Centered
 
-    public static bool ShurikenFoldout(string title, bool display)
-    {
-        var rect = DrawShuriken(title, new Vector2(20f, -2f), 22);
-        var e = Event.current;
-        var toggleRect = new Rect(rect.x + 4f, rect.y + 2f, 13f, 13f);
-        if (e.type == EventType.Repaint)
-        {
-            EditorStyles.foldout.Draw(toggleRect, false, false, display, false);
+    //Foldout
+    public static bool Foldout(string header, bool display, MaterialEditor me, Color color){
+        GUIStyle formatting = new GUIStyle("ShurikenModuleTitle");
+        formatting.font = new GUIStyle(EditorStyles.boldLabel).font;
+        formatting.contentOffset = new Vector2(20f, -3f);
+        formatting.hover.textColor = Color.gray;
+        formatting.fixedHeight = 28f;
+        formatting.fontSize = 10;
+
+        Rect rect = GUILayoutUtility.GetRect(GetInspectorWidth(), formatting.fixedHeight, formatting);
+        rect.width += 8f;
+        rect.x -= 8f;
+
+        Event evt = Event.current;
+        Color bgCol = GUI.backgroundColor;
+        bool mouseOver = rect.Contains(evt.mousePosition);
+        GUI.backgroundColor = color;
+
+        if (evt.type == EventType.MouseDown && mouseOver){
+            foldoutClicked = true;
+            evt.Use();
         }
-        if (e.type == EventType.MouseDown && rect.Contains(e.mousePosition))
-        {
-            display = !display;
-            e.Use();
+            
+        else if (evt.type == EventType.Repaint && foldoutClicked && mouseOver){
+            GUI.backgroundColor = Color.gray;
+            me.Repaint();
         }
-        return display;
-    }
+        
+        GUI.Box(rect, header, formatting);
+        GUI.backgroundColor = bgCol;
 
-    //parting line text
-    private static Rect DrawShurikenPartingLineText(string title, Vector2 contentOffset, int HeaderHeight)
-    {
-        var style = new GUIStyle("ShurikenModuleTitle");
-        style.font = new GUIStyle(EditorStyles.boldLabel).font;
-        style.border = new RectOffset(15, 7, 4, 4);
-        style.fixedHeight = HeaderHeight;
-        style.contentOffset = contentOffset;
-        style.alignment = TextAnchor.MiddleCenter;
-        var rect = GUILayoutUtility.GetRect(16f, HeaderHeight, style);
-
-        GUI.Box(rect, title, style);
-        return rect;
+        return FoldoutToggle(rect, evt, mouseOver, display, 0);
     }
-    //end of parting line text
+    //End Foldout
+
+    //Medium Foldout
+    public static bool MediumFoldout(string header, bool display, MaterialEditor me, Color color){
+        
+        GUIStyle formatting = new GUIStyle("ShurikenModuleTitle");
+        float lw = EditorGUIUtility.labelWidth;
+        formatting.contentOffset = new Vector2(20f, -3f);
+        formatting.fixedHeight = 22f;
+        formatting.fixedWidth = GetInspectorWidth()+4f;
+        formatting.font = new GUIStyle(EditorStyles.boldLabel).font;
+        formatting.fontSize = 11;
+
+        Rect rect = GUILayoutUtility.GetRect(0f, 20f, formatting);
+        rect.x -= 4f;
+        rect.width = lw;
+
+        Event evt = Event.current;
+        Color bgCol = GUI.backgroundColor;
+        bool mouseOver = rect.Contains(evt.mousePosition);
+        GUI.backgroundColor = color;
+        
+        if (evt.type == EventType.MouseDown && mouseOver){
+            foldoutClicked = true;
+            evt.Use();
+        }
+            
+        else if (evt.type == EventType.Repaint && foldoutClicked && mouseOver){
+            GUI.backgroundColor = Color.gray;
+            me.Repaint();
+        }
+
+        GUI.Box(rect, header, formatting);
+        GUI.backgroundColor = bgCol;
+        
+        return FoldoutToggle(rect, evt, mouseOver, display, 1);
+    }
+    //End Medium Foldout
 
     //parting lines
     static public void PartingLine()
@@ -109,6 +193,7 @@ public class ASWstyles : MonoBehaviour
         }
     }
     // end of parting line
+
     //exrta buttons
     public static void checkVersionButton(int Width, int Height)
     {
@@ -127,19 +212,9 @@ public class ASWstyles : MonoBehaviour
         }
     }
 
-    public static void ShurikenHeader(string title)
-    {
-        DrawShuriken(title, new Vector2(6f, -2f), 22);
-    }
-
     public static void ShurikenHeaderCentered(string title)
     {
         DrawShurikenCenteredTitle(title, new Vector2(0f, -2f), 22);
-    }
-
-    public static void DrawShurikenPartingLineText(string title)
-    {
-        DrawShurikenPartingLineText(title, new Vector2(6f, -2f), 22);
     }
 
     public static void DrawButtons()
