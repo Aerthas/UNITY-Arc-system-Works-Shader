@@ -5,7 +5,7 @@ using System.IO;
 
 // help link https://docs.unity3d.com/ScriptReference/EditorStyles.html
 [InitializeOnLoad]
-public class ASWstyles : MonoBehaviour
+public class ASWStyles : MonoBehaviour
 {
 
     private static bool foldoutClicked = false;
@@ -33,6 +33,28 @@ public class ASWstyles : MonoBehaviour
         GUILayout.FlexibleSpace();
         EditorGUILayout.EndHorizontal();
         return GUILayoutUtility.GetLastRect().width;
+    }
+
+    public static float GetPropertyWidth(){
+        float lw = EditorGUIUtility.labelWidth;
+        float iw = GetInspectorWidth();
+        return iw - lw;
+    }
+
+    public static bool SimpleButton(string text, float width, float xPos){
+        Rect buttonRect = EditorGUILayout.GetControlRect();
+        buttonRect.width = width;
+        buttonRect.x += xPos;
+        return GUI.Button(buttonRect, text);
+    }
+
+    // Replace invalid windows characters with underscores
+    public static string ReplaceInvalidChars(string filename) {
+        string updated = string.Join("_", filename.Split(Path.GetInvalidFileNameChars())); 
+        updated = updated.Replace(" ", "_");
+        if (updated == "")
+            updated = "_";
+        return updated;
     }
 
     public static bool FoldoutToggle(Rect rect, Event evt, bool mouseOver, bool display, int size){
@@ -246,11 +268,11 @@ public class ASWstyles : MonoBehaviour
 
     public static void DrawButtons()
     {
-        ASWstyles.PartingLine();
+        ASWStyles.PartingLine();
         EditorGUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
-        ASWstyles.checkVersionButton(100,30);
-        ASWstyles.discordButton(70,30);
+        ASWStyles.checkVersionButton(100,30);
+        ASWStyles.discordButton(70,30);
         GUILayout.FlexibleSpace();
         EditorGUILayout.EndHorizontal();
     }

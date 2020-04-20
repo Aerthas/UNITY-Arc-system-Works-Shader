@@ -1,0 +1,148 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: FighterZ_Goku
+  m_Shader: {fileID: 4800000, guid: d11bb9eec1ac777489f013c4121dd663, type: 3}
+  m_ShaderKeywords: _COLOROVERLAY_ON _FORCEFAKELIGHT_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Base:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailRequiresUVtobeonasecondUVChannel:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ILM:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Metal:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetalMatcap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SSS:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _ALPHABLEND: 0
+    - _AmbMax: 0.7
+    - _AmbMin: 0.2
+    - _BaseSSSAlphaSwap: 0
+    - _COLORADDSUBDIFF: 0
+    - _COLORCOLOR: 0
+    - _COLOROVERLAY: 1
+    - _CameraDepthMult: 2
+    - _Cutoff: 0.5
+    - _DepthMultClamp: 2
+    - _ENABLETHISFORGUILTYGEAR: 0
+    - _EnableBaseColorMult: 0
+    - _EnableCameraDistanceMult: 0
+    - _EnableFresnelHighlight: 0
+    - _EnableFresnelWORKINPROGRESS: 0
+    - _EnableGranblueBlackFresnel: 0
+    - _EnableMetalMatcap: 0
+    - _EnableOutline: 0
+    - _FADING: 0
+    - _FakeLightDirX: 35
+    - _FakeLightDirY: -135
+    - _FakeLightFallbackDirToggle: 0
+    - _FakeLightIntensity: 1
+    - _FinalColorIntensity: 3
+    - _ForceFakeLight: 0
+    - _GranblueFresnelPower: 1.77
+    - _GranblueFresnelScale: 1.12
+    - _HighlightFreselFuzzy: 0.01
+    - _HighlightIntensity: 1
+    - _HighlightPower: 5
+    - _HighlightScale: 1
+    - _ILMChannel: 0
+    - _ILMDetailScale: 5
+    - _ILMLayer1: 0.396
+    - _ILMLayer2: 0.59
+    - _LightIntensity: 1.33
+    - _LightLayer1: 0
+    - _LightLayer1Fuzziness: 0
+    - _LightLayer1Push: 0
+    - _LightLayer2: -0.3
+    - _LightLayer2Fuzziness: 0
+    - _LightLayer2Intensity: 1
+    - _LightLayer2Push: 0
+    - _METALLICGLOSSMAP: 0
+    - _MetalAIntensity: 1
+    - _MetalBIntensity: 5
+    - _MetalEnable: 0
+    - _OutlineDiffuseMultEnable: 0
+    - _OutlineThickness: 3
+    - _PIXELSNAP: 0
+    - _ShadowBrightness: 1
+    - _ShadowIntensity: 2
+    - _ShadowLayer1Fuzziness: 0
+    - _ShadowLayer1Gate: 1
+    - _ShadowLayer1Intensity: 1
+    - _ShadowLayer1Push: 0
+    - _ShadowLayer2Fuzziness: 0
+    - _ShadowLayer2Gate: 1
+    - _ShadowLayer2Intensity: 1
+    - _ShadowLayer2Push: -0.3
+    - _ShineIntensity: 1
+    - _ShineSize: 4
+    - _ShowOutlineSettings: 0
+    - _SpecularFuzzy: 0
+    - _SpecularFuzzySolid: 0
+    - _SpecularIntensity: 2.92
+    - _SpecularMult: 0
+    - _SpecularMult2: 5
+    - _SpecularSize: 0.425
+    - _VertexChannel: 0
+    - _VertexColorOpacity: 1
+    - _VertexColorScale: 0.7
+    - _VertexLayer1: 0.265
+    - _VertexLayer2: 0.51
+    - _ViewDirOffsetX: 0
+    - _ViewDirOffsetY: 0
+    - _WrongVertexColors: 0
+    - __dirty: 1
+    - _showOutlineSettings: 1
+    m_Colors:
+    - _BaseSSSAlphaColor: {r: 1, g: 1, b: 1, a: 0}
+    - _DarkHighlightMult: {r: 0.29411745, g: 0.29411745, b: 0.7411765, a: 0}
+    - _FakeLightColor: {r: 1, g: 1, b: 1, a: 0}
+    - _FakeLightDir: {r: 1, g: 1, b: 0, a: 0}
+    - _ILMDebugColor: {r: 1, g: 1, b: 1, a: 0}
+    - _LightColor: {r: 1, g: 1, b: 1, a: 0}
+    - _LightDir: {r: 1, g: 1, b: 1, a: 0}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
+    - _ShadowTint: {r: 0, g: 0, b: 0, a: 0}
+    - _VertexDebugColor: {r: 1, g: 1, b: 1, a: 0}
