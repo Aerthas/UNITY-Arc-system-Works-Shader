@@ -2,8 +2,10 @@
 # If you aren't aware, I have a much larger release of shaders on my main GitHub shader page which can be found here:
 https://github.com/Aerthas/Aerthas-Unity-Shaders
 
-## [Arc System Works Shader - DISCLAIMER BELOW](https://github.com/Aerthas/Aerthas-Unity-Shaders/blob/master/Arc%20System%20Works%20Shader/Arc%20System%20Works%20-%20Merged%20Light.shader)
-![Example of a render using the shader!](https://i.imgur.com/0YpFNJs.png)<br/><br/>
+
+## Arc System Works Shader - DISCLAIMER BELOW
+## [If you are unfamiliar with GitHub, click here to download](https://github.com/Aerthas/Aerthas-Unity-Shaders/releases)
+![Example of a render using the shader!](https://i.imgur.com/WzdxxQ5.png)<br/><br/>
 ![Example of a render using the shader!](https://i.imgur.com/ABRJ10x.png)<br/><br/>
 [See it in motion!](https://i.imgur.com/XgwrapH.mp4)<br/><br/>
 Emulates the look of the FABULOUS Arc System Works games.<br/><br/>
