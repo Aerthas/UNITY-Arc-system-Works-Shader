@@ -1,7 +1,6 @@
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 using System.IO;
 using System.Reflection;
  
@@ -20,6 +19,7 @@ public class ASWShaderGUI : ShaderGUI
         public static GUIContent ilmText = new GUIContent("ILM Texture", "[Character Indentifier]_ILM");
         public static GUIContent detailText = new GUIContent("Detail Texture", "[Character Indentifier]_Detail");
         public static GUIContent _MetalMatcapText = new GUIContent("Metal Texture", "metal. Only used by Frieza and Cooler from DBFZ as far as I am aware");
+        public static GUIContent glowMaskText = new GUIContent("Glow Mask", "[Character Indentifier]_GlowMask. Used by few characters.");
     }
 
     MaterialProperty _ForceFakeLight = null;
@@ -33,6 +33,10 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _MetalMatcap = null;
     MaterialProperty _MetalAIntensity = null;
     MaterialProperty _MetalBIntensity = null;
+    MaterialProperty _FADE = null;
+    MaterialProperty _GlowMask = null;
+    MaterialProperty _GlowMaskIntensity = null;
+    MaterialProperty _GlowMaskTint = null;
     MaterialProperty _FakeLightColor = null;
     MaterialProperty _FakeLightDirX = null;
     MaterialProperty _FakeLightDirY = null;
@@ -61,17 +65,17 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _HighlightFreselFuzzy = null;
     MaterialProperty _HighlightIntensity = null;
     MaterialProperty _HighlightScale = null;
-    MaterialProperty _FADING = null;
+    MaterialProperty _FresnelSystem = null;
     MaterialProperty _COLORADDSUBDIFF = null;
-    MaterialProperty _GranblueFresnelScale = null;
-    MaterialProperty _GranblueFresnelPower = null;
+    MaterialProperty _GranblueDarkenScale = null;
+    MaterialProperty _GranblueDarkenPower = null;
     MaterialProperty _EnableOutline = null;
     MaterialProperty _OutlineThickness = null;
     MaterialProperty _OutlineColor = null;
     MaterialProperty _EnableBaseColorMult = null;
     MaterialProperty _EnableCameraDistanceMult = null;
-    MaterialProperty _DepthMultClamp = null;
-    MaterialProperty _CameraDepthMult = null;
+    //MaterialProperty _DepthScaleClamp = null;
+    //MaterialProperty _CameraDepthMult = null;
     MaterialProperty _ALPHABLEND = null;
     MaterialProperty _VertexChannel = null;
     MaterialProperty _VertexDebugColor = null;
@@ -82,12 +86,13 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _BaseSSSAlphaSwap = null;
     MaterialProperty _BaseSSSAlphaColor = null;
 
-    public static Dictionary<Material, Toggles> foldouts = new Dictionary<Material, Toggles>();
+    public static Dictionary<Material, Toggles > foldouts = new Dictionary<Material, Toggles>();
     Toggles toggles = new Toggles(
 		new bool[] {
 			false, // Global
 				false,
 			true, // Main Textures
+				false,
 				false,
 			true, // Light Settings
 				false,
@@ -100,13 +105,14 @@ public class ASWShaderGUI : ShaderGUI
 				false,
 				false,
 			false, // Credits
-			false, // Presets
+			false // Presets
 		},
 		new string[] {
 			"Global Settings", 
 				"Fake Light Settings", 
 			"Main Textures", 
 				"Metal Matcap",
+				"Glow Mask",
 			"Light Settings",
 				"Specular Settings",
 			"Fresnel Settings",
@@ -160,9 +166,11 @@ public class ASWShaderGUI : ShaderGUI
         EditorGUIUtility.labelWidth = 300f;   // Use default labelWidth
         EditorGUIUtility.fieldWidth = 50f;   // Use default labelWidth
 
+        string[] shaderVersion = mat.shader.name.Split('v');
+
 		EditorGUI.BeginChangeCheck();
 		{
-			ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light v" + "<color=#ff0000ff> 6.6.0</color>" + "<color=#000000ff>  }</color>");
+			ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light v" + "<color=#ff0000ff> "+shaderVersion[1]+"</color>" + "<color=#000000ff>  }</color>");
 	        // Global props
 			if (ASWStyles.DoFoldout(foldouts, mat, me, "Global Settings")){
 		        //me.ShaderProperty(_ForceFakeLight, _ForceFakeLight.displayName);
@@ -197,6 +205,14 @@ public class ASWShaderGUI : ShaderGUI
 		        	me.ShaderProperty(_MetalBIntensity, _MetalBIntensity.displayName);
 		        	ASWStyles.ToggleGroupEnd();
 		        }
+
+		        if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, _FADE, "Glow Mask", Color.cyan) ){
+		        	ASWStyles.ToggleGroup(_FADE.floatValue == 0);
+		       		me.TexturePropertySingleLine(Styles.glowMaskText, _GlowMask);
+		        	me.ShaderProperty(_GlowMaskTint, _MetalBIntensity.displayName);
+		        	me.ShaderProperty(_GlowMaskIntensity, _MetalBIntensity.displayName);
+		        	ASWStyles.ToggleGroupEnd();
+		        }
 	        }
 	        
 	        
@@ -204,6 +220,8 @@ public class ASWShaderGUI : ShaderGUI
 		    //Light Layer Proprties
 	        if(ASWStyles.DoFoldout(foldouts, mat, me, "Light Settings")){
 				me.ShaderProperty(_ShadowBrightness, _ShadowBrightness.displayName);
+
+				ASWStyles.PartingLine();
 				
 				me.ShaderProperty(_ShadowLayer1Push, _ShadowLayer1Push.displayName);
 				me.ShaderProperty(_ShadowLayer1Gate, _ShadowLayer1Gate.displayName);
@@ -230,21 +248,26 @@ public class ASWShaderGUI : ShaderGUI
 			}
 
 			if(ASWStyles.DoFoldout(foldouts, mat, me, "Fresnel Settings")){
-				if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, _COLOROVERLAY, "Highlight Fresnel", Color.cyan)){
-					ASWStyles.ToggleGroup(_COLOROVERLAY.floatValue == 0);
+				//if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, _COLOROVERLAY, "Highlight Fresnel", Color.cyan)){
+				me.ShaderProperty(_COLOROVERLAY, "Enable Fresnel");
+				ASWStyles.PartingLine();
+				ASWStyles.ToggleGroup(_COLOROVERLAY.floatValue == 0);
+				me.ShaderProperty(_FresnelSystem, _FresnelSystem.displayName);
+				ASWStyles.PartingLine();
+				me.ShaderProperty(_HighlightPower, _HighlightPower.displayName);
+				me.ShaderProperty(_HighlightIntensity, _HighlightIntensity.displayName);
+				me.ShaderProperty(_HighlightScale, _HighlightScale.displayName);
+				me.ShaderProperty(_HighlightFreselFuzzy, _HighlightFreselFuzzy.displayName);
+				ASWStyles.PartingLine();
+
+				if ( _FresnelSystem.floatValue == 1 ){
+					me.ShaderProperty(_GranblueDarkenScale, _GranblueDarkenScale.displayName);
+					me.ShaderProperty(_GranblueDarkenPower, _GranblueDarkenPower.displayName);
+				}
+				else{
 					me.ShaderProperty(_DarkHighlightMult, _DarkHighlightMult.displayName);
-					me.ShaderProperty(_HighlightPower, _HighlightPower.displayName);
-					me.ShaderProperty(_HighlightFreselFuzzy, _HighlightFreselFuzzy.displayName);
-					me.ShaderProperty(_HighlightIntensity, _HighlightIntensity.displayName);
-					me.ShaderProperty(_HighlightScale, _HighlightScale.displayName);
-					ASWStyles.ToggleGroupEnd();
 				}
-				if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, _FADING, "Granblue Darken Fresnel", Color.cyan) ){
-					ASWStyles.ToggleGroup(_FADING.floatValue == 0);
-					me.ShaderProperty(_GranblueFresnelScale, _GranblueFresnelScale.displayName);
-					me.ShaderProperty(_GranblueFresnelPower, _GranblueFresnelPower.displayName);
-					ASWStyles.ToggleGroupEnd();
-				}
+				ASWStyles.ToggleGroupEnd();
 			}
 
 	        // Outline props
@@ -262,13 +285,11 @@ public class ASWShaderGUI : ShaderGUI
 				me.ShaderProperty(_EnableOutline, _EnableOutline.displayName);
 				if (_EnableOutline.floatValue == 1){
 					me.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
-					me.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
 					me.ShaderProperty(_EnableBaseColorMult, _EnableBaseColorMult.displayName);
-					me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
-					if (_EnableCameraDistanceMult.floatValue == 1){
-						me.ShaderProperty(_DepthMultClamp, _DepthMultClamp.displayName);
-						me.ShaderProperty(_CameraDepthMult, _CameraDepthMult.displayName);
+					if (_EnableBaseColorMult.floatValue == 0){
+						me.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
 					}
+					me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
 				}
 		    }
 
@@ -350,8 +371,6 @@ public class ASWOutlineGUI : ShaderGUI
     MaterialProperty _OutlineThickness = null;
     MaterialProperty _EnableBaseColorMult = null;
     MaterialProperty _EnableCameraDistanceMult = null;
-	MaterialProperty _DepthMultClamp = null;
-	MaterialProperty _CameraDepthMult = null;
 	MaterialProperty _Base = null;
 
     public override void OnGUI (MaterialEditor me, MaterialProperty[] props)
@@ -384,16 +403,14 @@ public class ASWOutlineGUI : ShaderGUI
 	        GUILayout.Label("Outline Settings", EditorStyles.boldLabel);
 	        me.ShaderProperty(_WrongVertexColors, "Are your vertex colors correct?");
 	        me.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
-	        me.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
 	        me.ShaderProperty(_EnableBaseColorMult, _EnableBaseColorMult.displayName);
 			if( _EnableBaseColorMult.floatValue == 1 ) {
 		         me.TexturePropertySingleLine(Styles.baseText, _Base);
 		    }
+		    else{
+		    	me.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
+		    }
 			me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
-			if (_EnableCameraDistanceMult.floatValue == 1){
-				me.ShaderProperty(_DepthMultClamp, _DepthMultClamp.displayName);
-				me.ShaderProperty(_CameraDepthMult, _CameraDepthMult.displayName);
-			}
 		}
     }
 }

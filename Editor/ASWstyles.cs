@@ -261,6 +261,15 @@ public class ASWStyles : MonoBehaviour
         }
     }
 
+    public static void paypalButton(int Width, int Height)
+    {
+        if (GUILayout.Button( (Texture2D)Resources.Load("Paypal_Icon", typeof(Texture2D)), GUILayout.Width(Width), GUILayout.Height(Height)))
+        {
+            Application.OpenURL("https://www.paypal.me/thisismypaypal");
+            Debug.Log("Opened external url: https://www.paypal.me/thisismypaypal");
+        }
+    }
+
     public static void ShurikenHeaderCentered(string title)
     {
         DrawShurikenCenteredTitle(title, new Vector2(0f, -2f), 22);
@@ -273,6 +282,7 @@ public class ASWStyles : MonoBehaviour
         GUILayout.FlexibleSpace();
         ASWStyles.checkVersionButton(100,30);
         ASWStyles.discordButton(70,30);
+        ASWStyles.paypalButton(30, 30);
         GUILayout.FlexibleSpace();
         EditorGUILayout.EndHorizontal();
     }

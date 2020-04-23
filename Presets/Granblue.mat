@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Granblue
   m_Shader: {fileID: 4800000, guid: d11bb9eec1ac777489f013c4121dd663, type: 3}
-  m_ShaderKeywords: _COLOROVERLAY_ON _FADING_ON
+  m_ShaderKeywords: _COLOROVERLAY_ON _ENABLECAMERADEPTHMULT_ON _FADING_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -23,27 +23,11 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _BumpMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _Detail:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _DetailAlbedoMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailMask:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailNormalMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _EmissionMap:
+    - _GlowMask:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -51,31 +35,11 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MetalMatcap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _OcclusionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _ParallaxMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _SSS:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _TextureSample0:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -88,76 +52,47 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _: 0
-    - _1: 0
     - _ALPHABLEND: 0
-    - _ALPHAMODULATE: 0
-    - _ALPHAMODULATE1: 0
-    - _ALPHAPREMULTIPLY: 0
-    - _AreyourVertexColorsproper: 0
     - _BaseSSSAlphaSwap: 0
-    - _BumpScale: 1
     - _COLORADDSUBDIFF: 0
     - _COLORCOLOR: 0
     - _COLOROVERLAY: 1
-    - _COLOROVERLAY_ON: 0
-    - _CameraDepthMult: 1
+    - _CameraDepthMult: 3
     - _Cutoff: 0.5
-    - _DepthMultClamp: 2
-    - _DetailNormalMapScale: 1
-    - _DstBlend: 0
-    - _ENABLETHISFORGUILTYGEAR: 0
-    - _EnableBaseColorMult: 0
-    - _EnableCameraDepthMult: 1
-    - _EnableCameraDistanceMult: 0
-    - _EnableFresnelHighlight: 1
-    - _EnableGranblueBlackFresnel: 1
-    - _EnableMetalMatcap: 0
+    - _DepthMultClamp: 0.5
+    - _DepthScaleClamp: 6
+    - _EnableBaseColorMult: 1
+    - _EnableCameraDepthMult: 0
+    - _EnableCameraDistanceMult: 1
     - _EnableOutline: 0
+    - _FADE: 0
     - _FADING: 1
-    - _FADING_ON: 0
-    - _FOG_EXP2: 0
     - _FakeLightDirX: 35
     - _FakeLightDirY: -135
-    - _FakeLightFallbackDirToggle: 1
-    - _FakeLightFallbackDirection: 1
+    - _FakeLightFallbackDirToggle: 0
     - _FakeLightIntensity: 1
-    - _FakeLightIntensity1: 1
-    - _Float0: -0.27
-    - _Float1: -1
-    - _Float2: 3
+    - _Float2: 0.5
     - _ForceFakeLight: 0
-    - _ForceFakeLight1: 0
-    - _GlossMapScale: 1
-    - _Glossiness: 0
-    - _GlossyReflections: 1
-    - _GranblueFresnelPower: 1.77
-    - _GranblueFresnelScale: 1.77
+    - _FresnelSystem: 1
+    - _GlowMaskIntensity: 1
+    - _GranblueDarkenPower: 1
+    - _GranblueDarkenScale: 1
+    - _GranblueFresnelPower: 1
+    - _GranblueFresnelScale: 1
     - _HighlightFreselFuzzy: 0.93
     - _HighlightIntensity: 1
-    - _HighlightPower: 5
-    - _HighlightScale: 1
-    - _ILMChannel: 1
+    - _HighlightPower: 10
+    - _HighlightScale: 30
+    - _ILMChannel: 0
     - _ILMLayer1: 0.335
     - _ILMLayer2: 0
-    - _LightFormula: 2
     - _METALLICGLOSSMAP: 0
     - _MetalAIntensity: 1
     - _MetalBIntensity: 10
-    - _Metallic: 0
-    - _Mode: 0
-    - _NORMALMAP: 1
-    - _OcclusionStrength: 1
-    - _Outline: 1
-    - _OutlineCameraDistanceClamp: 3.24
-    - _OutlineDiffuseMultEnable: 0
-    - _OutlineThickness: 2
-    - _OutlineTint: 1
-    - _OutlineToggle: 0
+    - _OutlineCameraDistanceClamp: 6.15
+    - _OutlineThickness: 1
     - _PIXELSNAP: 0
-    - _Parallax: 0.02
-    - _ShaderLayer2Gate: 0.9
-    - _ShadowBrightness: 1
+    - _ShadowBrightness: 0.654
     - _ShadowLayer1Fuzziness: 0
     - _ShadowLayer1Gate: 1
     - _ShadowLayer1Intensity: 1
@@ -166,47 +101,21 @@ Material:
     - _ShadowLayer2Gate: 0.91
     - _ShadowLayer2Intensity: 1
     - _ShadowLayer2Push: -0.393
-    - _SmoothnessTextureChannel: 0
     - _SpecularFuzzy: 0
-    - _SpecularFuzzy1: 0
-    - _SpecularHighlights: 1
     - _SpecularIntensity: 1
-    - _SpecularIntensity1: 0.96
-    - _SpecularSize: 0.5
-    - _SpecularSize1: 0.46
-    - _SrcBlend: 1
-    - _Thick: 1
-    - _ToggleSwitch0: 0
-    - _UVSec: 0
+    - _SpecularSize: 0.46
     - _VertexChannel: 0
     - _VertexLayer1: 0.254
     - _VertexLayer2: 0.51
     - _ViewDirOffsetX: 0
     - _ViewDirOffsetY: 0
     - _WrongVertexColors: 0
-    - _ZWrite: 1
     - __dirty: 1
     m_Colors:
-    - _ASEOutlineColor: {r: 0, g: 0, b: 0, a: 0}
     - _BaseSSSAlphaColor: {r: 1, g: 1, b: 1, a: 0}
-    - _Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-    - _DarkHighlightMult: {r: 0.23921385, g: 0.23921385, b: 0.5294118, a: 0}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - _DarkHighlightMult: {r: 0.23921531, g: 0.23921531, b: 0.5294118, a: 0}
     - _FakeLightColor: {r: 1, g: 1, b: 1, a: 0}
-    - _ILMAlpha: {r: 1, g: 1, b: 1, a: 0}
-    - _ILMBlue: {r: 0, g: 0, b: 1, a: 0}
+    - _GlowMaskTint: {r: 1, g: 1, b: 1, a: 0}
     - _ILMDebugColor: {r: 1, g: 1, b: 1, a: 0}
-    - _ILMGreen: {r: 0, g: 1, b: 0, a: 0}
-    - _ILMRed: {r: 1, g: 0, b: 0, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
-    - _Vector0: {r: 0, g: 180, b: 0, a: 0}
-    - _VertexAlpha: {r: 1, g: 1, b: 1, a: 0}
-    - _VertexAlpha1: {r: 1, g: 1, b: 1, a: 0}
-    - _VertexBlue: {r: 0, g: 0, b: 1, a: 0}
-    - _VertexBlue1: {r: 0, g: 0, b: 1, a: 0}
     - _VertexDebugColor: {r: 1, g: 1, b: 1, a: 0}
-    - _VertexGreen: {r: 0, g: 1, b: 0, a: 0}
-    - _VertexGreen1: {r: 0, g: 1, b: 0, a: 0}
-    - _VertexRed: {r: 1, g: 0, b: 0, a: 0}
-    - _VertexRed1: {r: 1, g: 0, b: 0, a: 0}
-    - _ViewOffset: {r: 0, g: 0, b: 0, a: 0}

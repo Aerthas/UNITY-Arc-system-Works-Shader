@@ -28,6 +28,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _GlowMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ILM:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -50,13 +54,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _ALPHABLEND: 0
-    - _BaseSSSAlphaSwap: 0
+    - _BaseSSSAlphaSwap: 1
     - _COLORADDSUBDIFF: 0
     - _COLORCOLOR: 0
     - _COLOROVERLAY: 1
     - _CameraDepthMult: 2
     - _Cutoff: 0.5
     - _DepthMultClamp: 2
+    - _DepthScaleClamp: 6
     - _ENABLETHISFORGUILTYGEAR: 0
     - _EnableBaseColorMult: 0
     - _EnableCameraDepthMult: 0
@@ -65,18 +70,33 @@ Material:
     - _EnableGranblueBlackFresnel: 0
     - _EnableMetalMatcap: 0
     - _EnableOutline: 0
+    - _FADE: 0
     - _FADING: 1
     - _FakeLightDirX: 35
     - _FakeLightDirY: -135
     - _FakeLightFallbackDirToggle: 0
     - _FakeLightIntensity: 1
+    - _FighterZHighlightFreselFuzzy: 0.01
+    - _FighterZHighlightIntensity: 1
+    - _FighterZHighlightPower: 5
     - _ForceFakeLight: 1
+    - _FresnelSystem: 0
+    - _GlowMaskIntensity: 1
+    - _GranblueDarkenFreselFuzzy: 0
+    - _GranblueDarkenIntensity: 0
+    - _GranblueDarkenPower: 0
+    - _GranblueDarkenScale: 0
     - _GranblueFresnelPower: 1.77
+    - _GranblueFresnelPower1: 1.77
     - _GranblueFresnelScale: 1.12
+    - _GranblueFresnelScale1: 1.77
+    - _GranblueHighlightFreselFuzzy: 0
+    - _GranblueHighlightIntensity: 0
+    - _GranblueHighlightPower: 0
     - _HighlightFreselFuzzy: 0.01
     - _HighlightIntensity: 1
-    - _HighlightPower: 1
-    - _HighlightScale: 0.41
+    - _HighlightPower: 5
+    - _HighlightScale: 1
     - _ILMChannel: 0
     - _ILMLayer1: 0.6
     - _ILMLayer2: 0.3
@@ -109,9 +129,10 @@ Material:
     - _showOutlineSettings: 0
     m_Colors:
     - _BaseSSSAlphaColor: {r: 1, g: 1, b: 1, a: 0}
-    - _DarkHighlightMult: {r: 0.23921531, g: 0.23921531, b: 0.5294118, a: 0}
+    - _DarkHighlightMult: {r: 0.23921528, g: 0.23921528, b: 0.5294118, a: 0}
     - _FakeLightColor: {r: 1, g: 1, b: 1, a: 0}
     - _FakeLightDir: {r: 0, g: 0, b: 0, a: 0}
+    - _GlowMaskTint: {r: 1, g: 1, b: 1, a: 0}
     - _ILMDebugColor: {r: 1, g: 1, b: 1, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
     - _VertexDebugColor: {r: 1, g: 1, b: 1, a: 0}
