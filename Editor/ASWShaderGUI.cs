@@ -72,10 +72,9 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _EnableOutline = null;
     MaterialProperty _OutlineThickness = null;
     MaterialProperty _OutlineColor = null;
+    MaterialProperty _OutlineColorIntensity = null;
     MaterialProperty _EnableBaseColorMult = null;
     MaterialProperty _EnableCameraDistanceMult = null;
-    //MaterialProperty _DepthScaleClamp = null;
-    //MaterialProperty _CameraDepthMult = null;
     MaterialProperty _ALPHABLEND = null;
     MaterialProperty _VertexChannel = null;
     MaterialProperty _VertexDebugColor = null;
@@ -209,8 +208,8 @@ public class ASWShaderGUI : ShaderGUI
 		        if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, _FADE, "Glow Mask", Color.cyan) ){
 		        	ASWStyles.ToggleGroup(_FADE.floatValue == 0);
 		       		me.TexturePropertySingleLine(Styles.glowMaskText, _GlowMask);
-		        	me.ShaderProperty(_GlowMaskTint, _MetalBIntensity.displayName);
-		        	me.ShaderProperty(_GlowMaskIntensity, _MetalBIntensity.displayName);
+		        	me.ShaderProperty(_GlowMaskTint, _GlowMaskTint.displayName);
+		        	me.ShaderProperty(_GlowMaskIntensity, _GlowMaskIntensity.displayName);
 		        	ASWStyles.ToggleGroupEnd();
 		        }
 	        }
@@ -285,11 +284,12 @@ public class ASWShaderGUI : ShaderGUI
 				me.ShaderProperty(_EnableOutline, _EnableOutline.displayName);
 				if (_EnableOutline.floatValue == 1){
 					me.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
+					me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
 					me.ShaderProperty(_EnableBaseColorMult, _EnableBaseColorMult.displayName);
 					if (_EnableBaseColorMult.floatValue == 0){
 						me.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
 					}
-					me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
+					me.ShaderProperty(_OutlineColorIntensity, _OutlineColorIntensity.displayName);
 				}
 		    }
 
@@ -371,6 +371,7 @@ public class ASWOutlineGUI : ShaderGUI
     MaterialProperty _OutlineThickness = null;
     MaterialProperty _EnableBaseColorMult = null;
     MaterialProperty _EnableCameraDistanceMult = null;
+    MaterialProperty _OutlineColorIntensity = null;
 	MaterialProperty _Base = null;
 
     public override void OnGUI (MaterialEditor me, MaterialProperty[] props)
@@ -403,6 +404,7 @@ public class ASWOutlineGUI : ShaderGUI
 	        GUILayout.Label("Outline Settings", EditorStyles.boldLabel);
 	        me.ShaderProperty(_WrongVertexColors, "Are your vertex colors correct?");
 	        me.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
+			me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
 	        me.ShaderProperty(_EnableBaseColorMult, _EnableBaseColorMult.displayName);
 			if( _EnableBaseColorMult.floatValue == 1 ) {
 		         me.TexturePropertySingleLine(Styles.baseText, _Base);
@@ -410,7 +412,7 @@ public class ASWOutlineGUI : ShaderGUI
 		    else{
 		    	me.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
 		    }
-			me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
+		    me.ShaderProperty(_OutlineColorIntensity, _OutlineColorIntensity.displayName);
 		}
     }
 }
