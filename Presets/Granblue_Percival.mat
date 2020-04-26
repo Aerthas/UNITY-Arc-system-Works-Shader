@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FighterZ_Goku
+  m_Name: Granblue_Percival
   m_Shader: {fileID: 4800000, guid: d11bb9eec1ac777489f013c4121dd663, type: 3}
-  m_ShaderKeywords: _COLOROVERLAY_ON _FORCEFAKELIGHT_ON
+  m_ShaderKeywords: _COLOROVERLAY_ON _ENABLECAMERADEPTHMULT_ON _FADING_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -27,19 +27,11 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _DetailRequiresUVtobeonasecondUVChannel:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _GlowMask:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ILM:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Metal:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -61,114 +53,70 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _ALPHABLEND: 0
-    - _AmbMax: 0.7
-    - _AmbMin: 0.2
-    - _BaseSSSAlphaSwap: 1
+    - _BaseSSSAlphaSwap: 0
     - _COLORADDSUBDIFF: 0
     - _COLORCOLOR: 0
     - _COLOROVERLAY: 1
     - _CameraDepthMult: 3
     - _Cutoff: 0.5
-    - _DepthMultClamp: 2
+    - _DepthMultClamp: 0.5
     - _DepthScaleClamp: 6
-    - _ENABLETHISFORGUILTYGEAR: 0
     - _EnableBaseColorMult: 1
+    - _EnableCameraDepthMult: 0
     - _EnableCameraDistanceMult: 1
-    - _EnableFresnelHighlight: 0
-    - _EnableFresnelWORKINPROGRESS: 0
-    - _EnableGranblueBlackFresnel: 0
-    - _EnableMetalMatcap: 0
     - _EnableOutline: 1
     - _FADE: 0
-    - _FADING: 0
+    - _FADING: 1
     - _FakeLightDirX: 35
     - _FakeLightDirY: -135
     - _FakeLightFallbackDirToggle: 0
     - _FakeLightIntensity: 1
-    - _FighterZHighlightFreselFuzzy: 0.01
-    - _FighterZHighlightIntensity: 1
-    - _FighterZHighlightPower: 5
-    - _FinalColorIntensity: 3
-    - _Float33: 0.0001
-    - _Float34: 0.0001
+    - _Float2: 0.5
     - _ForceFakeLight: 0
-    - _FresnelSystem: 0
+    - _FresnelSystem: 1
     - _GlowMaskIntensity: 1
-    - _GranblueDarkenFreselFuzzy: 0
-    - _GranblueDarkenIntensity: 0
-    - _GranblueDarkenPower: 0
-    - _GranblueDarkenScale: 0
-    - _GranblueFresnelPower: 1.77
-    - _GranblueFresnelPower1: 1.77
-    - _GranblueFresnelScale: 1.77
-    - _GranblueFresnelScale1: 1.77
-    - _GranblueHighlightFreselFuzzy: 0
-    - _GranblueHighlightIntensity: 0
-    - _GranblueHighlightPower: 0
-    - _HighlightFreselFuzzy: 0.01
+    - _GranblueDarkenPower: 1
+    - _GranblueDarkenScale: 1.5
+    - _GranblueFresnelPower: 1
+    - _GranblueFresnelScale: 1
+    - _HighlightFreselFuzzy: 0.93
     - _HighlightIntensity: 1
-    - _HighlightPower: 5
-    - _HighlightScale: 1
+    - _HighlightPower: 10
+    - _HighlightScale: 30
     - _ILMChannel: 0
-    - _ILMDetailScale: 5
-    - _ILMLayer1: 0.396
-    - _ILMLayer2: 0.59
-    - _LightIntensity: 1.33
-    - _LightLayer1: 0
-    - _LightLayer1Fuzziness: 0
-    - _LightLayer1Push: 0
-    - _LightLayer2: -0.3
-    - _LightLayer2Fuzziness: 0
-    - _LightLayer2Intensity: 1
-    - _LightLayer2Push: 0
+    - _ILMLayer1: 0.335
+    - _ILMLayer2: 0
     - _METALLICGLOSSMAP: 0
     - _MetalAIntensity: 1
-    - _MetalBIntensity: 5
-    - _MetalEnable: 0
+    - _MetalBIntensity: 10
+    - _OutlineCameraDistanceClamp: 6.15
     - _OutlineColorIntensity: 1
-    - _OutlineDiffuseMultEnable: 0
     - _OutlineThickness: 0.5
-    - _OutlineWidth: 1
-    - _OutlineWidth1: 0
     - _PIXELSNAP: 0
     - _ShadowBrightness: 1
-    - _ShadowIntensity: 2
     - _ShadowLayer1Fuzziness: 0
     - _ShadowLayer1Gate: 1
     - _ShadowLayer1Intensity: 1
     - _ShadowLayer1Push: 0
     - _ShadowLayer2Fuzziness: 0
-    - _ShadowLayer2Gate: 1
+    - _ShadowLayer2Gate: 0.91
     - _ShadowLayer2Intensity: 1
-    - _ShadowLayer2Push: -0.3
-    - _ShineIntensity: 1
-    - _ShineSize: 4
-    - _ShowOutlineSettings: 0
+    - _ShadowLayer2Push: -0.393
     - _SpecularFuzzy: 0
-    - _SpecularFuzzySolid: 0
-    - _SpecularIntensity: 2.92
-    - _SpecularMult: 0
-    - _SpecularMult2: 5
-    - _SpecularSize: 0.425
-    - _VertexChannel: 1
-    - _VertexColorOpacity: 1
-    - _VertexColorScale: 0.7
-    - _VertexLayer1: 0.265
+    - _SpecularIntensity: 2
+    - _SpecularSize: 0.68
+    - _VertexChannel: 0
+    - _VertexLayer1: 0.254
     - _VertexLayer2: 0.51
     - _ViewDirOffsetX: 0
     - _ViewDirOffsetY: 0
     - _WrongVertexColors: 0
-    - __dirty: 0
-    - _showOutlineSettings: 1
+    - __dirty: 1
     m_Colors:
     - _BaseSSSAlphaColor: {r: 1, g: 1, b: 1, a: 0}
-    - _DarkHighlightMult: {r: 0.5492118, g: 0.5492118, b: 0.7411765, a: 0}
+    - _DarkHighlightMult: {r: 0.23921531, g: 0.23921531, b: 0.5294118, a: 0}
     - _FakeLightColor: {r: 1, g: 1, b: 1, a: 0}
-    - _FakeLightDir: {r: 1, g: 1, b: 0, a: 0}
     - _GlowMaskTint: {r: 1, g: 1, b: 1, a: 0}
     - _ILMDebugColor: {r: 1, g: 1, b: 1, a: 0}
-    - _LightColor: {r: 1, g: 1, b: 1, a: 0}
-    - _LightDir: {r: 1, g: 1, b: 1, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
-    - _ShadowTint: {r: 0, g: 0, b: 0, a: 0}
     - _VertexDebugColor: {r: 1, g: 1, b: 1, a: 0}

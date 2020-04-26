@@ -63,13 +63,13 @@ Material:
     - _DepthMultClamp: 2
     - _DepthScaleClamp: 6
     - _ENABLETHISFORGUILTYGEAR: 0
-    - _EnableBaseColorMult: 0
+    - _EnableBaseColorMult: 1
     - _EnableCameraDepthMult: 0
-    - _EnableCameraDistanceMult: 0
+    - _EnableCameraDistanceMult: 1
     - _EnableFresnelHighlight: 1
     - _EnableGranblueBlackFresnel: 0
     - _EnableMetalMatcap: 0
-    - _EnableOutline: 0
+    - _EnableOutline: 1
     - _FADE: 0
     - _FADING: 1
     - _FakeLightDirX: 35
@@ -103,8 +103,9 @@ Material:
     - _METALLICGLOSSMAP: 0
     - _MetalAIntensity: 1
     - _MetalBIntensity: 10
+    - _OutlineColorIntensity: 1
     - _OutlineDiffuseMultEnable: 0
-    - _OutlineThickness: 0
+    - _OutlineThickness: 0.5
     - _PIXELSNAP: 0
     - _ShadowBrightness: 0.431
     - _ShadowLayer1Fuzziness: 0

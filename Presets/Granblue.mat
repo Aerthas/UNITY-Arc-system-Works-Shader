@@ -64,7 +64,7 @@ Material:
     - _EnableBaseColorMult: 1
     - _EnableCameraDepthMult: 0
     - _EnableCameraDistanceMult: 1
-    - _EnableOutline: 0
+    - _EnableOutline: 1
     - _FADE: 0
     - _FADING: 1
     - _FakeLightDirX: 35
@@ -76,7 +76,7 @@ Material:
     - _FresnelSystem: 1
     - _GlowMaskIntensity: 1
     - _GranblueDarkenPower: 1
-    - _GranblueDarkenScale: 1
+    - _GranblueDarkenScale: 1.5
     - _GranblueFresnelPower: 1
     - _GranblueFresnelScale: 1
     - _HighlightFreselFuzzy: 0.93
@@ -90,9 +90,10 @@ Material:
     - _MetalAIntensity: 1
     - _MetalBIntensity: 10
     - _OutlineCameraDistanceClamp: 6.15
-    - _OutlineThickness: 1
+    - _OutlineColorIntensity: 1
+    - _OutlineThickness: 0.5
     - _PIXELSNAP: 0
-    - _ShadowBrightness: 0.654
+    - _ShadowBrightness: 1
     - _ShadowLayer1Fuzziness: 0
     - _ShadowLayer1Gate: 1
     - _ShadowLayer1Intensity: 1
