@@ -5,9 +5,9 @@ https://github.com/Aerthas/Aerthas-Unity-Shaders
 
 ## Arc System Works Shader - DISCLAIMER BELOW
 ## [If you are unfamiliar with GitHub, click here to download](https://github.com/Aerthas/Aerthas-Unity-Shaders/releases)
-![Example of a render using the shader!](https://i.imgur.com/WzdxxQ5.png)<br/><br/>
-![Example of a render using the shader!](https://i.imgur.com/ABRJ10x.png)<br/><br/>
-[See it in motion!](https://i.imgur.com/XgwrapH.mp4)<br/><br/>
+![Example of a render using the shader!](https://i.imgur.com/eRlrYKg.png)<br/>
+(Yes this is a render using my shader)<br/>
+![Example of a render using the shader!](https://i.imgur.com/zRXvGlV.jpg)<br/><br/>
 Emulates the look of the FABULOUS Arc System Works games.<br/><br/>
 Confirmed games this shader will work with:
 * Dragon Ball: FighterZ
