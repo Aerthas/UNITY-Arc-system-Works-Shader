@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Granblue_Percival
   m_Shader: {fileID: 4800000, guid: d11bb9eec1ac777489f013c4121dd663, type: 3}
-  m_ShaderKeywords: _COLOROVERLAY_ON _ENABLECAMERADEPTHMULT_ON _FADING_ON
+  m_ShaderKeywords: _COLOROVERLAY_ON _FADING_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -64,17 +64,21 @@ Material:
     - _EnableBaseColorMult: 1
     - _EnableCameraDepthMult: 0
     - _EnableCameraDistanceMult: 1
+    - _EnableLightColorMult: 1
     - _EnableOutline: 1
     - _FADE: 0
     - _FADING: 1
     - _FakeLightDirX: 35
     - _FakeLightDirY: -135
-    - _FakeLightFallbackDirToggle: 0
+    - _FakeLightFallbackDirToggle: 1
+    - _FakeLightFallbackDirection: 1
     - _FakeLightIntensity: 1
     - _Float2: 0.5
-    - _ForceFakeLight: 0
+    - _ForceFakeLight: 1
+    - _ForceFakeLightDirection: 1
     - _FresnelSystem: 1
-    - _GlowMaskIntensity: 1
+    - _GlobalIntensityMinimum: 0.1
+    - _GlowMaskIntensity: 0.36
     - _GranblueDarkenPower: 1
     - _GranblueDarkenScale: 1.5
     - _GranblueFresnelPower: 1
@@ -86,6 +90,9 @@ Material:
     - _ILMChannel: 0
     - _ILMLayer1: 0.335
     - _ILMLayer2: 0
+    - _IntensityMinimum: 0
+    - _LightColor: 0
+    - _LightDirection: 0
     - _METALLICGLOSSMAP: 0
     - _MetalAIntensity: 1
     - _MetalBIntensity: 10
@@ -108,15 +115,16 @@ Material:
     - _VertexChannel: 0
     - _VertexLayer1: 0.254
     - _VertexLayer2: 0.51
-    - _ViewDirOffsetX: 0
-    - _ViewDirOffsetY: 0
+    - _ViewDirOffsetX: -20
+    - _ViewDirOffsetY: 35
     - _WrongVertexColors: 0
     - __dirty: 1
     m_Colors:
     - _BaseSSSAlphaColor: {r: 1, g: 1, b: 1, a: 0}
-    - _DarkHighlightMult: {r: 0.23921531, g: 0.23921531, b: 0.5294118, a: 0}
+    - _DarkHighlightMult: {r: 0.23921517, g: 0.23921517, b: 0.5294118, a: 0}
     - _FakeLightColor: {r: 1, g: 1, b: 1, a: 0}
     - _GlowMaskTint: {r: 1, g: 1, b: 1, a: 0}
     - _ILMDebugColor: {r: 1, g: 1, b: 1, a: 0}
+    - _IntensityMinimum: {r: 0.413, g: 0.413, b: 0.413, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
     - _VertexDebugColor: {r: 1, g: 1, b: 1, a: 0}

@@ -22,8 +22,6 @@ public class ASWShaderGUI : ShaderGUI
         public static GUIContent glowMaskText = new GUIContent("Glow Mask", "[Character Indentifier]_GlowMask. Used by few characters.");
     }
 
-    MaterialProperty _ForceFakeLight = null;
-    MaterialProperty _FakeLightFallbackDirToggle = null;
     MaterialProperty _WrongVertexColors = null;
     MaterialProperty _Base = null;
     MaterialProperty _SSS = null;
@@ -42,6 +40,10 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _FakeLightDirY = null;
     MaterialProperty _ViewDirOffsetX = null;
     MaterialProperty _ViewDirOffsetY = null;
+    MaterialProperty _LightDirection = null;
+    MaterialProperty _LightColor = null;
+    MaterialProperty _FakeLightFallbackDirection = null;
+    MaterialProperty _GlobalIntensityMinimum = null;
     MaterialProperty _FakeLightIntensity = null;
     MaterialProperty _ShadowLayer1Push = null;
     MaterialProperty _ShadowLayer1Gate = null;
@@ -73,6 +75,8 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _OutlineThickness = null;
     MaterialProperty _OutlineColor = null;
     MaterialProperty _OutlineColorIntensity = null;
+    MaterialProperty _EnableLightColorMult = null;
+	
     MaterialProperty _EnableBaseColorMult = null;
     MaterialProperty _EnableCameraDistanceMult = null;
     MaterialProperty _ALPHABLEND = null;
@@ -95,10 +99,13 @@ public class ASWShaderGUI : ShaderGUI
 				false,
 			true, // Light Settings
 				false,
+				false,
 			false, // Fresnel Settings
 				false,
 				false,
 			false, // Outline Settings
+				false,
+				false,
 			false, // Debug
 				false,
 				false,
@@ -113,11 +120,14 @@ public class ASWShaderGUI : ShaderGUI
 				"Metal Matcap",
 				"Glow Mask",
 			"Light Settings",
+				"Shadow Settings",
 				"Specular Settings",
 			"Fresnel Settings",
 				"Highlight Fresnel",
 				"Granblue Darken Fresnel",
 			"Outline Settings",
+				"Thickness",
+				"Color",
 			"Debug",
 				"Vertex Colors",
 				"ILM Colors",
@@ -169,26 +179,12 @@ public class ASWShaderGUI : ShaderGUI
 
 		EditorGUI.BeginChangeCheck();
 		{
+			//ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light v" + "<color=#ff0000ff> "+shaderVersion[1]+"</color>" + "<color=#000000ff>  }</color>");
 			ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light v" + "<color=#ff0000ff> "+shaderVersion[1]+"</color>" + "<color=#000000ff>  }</color>");
 	        // Global props
 			if (ASWStyles.DoFoldout(foldouts, mat, me, "Global Settings")){
-		        //me.ShaderProperty(_ForceFakeLight, _ForceFakeLight.displayName);
+		        //me.ShaderProperty(_LightDirection, _LightDirection.displayName);
 		        me.ShaderProperty(_WrongVertexColors, "Are your vertex colors correct?");
-		        me.ShaderProperty(_ForceFakeLight, new GUIContent(_ForceFakeLight.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
-		        me.ShaderProperty(_FakeLightFallbackDirToggle, new GUIContent(_FakeLightFallbackDirToggle.displayName, "Toggle between different light directions if the scene/world has no light source."));
-	        
-				if( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Fake Light Settings", Color.yellow) ){
-					me.ShaderProperty(_FakeLightIntensity, _FakeLightIntensity.displayName);
-					me.ShaderProperty(_FakeLightColor, _FakeLightColor.displayName);
-					if(_FakeLightFallbackDirToggle.floatValue == 0){
-						me.ShaderProperty(_FakeLightDirX, _FakeLightDirX.displayName);
-						me.ShaderProperty(_FakeLightDirY, _FakeLightDirY.displayName);
-					}
-					else{
-						me.ShaderProperty(_ViewDirOffsetX, _ViewDirOffsetX.displayName);
-						me.ShaderProperty(_ViewDirOffsetY, _ViewDirOffsetY.displayName);
-					}
-				}
 	        }
 	        // Primary props
 	        if (ASWStyles.DoFoldout(foldouts, mat, me, "Main Textures")){
@@ -218,25 +214,49 @@ public class ASWShaderGUI : ShaderGUI
 
 		    //Light Layer Proprties
 	        if(ASWStyles.DoFoldout(foldouts, mat, me, "Light Settings")){
-				me.ShaderProperty(_ShadowBrightness, _ShadowBrightness.displayName);
-
+				
+		        me.ShaderProperty(_LightDirection, new GUIContent(_LightDirection.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
+		        me.ShaderProperty(_LightColor, new GUIContent(_LightColor.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
+		        
+				ASWStyles.PartingLine();
+				me.ShaderProperty(_GlobalIntensityMinimum, _GlobalIntensityMinimum.displayName);
 				ASWStyles.PartingLine();
 				
-				me.ShaderProperty(_ShadowLayer1Push, _ShadowLayer1Push.displayName);
-				me.ShaderProperty(_ShadowLayer1Gate, _ShadowLayer1Gate.displayName);
-				me.ShaderProperty(_ShadowLayer1Fuzziness, _ShadowLayer1Fuzziness.displayName);
-				me.ShaderProperty(_ShadowLayer1Intensity, _ShadowLayer1Intensity.displayName);
-				me.ShaderProperty(_ILMLayer1, _ILMLayer1.displayName);
-				me.ShaderProperty(_VertexLayer1, _VertexLayer1.displayName);
+				if( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Fake Light Settings", Color.yellow) ){
+					me.ShaderProperty(_FakeLightFallbackDirection, new GUIContent(_FakeLightFallbackDirection.displayName, "Toggle between different light directions if the scene/world has no light source."));
+					me.ShaderProperty(_FakeLightIntensity, _FakeLightIntensity.displayName);
+					me.ShaderProperty(_FakeLightColor, _FakeLightColor.displayName);
+					if(_FakeLightFallbackDirection.floatValue == 0){
+						me.ShaderProperty(_FakeLightDirX, _FakeLightDirX.displayName);
+						me.ShaderProperty(_FakeLightDirY, _FakeLightDirY.displayName);
+					}
+					else{
+						me.ShaderProperty(_ViewDirOffsetX, _ViewDirOffsetX.displayName);
+						me.ShaderProperty(_ViewDirOffsetY, _ViewDirOffsetY.displayName);
+					}
+				}
+				
+				if( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Shadow Settings", Color.yellow) ){
+					me.ShaderProperty(_ShadowBrightness, _ShadowBrightness.displayName);
 
-				ASWStyles.PartingLine();
+					ASWStyles.PartingLine();
+					
+					me.ShaderProperty(_ShadowLayer1Push, _ShadowLayer1Push.displayName);
+					me.ShaderProperty(_ShadowLayer1Gate, _ShadowLayer1Gate.displayName);
+					me.ShaderProperty(_ShadowLayer1Fuzziness, _ShadowLayer1Fuzziness.displayName);
+					me.ShaderProperty(_ShadowLayer1Intensity, _ShadowLayer1Intensity.displayName);
+					me.ShaderProperty(_ILMLayer1, _ILMLayer1.displayName);
+					me.ShaderProperty(_VertexLayer1, _VertexLayer1.displayName);
 
-				me.ShaderProperty(_ShadowLayer2Push, _ShadowLayer2Push.displayName);
-				me.ShaderProperty(_ShadowLayer2Gate, _ShadowLayer2Gate.displayName);
-				me.ShaderProperty(_ShadowLayer2Fuzziness, _ShadowLayer2Fuzziness.displayName);
-				me.ShaderProperty(_ShadowLayer2Intensity, _ShadowLayer2Intensity.displayName);
-				me.ShaderProperty(_ILMLayer2, _ILMLayer2.displayName);
-				me.ShaderProperty(_VertexLayer2, _VertexLayer2.displayName);
+					ASWStyles.PartingLine();
+
+					me.ShaderProperty(_ShadowLayer2Push, _ShadowLayer2Push.displayName);
+					me.ShaderProperty(_ShadowLayer2Gate, _ShadowLayer2Gate.displayName);
+					me.ShaderProperty(_ShadowLayer2Fuzziness, _ShadowLayer2Fuzziness.displayName);
+					me.ShaderProperty(_ShadowLayer2Intensity, _ShadowLayer2Intensity.displayName);
+					me.ShaderProperty(_ILMLayer2, _ILMLayer2.displayName);
+					me.ShaderProperty(_VertexLayer2, _VertexLayer2.displayName);
+				}
 
 				//Specular Settings
 				if( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Specular Settings", Color.yellow) ){
@@ -283,13 +303,18 @@ public class ASWShaderGUI : ShaderGUI
 				ASWStyles.PartingLine();
 				me.ShaderProperty(_EnableOutline, _EnableOutline.displayName);
 				if (_EnableOutline.floatValue == 1){
-					me.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
-					me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
-					me.ShaderProperty(_EnableBaseColorMult, _EnableBaseColorMult.displayName);
-					if (_EnableBaseColorMult.floatValue == 0){
-						me.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
+					if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Thickness", Color.cyan)){
+						me.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
+						me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
 					}
-					me.ShaderProperty(_OutlineColorIntensity, _OutlineColorIntensity.displayName);
+					if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Color", Color.cyan)){
+						me.ShaderProperty(_EnableLightColorMult, _EnableLightColorMult.displayName);
+						me.ShaderProperty(_EnableBaseColorMult, _EnableBaseColorMult.displayName);
+						if (_EnableBaseColorMult.floatValue == 0){
+							me.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
+						}
+						me.ShaderProperty(_OutlineColorIntensity, _OutlineColorIntensity.displayName);
+					}
 				}
 		    }
 
@@ -365,6 +390,18 @@ public class ASWOutlineGUI : ShaderGUI
     {
         public static GUIContent baseText = new GUIContent("Base Texture", "[Character Indentifier]_Base");
     }
+	
+	public static Dictionary<Material, Toggles > foldouts = new Dictionary<Material, Toggles>();
+    Toggles toggles = new Toggles(
+		new bool[] {
+			false, // Thickness
+			true,
+		},
+		new string[] {
+			"Thickness Settings", 
+			"Color Settings"
+		}
+	);
 
     MaterialProperty _WrongVertexColors = null;
     MaterialProperty _OutlineColor = null;
@@ -373,10 +410,19 @@ public class ASWOutlineGUI : ShaderGUI
     MaterialProperty _EnableCameraDistanceMult = null;
     MaterialProperty _OutlineColorIntensity = null;
 	MaterialProperty _Base = null;
+    MaterialProperty _EnableLightColorMult = null;
+    MaterialProperty _GlobalIntensityMinimum = null;
+    MaterialProperty _LightColor = null;
+    MaterialProperty _FakeLightColor = null;
+    MaterialProperty _FakeLightIntensity = null;
 
     public override void OnGUI (MaterialEditor me, MaterialProperty[] props)
     {
     	Material mat = (Material)me.target;
+		
+		if (!foldouts.ContainsKey(mat)){
+			foldouts.Add(mat, toggles);
+		}
 
     	foreach (var property in GetType().GetFields(bindingFlags)) 
         {                                                           
@@ -399,20 +445,34 @@ public class ASWOutlineGUI : ShaderGUI
 	        	Application.OpenURL("https://www.youtube.com/watch?v=SYS3XlRmDaA");
 	            Debug.Log("Opened external url: https://www.youtube.com/watch?v=SYS3XlRmDaA");
 	        }
-
+			
 	        // Outline props
 	        GUILayout.Label("Outline Settings", EditorStyles.boldLabel);
 	        me.ShaderProperty(_WrongVertexColors, "Are your vertex colors correct?");
-	        me.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
-			me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
-	        me.ShaderProperty(_EnableBaseColorMult, _EnableBaseColorMult.displayName);
-			if( _EnableBaseColorMult.floatValue == 1 ) {
-		         me.TexturePropertySingleLine(Styles.baseText, _Base);
-		    }
-		    else{
-		    	me.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
-		    }
-		    me.ShaderProperty(_OutlineColorIntensity, _OutlineColorIntensity.displayName);
+			
+			if (ASWStyles.DoFoldout(foldouts, mat, me, "Thickness Settings")){
+				me.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
+				me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
+			}
+			if (ASWStyles.DoFoldout(foldouts, mat, me, "Color Settings")){
+				me.ShaderProperty(_EnableBaseColorMult, _EnableBaseColorMult.displayName);
+				if( _EnableBaseColorMult.floatValue == 1 ) {
+					 me.TexturePropertySingleLine(Styles.baseText, _Base);
+				}
+				else{
+					me.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
+				}
+				me.ShaderProperty(_OutlineColorIntensity, _OutlineColorIntensity.displayName);
+				ASWStyles.PartingLine();
+				me.ShaderProperty(_EnableLightColorMult, _EnableLightColorMult.displayName);
+				if( _EnableLightColorMult.floatValue == 1 ){
+					me.ShaderProperty(_LightColor, new GUIContent(_LightColor.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
+					me.ShaderProperty(_GlobalIntensityMinimum, _GlobalIntensityMinimum.displayName);
+					ASWStyles.PartingLine();
+					me.ShaderProperty(_FakeLightColor, _FakeLightColor.displayName);
+					me.ShaderProperty(_FakeLightIntensity, _FakeLightIntensity.displayName);
+				}
+			}
 		}
     }
 }

@@ -113,10 +113,34 @@ public class ASWStyles : MonoBehaviour
         style.fixedHeight = HeaderHeight;
         style.contentOffset = contentOffset;
         style.alignment = TextAnchor.MiddleCenter;
-        var rect = GUILayoutUtility.GetRect(16f, HeaderHeight, style);
+        //var rect = GUILayoutUtility.GetRect(16f, HeaderHeight, style);
+		var rect = GUILayoutUtility.GetRect(GetInspectorWidth(), style.fixedHeight, style);
 
         GUI.Box(rect, title, style);
         return rect;
+    }
+	private static Rect DrawShurikenCenteredTitle(string title){
+		GUIStyle formatting = new GUIStyle("ShurikenModuleTitle");
+        formatting.font = new GUIStyle(EditorStyles.boldLabel).font;
+        formatting.contentOffset = new Vector2(0f, -3f);
+        formatting.hover.textColor = Color.gray;
+        formatting.fixedHeight = 28f;
+        formatting.fontSize = 10;
+		
+        formatting.alignment = TextAnchor.MiddleCenter;
+		Rect rect = GUILayoutUtility.GetRect(GetInspectorWidth(), formatting.fixedHeight, formatting);
+        rect.width += 8f;
+        rect.x -= 8f;
+
+        Event evt = Event.current;
+        Color bgCol = GUI.backgroundColor;
+		GUI.Box(rect, title, formatting);
+		
+		return rect;
+	}
+	public static void ShurikenHeaderCentered(string title)
+    {
+        DrawShurikenCenteredTitle(title);
     }
     //End Header Centered
 
@@ -270,10 +294,7 @@ public class ASWStyles : MonoBehaviour
         }
     }
 
-    public static void ShurikenHeaderCentered(string title)
-    {
-        DrawShurikenCenteredTitle(title, new Vector2(0f, -2f), 22);
-    }
+    
 
     public static void DrawButtons()
     {

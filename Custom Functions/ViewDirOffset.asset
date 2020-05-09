@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ViewDirOffset
   m_EditorClassIdentifier: 
   m_functionInfo: "// Made with Amplify Shader Editor\n// Available at the Unity Asset
-    Store - http://u3d.as/y3X \n/*ASEBEGIN\nVersion=17800\n2167;93;1532;824;-1252.31;1106.35;1;True;True\nNode;AmplifyShaderEditor.NormalizeNode;2;2878.867,-810.6541;Inherit;False;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0\nNode;AmplifyShaderEditor.CustomExpressionNode;184;2617.319,-826.261;Inherit;False;float
+    Store - http://u3d.as/y3X \n/*ASEBEGIN\nVersion=17800\n2280;91;1532;824;-1517.31;1110.35;1;True;True\nNode;AmplifyShaderEditor.NormalizeNode;2;2878.867,-810.6541;Inherit;False;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0\nNode;AmplifyShaderEditor.CustomExpressionNode;184;2617.319,-826.261;Inherit;False;float
     sinX = sin(rotation.x)@$float cosX = cos(rotation.x)@$float sinY = sin(rotation.y)@$float
     cosY = cos(rotation.y)@$float sinZ = sin(rotation.z)@$float cosZ = cos(rotation.z)@$float3
     xAxis = float3($\tcosY * cosZ,$\tcosX * sinZ + sinX * sinY * cosZ,$\tsinX * sinZ
@@ -24,7 +24,7 @@ MonoBehaviour:
     UNITY_SINGLE_PASS_STEREO$float3 cameraPos = float3((unity_StereoWorldSpaceCameraPos[0]+
     unity_StereoWorldSpaceCameraPos[1])*.5)@ $#else$float3 cameraPos = _WorldSpaceCameraPos@$#endif$float3
     worldViewDir = normalize((cameraPos - worldPos))@$return worldViewDir@;3;False;1;True;worldPos;FLOAT3;0,0,0;In;;Float;False;Stereo
-    Camera View Direction;True;False;0;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0\nNode;AmplifyShaderEditor.WorldPosInputsNode;197;1730.31,-712.3499;Inherit;False;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3\nNode;AmplifyShaderEditor.FunctionOutput;0;3076.306,-794.5349;Inherit;False;True;-1;Output;0;False;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0\nWireConnection;2;0;184;0\nWireConnection;184;0;186;0\nWireConnection;184;1;195;0\nWireConnection;184;2;195;1\nWireConnection;184;3;195;2\nWireConnection;192;0;1;0\nWireConnection;186;0;192;0\nWireConnection;186;1;191;0\nWireConnection;191;0;18;0\nWireConnection;195;0;194;0\nWireConnection;194;0;197;0\nWireConnection;0;0;2;0\nASEEND*/\n//CHKSM=33850B560ED7197B367AC9C5134F11F366D92C32"
+    Camera View Direction;True;False;0;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0\nNode;AmplifyShaderEditor.WorldPosInputsNode;197;1730.31,-712.3499;Inherit;False;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3\nNode;AmplifyShaderEditor.FunctionOutput;0;3076.306,-794.5349;Inherit;False;True;-1;Output;0;False;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0\nWireConnection;2;0;184;0\nWireConnection;184;0;186;0\nWireConnection;184;1;195;0\nWireConnection;184;2;195;1\nWireConnection;184;3;195;2\nWireConnection;192;0;1;0\nWireConnection;186;0;192;0\nWireConnection;186;1;191;0\nWireConnection;191;0;18;0\nWireConnection;195;0;194;0\nWireConnection;194;0;197;0\nWireConnection;0;0;2;0\nASEEND*/\n//CHKSM=B7CE0480196C1A562068C18850B7A97A434EAF76"
   m_functionName: 
   m_description: 
   m_additionalIncludes:
