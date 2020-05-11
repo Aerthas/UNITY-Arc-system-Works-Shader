@@ -33,6 +33,7 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _MetalBIntensity = null;
     MaterialProperty _FADE = null;
     MaterialProperty _GlowMask = null;
+    MaterialProperty _GlowMaskMultSystem = null;
     MaterialProperty _GlowMaskIntensity = null;
     MaterialProperty _GlowMaskTint = null;
     MaterialProperty _FakeLightColor = null;
@@ -204,6 +205,7 @@ public class ASWShaderGUI : ShaderGUI
 		        if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, _FADE, "Glow Mask", Color.cyan) ){
 		        	ASWStyles.ToggleGroup(_FADE.floatValue == 0);
 		       		me.TexturePropertySingleLine(Styles.glowMaskText, _GlowMask);
+		        	me.ShaderProperty(_GlowMaskMultSystem, _GlowMaskMultSystem.displayName);
 		        	me.ShaderProperty(_GlowMaskTint, _GlowMaskTint.displayName);
 		        	me.ShaderProperty(_GlowMaskIntensity, _GlowMaskIntensity.displayName);
 		        	ASWStyles.ToggleGroupEnd();
