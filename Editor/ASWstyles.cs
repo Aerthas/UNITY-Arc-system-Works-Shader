@@ -10,19 +10,19 @@ public class ASWStyles : MonoBehaviour
 
     private static bool foldoutClicked = false;
 
-    public static bool DoFoldout(Dictionary<Material, Toggles> foldouts, Material mat, MaterialEditor me, string header){
+    public static bool DoFoldout(Dictionary<Material, ASWToggles> foldouts, Material mat, MaterialEditor me, string header){
         foldouts[mat].SetState(header, Foldout(header, foldouts[mat].GetState(header), me));
         return foldouts[mat].GetState(header);
     }
 
-    public static bool DoMediumFoldout(Dictionary<Material, Toggles> foldouts, Material mat, MaterialEditor me, MaterialProperty prop, string header, Color color){
+    public static bool DoMediumFoldout(Dictionary<Material, ASWToggles> foldouts, Material mat, MaterialEditor me, MaterialProperty prop, string header, Color color){
         foldouts[mat].SetState(header, MediumFoldout(header, foldouts[mat].GetState(header), me, color));
         me.ShaderProperty(prop, " ");
         GUILayout.Space(4);
         return foldouts[mat].GetState(header);
     }
 
-    public static bool DoMediumFoldout(Dictionary<Material, Toggles> foldouts, Material mat, MaterialEditor me, string header, Color color){
+    public static bool DoMediumFoldout(Dictionary<Material, ASWToggles> foldouts, Material mat, MaterialEditor me, string header, Color color){
         foldouts[mat].SetState(header, MediumFoldout(header, foldouts[mat].GetState(header), me, color));
         GUILayout.Space(24);
         return foldouts[mat].GetState(header);

@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-public class Toggles {
+public class ASWToggles {
 
 	bool[] toggles; 
 	string[] headers;
 	List<int> mainFoldouts = new List<int>();
 	List<int> subFoldouts = new List<int>();
 
-	public Toggles(bool[] t, string[] h){
+	public ASWToggles(bool[] t, string[] h){
 		toggles = t;
 		headers = h;
 		for (int i = 0; i < h.Length; i++){
@@ -40,5 +40,5 @@ public class Toggles {
 
 	public int[] GetMain(){return mainFoldouts.ToArray();}
 	public int[] GetSub(){return subFoldouts.ToArray();}
-	public bool[] GetToggles(){return toggles;}
+	public bool[] GetASWToggles(){return toggles;}
 }

@@ -68,6 +68,7 @@ Material:
     - _EnableCameraDistanceMult: 1
     - _EnableFresnelHighlight: 1
     - _EnableGranblueBlackFresnel: 0
+    - _EnableLightColorMult: 1
     - _EnableMetalMatcap: 0
     - _EnableOutline: 1
     - _FADE: 0
@@ -75,13 +76,16 @@ Material:
     - _FakeLightDirX: 35
     - _FakeLightDirY: -135
     - _FakeLightFallbackDirToggle: 0
+    - _FakeLightFallbackDirection: 0
     - _FakeLightIntensity: 1
     - _FighterZHighlightFreselFuzzy: 0.01
     - _FighterZHighlightIntensity: 1
     - _FighterZHighlightPower: 5
     - _ForceFakeLight: 1
     - _FresnelSystem: 0
+    - _GlobalIntensityMinimum: 0.1
     - _GlowMaskIntensity: 1
+    - _GlowMaskMultSystem: 0
     - _GranblueDarkenFreselFuzzy: 0
     - _GranblueDarkenIntensity: 0
     - _GranblueDarkenPower: 0
@@ -98,8 +102,12 @@ Material:
     - _HighlightPower: 5
     - _HighlightScale: 1
     - _ILMChannel: 0
+    - _ILMColorSetting: 0
+    - _ILMEmissiveIntensity: 0
     - _ILMLayer1: 0.6
     - _ILMLayer2: 0.3
+    - _LightColor: 0
+    - _LightDirection: 0
     - _METALLICGLOSSMAP: 0
     - _MetalAIntensity: 1
     - _MetalBIntensity: 10
@@ -107,6 +115,7 @@ Material:
     - _OutlineDiffuseMultEnable: 0
     - _OutlineThickness: 0.5
     - _PIXELSNAP: 0
+    - _SOFTPARTICLES: 0
     - _ShadowBrightness: 0.431
     - _ShadowLayer1Fuzziness: 0
     - _ShadowLayer1Gate: 1
@@ -125,6 +134,7 @@ Material:
     - _VertexLayer2: 0.51
     - _ViewDirOffsetX: 0
     - _ViewDirOffsetY: 0
+    - _ViewDirOffsetZ: 0
     - _WrongVertexColors: 0
     - __dirty: 1
     - _showOutlineSettings: 0
@@ -134,6 +144,7 @@ Material:
     - _FakeLightColor: {r: 1, g: 1, b: 1, a: 0}
     - _FakeLightDir: {r: 0, g: 0, b: 0, a: 0}
     - _GlowMaskTint: {r: 1, g: 1, b: 1, a: 0}
+    - _ILMColor: {r: 1, g: 0, b: 0, a: 0}
     - _ILMDebugColor: {r: 1, g: 1, b: 1, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
     - _VertexDebugColor: {r: 1, g: 1, b: 1, a: 0}

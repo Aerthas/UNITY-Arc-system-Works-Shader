@@ -79,6 +79,7 @@ Material:
     - _FresnelSystem: 1
     - _GlobalIntensityMinimum: 0.1
     - _GlowMaskIntensity: 0.36
+    - _GlowMaskMultSystem: 0
     - _GranblueDarkenPower: 1
     - _GranblueDarkenScale: 1.5
     - _GranblueFresnelPower: 1
@@ -88,6 +89,8 @@ Material:
     - _HighlightPower: 10
     - _HighlightScale: 30
     - _ILMChannel: 0
+    - _ILMColorSetting: 0
+    - _ILMEmissiveIntensity: 0
     - _ILMLayer1: 0.335
     - _ILMLayer2: 0
     - _IntensityMinimum: 0
@@ -100,6 +103,7 @@ Material:
     - _OutlineColorIntensity: 1
     - _OutlineThickness: 0.5
     - _PIXELSNAP: 0
+    - _SOFTPARTICLES: 0
     - _ShadowBrightness: 1
     - _ShadowLayer1Fuzziness: 0
     - _ShadowLayer1Gate: 1
@@ -117,6 +121,7 @@ Material:
     - _VertexLayer2: 0.51
     - _ViewDirOffsetX: -20
     - _ViewDirOffsetY: 35
+    - _ViewDirOffsetZ: 0
     - _WrongVertexColors: 0
     - __dirty: 1
     m_Colors:
@@ -124,6 +129,7 @@ Material:
     - _DarkHighlightMult: {r: 0.23921517, g: 0.23921517, b: 0.5294118, a: 0}
     - _FakeLightColor: {r: 1, g: 1, b: 1, a: 0}
     - _GlowMaskTint: {r: 1, g: 1, b: 1, a: 0}
+    - _ILMColor: {r: 1, g: 0, b: 0, a: 0}
     - _ILMDebugColor: {r: 1, g: 1, b: 1, a: 0}
     - _IntensityMinimum: {r: 0.413, g: 0.413, b: 0.413, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}

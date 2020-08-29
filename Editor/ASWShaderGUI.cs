@@ -27,6 +27,10 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _SSS = null;
     MaterialProperty _ILM = null;
     MaterialProperty _Detail = null;
+	MaterialProperty _ILMColorSetting = null;
+	MaterialProperty _ILMColor = null;
+	MaterialProperty _ILMEmissiveIntensity = null;
+	MaterialProperty _SOFTPARTICLES = null;
     MaterialProperty _METALLICGLOSSMAP = null;
     MaterialProperty _MetalMatcap = null;
     MaterialProperty _MetalAIntensity = null;
@@ -39,7 +43,7 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _FakeLightColor = null;
     MaterialProperty _FakeLightDirX = null;
     MaterialProperty _FakeLightDirY = null;
-    MaterialProperty _ViewDirOffsetX = null;
+    //MaterialProperty _ViewDirOffsetX = null;
     MaterialProperty _ViewDirOffsetY = null;
     MaterialProperty _LightDirection = null;
     MaterialProperty _LightColor = null;
@@ -90,12 +94,13 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _BaseSSSAlphaSwap = null;
     MaterialProperty _BaseSSSAlphaColor = null;
 
-    public static Dictionary<Material, Toggles > foldouts = new Dictionary<Material, Toggles>();
-    Toggles toggles = new Toggles(
+    public static Dictionary<Material, ASWToggles > foldouts = new Dictionary<Material, ASWToggles>();
+    ASWToggles toggles = new ASWToggles(
 		new bool[] {
 			false, // Global
 				false,
 			true, // Main Textures
+				false,
 				false,
 				false,
 			true, // Light Settings
@@ -118,6 +123,7 @@ public class ASWShaderGUI : ShaderGUI
 			"Global Settings", 
 				"Fake Light Settings", 
 			"Main Textures", 
+				"ILM Body Lines Color",
 				"Metal Matcap",
 				"Glow Mask",
 			"Light Settings",
@@ -192,7 +198,20 @@ public class ASWShaderGUI : ShaderGUI
 		        me.TexturePropertySingleLine(Styles.baseText, _Base);
 		        me.TexturePropertySingleLine(Styles.sssText, _SSS);
 		        me.TexturePropertySingleLine(Styles.ilmText, _ILM);
+				GUILayout.Space(-18);
+		        me.ShaderProperty(_ILMColorSetting," ");
+				//GUILayout.Space(24);
 		        me.TexturePropertySingleLine(Styles.detailText, _Detail);
+				
+				if ( _ILMColorSetting.floatValue > 0 ){
+					if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "ILM Body Lines Color", Color.cyan) ){
+						me.ShaderProperty(_ILMColor, _ILMColor.displayName);
+						me.ShaderProperty(_SOFTPARTICLES, "Enable ILM Lines Glow");
+						if(_SOFTPARTICLES.floatValue == 1){
+							me.ShaderProperty(_ILMEmissiveIntensity, _ILMEmissiveIntensity.displayName);
+						}
+					}
+				}
 
 		        if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, _METALLICGLOSSMAP, "Metal Matcap", Color.cyan) ){
 		        	ASWStyles.ToggleGroup(_METALLICGLOSSMAP.floatValue == 0);
@@ -233,8 +252,9 @@ public class ASWShaderGUI : ShaderGUI
 						me.ShaderProperty(_FakeLightDirY, _FakeLightDirY.displayName);
 					}
 					else{
-						me.ShaderProperty(_ViewDirOffsetX, _ViewDirOffsetX.displayName);
+						//me.ShaderProperty(_ViewDirOffsetX, _ViewDirOffsetX.displayName);
 						me.ShaderProperty(_ViewDirOffsetY, _ViewDirOffsetY.displayName);
+						//GUILayout.Label("Note: VRChat flips the 'X' direction from what is visible here. Negate any value you put in the X to see what it will look like in game.", EditorStyles.helpBox);
 					}
 				}
 				
@@ -393,8 +413,8 @@ public class ASWOutlineGUI : ShaderGUI
         public static GUIContent baseText = new GUIContent("Base Texture", "[Character Indentifier]_Base");
     }
 	
-	public static Dictionary<Material, Toggles > foldouts = new Dictionary<Material, Toggles>();
-    Toggles toggles = new Toggles(
+	public static Dictionary<Material, ASWToggles > foldouts = new Dictionary<Material, ASWToggles>();
+    ASWToggles toggles = new ASWToggles(
 		new bool[] {
 			false, // Thickness
 			true,
