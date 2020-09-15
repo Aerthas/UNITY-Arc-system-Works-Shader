@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
- 
+
 public class ASWShaderGUI : ShaderGUI
 {
     BindingFlags bindingFlags = BindingFlags.Public |
@@ -46,7 +46,7 @@ public class ASWShaderGUI : ShaderGUI
     //MaterialProperty _ViewDirOffsetX = null;
     MaterialProperty _ViewDirOffsetY = null;
     MaterialProperty _LightDirection = null;
-    MaterialProperty _LightColor = null;
+    MaterialProperty _LightingSystem = null;
     MaterialProperty _FakeLightFallbackDirection = null;
     MaterialProperty _GlobalIntensityMinimum = null;
     MaterialProperty _FakeLightIntensity = null;
@@ -81,7 +81,7 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _OutlineColor = null;
     MaterialProperty _OutlineColorIntensity = null;
     MaterialProperty _EnableLightColorMult = null;
-	
+
     MaterialProperty _EnableBaseColorMult = null;
     MaterialProperty _EnableCameraDistanceMult = null;
     MaterialProperty _ALPHABLEND = null;
@@ -120,9 +120,9 @@ public class ASWShaderGUI : ShaderGUI
 			false // Presets
 		},
 		new string[] {
-			"Global Settings", 
-				"Fake Light Settings", 
-			"Main Textures", 
+			"Global Settings",
+				"Fake Light Settings",
+			"Main Textures",
 				"ILM Body Lines Color",
 				"Metal Matcap",
 				"Glow Mask",
@@ -154,8 +154,8 @@ public class ASWShaderGUI : ShaderGUI
     {
         Material mat = (Material)me.target;
 
-    	foreach (var property in GetType().GetFields(bindingFlags)) 
-        {                                                           
+    	foreach (var property in GetType().GetFields(bindingFlags))
+        {
             if (property.FieldType == typeof(MaterialProperty))
             {
                 property.SetValue(this, FindProperty(property.Name, props));
@@ -202,7 +202,7 @@ public class ASWShaderGUI : ShaderGUI
 		        me.ShaderProperty(_ILMColorSetting," ");
 				//GUILayout.Space(24);
 		        me.TexturePropertySingleLine(Styles.detailText, _Detail);
-				
+
 				if ( _ILMColorSetting.floatValue > 0 ){
 					if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "ILM Body Lines Color", Color.cyan) ){
 						me.ShaderProperty(_ILMColor, _ILMColor.displayName);
@@ -230,19 +230,19 @@ public class ASWShaderGUI : ShaderGUI
 		        	ASWStyles.ToggleGroupEnd();
 		        }
 	        }
-	        
-	        
+
+
 
 		    //Light Layer Proprties
 	        if(ASWStyles.DoFoldout(foldouts, mat, me, "Light Settings")){
-				
+
 		        me.ShaderProperty(_LightDirection, new GUIContent(_LightDirection.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
-		        me.ShaderProperty(_LightColor, new GUIContent(_LightColor.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
-		        
+		        me.ShaderProperty(_LightingSystem, new GUIContent(_LightingSystem.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
+
 				ASWStyles.PartingLine();
 				me.ShaderProperty(_GlobalIntensityMinimum, _GlobalIntensityMinimum.displayName);
 				ASWStyles.PartingLine();
-				
+
 				if( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Fake Light Settings", Color.yellow) ){
 					me.ShaderProperty(_FakeLightFallbackDirection, new GUIContent(_FakeLightFallbackDirection.displayName, "Toggle between different light directions if the scene/world has no light source."));
 					me.ShaderProperty(_FakeLightIntensity, _FakeLightIntensity.displayName);
@@ -257,12 +257,12 @@ public class ASWShaderGUI : ShaderGUI
 						//GUILayout.Label("Note: VRChat flips the 'X' direction from what is visible here. Negate any value you put in the X to see what it will look like in game.", EditorStyles.helpBox);
 					}
 				}
-				
+
 				if( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Shadow Settings", Color.yellow) ){
 					me.ShaderProperty(_ShadowBrightness, _ShadowBrightness.displayName);
 
 					ASWStyles.PartingLine();
-					
+
 					me.ShaderProperty(_ShadowLayer1Push, _ShadowLayer1Push.displayName);
 					me.ShaderProperty(_ShadowLayer1Gate, _ShadowLayer1Gate.displayName);
 					me.ShaderProperty(_ShadowLayer1Fuzziness, _ShadowLayer1Fuzziness.displayName);
@@ -412,7 +412,7 @@ public class ASWOutlineGUI : ShaderGUI
     {
         public static GUIContent baseText = new GUIContent("Base Texture", "[Character Indentifier]_Base");
     }
-	
+
 	public static Dictionary<Material, ASWToggles > foldouts = new Dictionary<Material, ASWToggles>();
     ASWToggles toggles = new ASWToggles(
 		new bool[] {
@@ -420,7 +420,7 @@ public class ASWOutlineGUI : ShaderGUI
 			true,
 		},
 		new string[] {
-			"Thickness Settings", 
+			"Thickness Settings",
 			"Color Settings"
 		}
 	);
@@ -434,20 +434,20 @@ public class ASWOutlineGUI : ShaderGUI
 	MaterialProperty _Base = null;
     MaterialProperty _EnableLightColorMult = null;
     MaterialProperty _GlobalIntensityMinimum = null;
-    MaterialProperty _LightColor = null;
+    MaterialProperty _LightingSystem = null;
     MaterialProperty _FakeLightColor = null;
     MaterialProperty _FakeLightIntensity = null;
 
     public override void OnGUI (MaterialEditor me, MaterialProperty[] props)
     {
     	Material mat = (Material)me.target;
-		
+
 		if (!foldouts.ContainsKey(mat)){
 			foldouts.Add(mat, toggles);
 		}
 
-    	foreach (var property in GetType().GetFields(bindingFlags)) 
-        {                                                           
+    	foreach (var property in GetType().GetFields(bindingFlags))
+        {
             if (property.FieldType == typeof(MaterialProperty))
             {
                 property.SetValue(this, FindProperty(property.Name, props));
@@ -461,17 +461,17 @@ public class ASWOutlineGUI : ShaderGUI
 	        EditorGUIUtility.fieldWidth = 50f;   // Use default labelWidth
 
 		    ASWStyles.ShurikenHeaderCentered("Arc System Works Outline");
-	        
+
 		    if (GUILayout.Button("How to properly set up your outlines") == true)
 	        {
 	        	Application.OpenURL("https://www.youtube.com/watch?v=SYS3XlRmDaA");
 	            Debug.Log("Opened external url: https://www.youtube.com/watch?v=SYS3XlRmDaA");
 	        }
-			
+
 	        // Outline props
 	        GUILayout.Label("Outline Settings", EditorStyles.boldLabel);
 	        me.ShaderProperty(_WrongVertexColors, "Are your vertex colors correct?");
-			
+
 			if (ASWStyles.DoFoldout(foldouts, mat, me, "Thickness Settings")){
 				me.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
 				me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
@@ -488,7 +488,7 @@ public class ASWOutlineGUI : ShaderGUI
 				ASWStyles.PartingLine();
 				me.ShaderProperty(_EnableLightColorMult, _EnableLightColorMult.displayName);
 				if( _EnableLightColorMult.floatValue == 1 ){
-					me.ShaderProperty(_LightColor, new GUIContent(_LightColor.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
+					me.ShaderProperty(_LightingSystem, new GUIContent(_LightingSystem.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
 					me.ShaderProperty(_GlobalIntensityMinimum, _GlobalIntensityMinimum.displayName);
 					ASWStyles.PartingLine();
 					me.ShaderProperty(_FakeLightColor, _FakeLightColor.displayName);
