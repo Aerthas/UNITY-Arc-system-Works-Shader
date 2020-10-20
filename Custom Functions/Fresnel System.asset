@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b2425a2284af743826c689403a4924, type: 3}
+  m_Name: Fresnel System
+  m_EditorClassIdentifier: 
+  m_functionInfo: "// Made with Amplify Shader Editor\n// Available at the Unity Asset
+    Store - http://u3d.as/y3X \n/*ASEBEGIN\nVersion=17800\n269;356;2060;940;3885.289;1428.453;2.817758;True;True\nNode;AmplifyShaderEditor.CommentaryNode;1;-2858.835,-897.8733;Inherit;False;2615.82;1308.131;;7;6;2;67;68;69;70;71;Fresnel;1,1,1,1;0;0\nNode;AmplifyShaderEditor.CommentaryNode;2;-2768.628,-797.8733;Inherit;False;2427.208;540.8108;Highlight;11;38;31;26;20;15;13;10;8;4;57;60;;1,1,1,1;0;0\nNode;AmplifyShaderEditor.CommentaryNode;6;-2732.458,-110.3474;Inherit;False;2406.616;454.556;Darken
+    Highlight;8;39;34;30;24;22;19;12;62;;1,1,1,1;0;0\nNode;AmplifyShaderEditor.CommentaryNode;9;-2225.056,602.7288;Inherit;False;1434.534;438.8455;Granblue
+    Black Fresnel;8;42;37;27;25;21;16;72;73;;1,1,1,1;0;0\nNode;AmplifyShaderEditor.SimpleMultiplyOpNode;38;-742.8752,-565.7953;Inherit;False;3;3;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.SimpleMultiplyOpNode;39;-833.9153,55.7478;Inherit;False;3;3;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.TFHCCompareEqual;42;-932.4573,715.2017;Inherit;False;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;1;False;3;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.TFHCCompareEqual;48;-480.8823,670.0078;Inherit;False;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.WireNode;61;-831.688,-641.9271;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionInput;60;-2682.3,-668.1438;Inherit;False;Base
+    Alpha;1;0;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.WireNode;63;-897.7575,193.0668;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionInput;67;-1251.565,-233.3098;Inherit;False;Highlight
+    Intensity;1;2;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.OneMinusNode;37;-1153.839,769.8657;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionInput;68;-1629.265,-230.5099;Inherit;False;Enable
+    Fresnel;1;3;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionInput;69;-2125.472,-220.6621;Inherit;False;Highlight
+    Fresnel Fuzzy;1;4;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionInput;71;-2722.59,-193.9854;Inherit;False;Highlight
+    Power;1;6;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionInput;70;-2714.59,-267.9854;Inherit;False;Highlight
+    Scale;1;5;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionInput;73;-2163.361,898.354;Inherit;False;Granblue
+    Darken Power;1;8;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionInput;62;-2684.762,173.4208;Inherit;False;SSS
+    Alpha;1;1;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.ClampOpNode;34;-1035.701,68.90869;Inherit;False;3;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;1;False;1;FLOAT;0\nNode;AmplifyShaderEditor.ClampOpNode;31;-1011.927,-585.2874;Inherit;False;3;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;1;False;1;FLOAT;0\nNode;AmplifyShaderEditor.SimpleMultiplyOpNode;30;-1220.48,66.78174;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.WorldPosInputsNode;4;-2731.999,-465.5262;Inherit;False;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3\nNode;AmplifyShaderEditor.SimpleMultiplyOpNode;8;-2418.821,-504.4012;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.CustomExpressionNode;10;-2488.545,-365.8833;Inherit;False;#if
+    UNITY_SINGLE_PASS_STEREO$float3 cameraPos = float3((unity_StereoWorldSpaceCameraPos[0]+
+    unity_StereoWorldSpaceCameraPos[1])*.5)@ $#else$float3 cameraPos = _WorldSpaceCameraPos@$#endif$float3
+    worldViewDir = normalize((cameraPos - worldPos))@$return worldViewDir@;3;False;1;True;worldPos;FLOAT3;0,0,0;In;;Float;False;Stereo
+    Camera View Direction;True;False;0;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0\nNode;AmplifyShaderEditor.SimpleMultiplyOpNode;12;-2468.995,84.46875;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FresnelNode;13;-2177.991,-564.9222;Inherit;False;Standard;WorldNormal;ViewDir;False;False;5;0;FLOAT3;0,0,1;False;4;FLOAT3;0,0,0;False;1;FLOAT;-0.180914;False;2;FLOAT;1;False;3;FLOAT;5;False;1;FLOAT;0\nNode;AmplifyShaderEditor.SaturateNode;15;-1903.956,-550.1683;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.SimpleMultiplyOpNode;16;-1874.347,782.9597;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FresnelNode;19;-2211.328,43.1958;Inherit;False;Standard;WorldNormal;ViewDir;False;False;5;0;FLOAT3;0,0,1;False;4;FLOAT3;0,0,0;False;1;FLOAT;-0.180914;False;2;FLOAT;1;False;3;FLOAT;5;False;1;FLOAT;0\nNode;AmplifyShaderEditor.PowerNode;20;-1701.194,-540.5753;Inherit;False;False;2;0;FLOAT;0;False;1;FLOAT;0.01;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FresnelNode;21;-1691.573,757.0188;Inherit;False;Standard;WorldNormal;ViewDir;False;False;5;0;FLOAT3;0,0,1;False;4;FLOAT3;0,0,0;False;1;FLOAT;0;False;2;FLOAT;1;False;3;FLOAT;5;False;1;FLOAT;0\nNode;AmplifyShaderEditor.SaturateNode;22;-1940.406,41.64771;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.PowerNode;24;-1715.93,41.64771;Inherit;False;False;2;0;FLOAT;0;False;1;FLOAT;1;False;1;FLOAT;0\nNode;AmplifyShaderEditor.SaturateNode;25;-1459.228,756.8557;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.SimpleMultiplyOpNode;26;-1277.302,-592.8423;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.ClampOpNode;27;-1314.679,751.0566;Inherit;False;3;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;1;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionInput;72;-2173.361,803.354;Inherit;False;Granblue
+    Darken Scale;1;7;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionInput;74;-831.4072,552.6448;Inherit;False;Fresnel
+    System;1;9;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionOutput;59;-241.459,642.1141;Inherit;False;False;-1;Darken
+    Highlight;1;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionOutput;57;-567.9851,-556.0719;Inherit;False;True;-1;Highlight;0;False;1;0;FLOAT;0;False;1;FLOAT;0\nWireConnection;38;0;61;0\nWireConnection;38;1;31;0\nWireConnection;38;2;67;0\nWireConnection;39;0;67;0\nWireConnection;39;1;34;0\nWireConnection;39;2;63;0\nWireConnection;42;0;68;0\nWireConnection;42;3;37;0\nWireConnection;48;0;74;0\nWireConnection;48;2;39;0\nWireConnection;48;3;42;0\nWireConnection;61;0;60;0\nWireConnection;63;0;62;0\nWireConnection;37;0;27;0\nWireConnection;34;0;30;0\nWireConnection;31;0;26;0\nWireConnection;30;0;68;0\nWireConnection;30;1;24;0\nWireConnection;8;0;60;0\nWireConnection;8;1;70;0\nWireConnection;10;0;4;0\nWireConnection;12;0;70;0\nWireConnection;12;1;62;0\nWireConnection;13;4;10;0\nWireConnection;13;2;8;0\nWireConnection;13;3;71;0\nWireConnection;15;0;13;0\nWireConnection;16;0;62;0\nWireConnection;16;1;72;0\nWireConnection;19;4;10;0\nWireConnection;19;2;12;0\nWireConnection;19;3;71;0\nWireConnection;20;0;15;0\nWireConnection;20;1;69;0\nWireConnection;21;2;16;0\nWireConnection;21;3;73;0\nWireConnection;22;0;19;0\nWireConnection;24;0;22;0\nWireConnection;24;1;69;0\nWireConnection;25;0;21;0\nWireConnection;26;0;20;0\nWireConnection;26;1;68;0\nWireConnection;27;0;25;0\nWireConnection;59;0;48;0\nWireConnection;57;0;38;0\nASEEND*/\n//CHKSM=7176BCFFD1EE8D4720DC56B49A897121779DF5F4"
+  m_functionName: 
+  m_description: 
+  m_additionalIncludes:
+    m_additionalIncludes: []
+    m_outsideIncludes: []
+  m_additionalPragmas:
+    m_additionalPragmas: []
+    m_outsidePragmas: []
+  m_additionalDirectives:
+    m_validData: 0
+    m_isDirty: 0
+    m_moduleName: ' Additional Directives'
+    m_independentModule: 1
+    m_additionalDirectives: []
+    m_shaderFunctionDirectives: []
+    m_nativeDirectives: []
+    m_nativeDirectivesIndex: -1
+    m_nativeDirectivesFoldout: 0
+    m_directivesSaveItems: []
+  m_nodeCategory: 3
+  m_customNodeCategory: 
+  m_previewPosition: 0
+  m_hidden: 0

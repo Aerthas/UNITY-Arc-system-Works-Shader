@@ -10,7 +10,7 @@ Material:
   m_Name: FighterZ_Cell
   m_Shader: {fileID: 4800000, guid: d11bb9eec1ac777489f013c4121dd663, type: 3}
   m_ShaderKeywords: _COLOROVERLAY_ON _ENABLEFRESNELHIGHLIGHT_ON _ENABLEFRESNELWORKINPROGRESS_ON
-    _ENABLESPECULAREMISSION_ON _FADING_ON
+    _ENABLEHIGHLIGHT_ON _ENABLESPECULAREMISSION_ON _FADING_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -54,23 +54,34 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _ALPHABLEND: 0
+    - _ALPHATEST: 0
     - _BaseSSSAlphaSwap: 1
     - _COLORADDSUBDIFF: 0
     - _COLORCOLOR: 0
     - _COLOROVERLAY: 1
     - _CameraDepthMult: 2
+    - _CameraDistanceMult: 1
     - _Cutoff: 0.5
+    - _DebugGroup: 0
     - _DepthMultClamp: 2
     - _DepthScaleClamp: 6
+    - _DetailColorSetting: 0
+    - _DetailEmissiveIntensity: 0
     - _ENABLETHISFORGUILTYGEAR: 0
     - _EnableBaseColorMult: 1
     - _EnableCameraDepthMult: 0
     - _EnableCameraDistanceMult: 1
+    - _EnableDetailEmission: 0
+    - _EnableFresnel: 1
     - _EnableFresnelHighlight: 1
+    - _EnableGlowmask: 0
     - _EnableGranblueBlackFresnel: 0
+    - _EnableHighlight: 1
+    - _EnableILMEmission: 0
     - _EnableLightColorMult: 1
+    - _EnableMatcap: 0
     - _EnableMetalMatcap: 0
-    - _EnableOutline: 1
+    - _EnableOutline: 0
     - _FADE: 0
     - _FADING: 1
     - _FakeLightDirX: 35
@@ -108,12 +119,13 @@ Material:
     - _ILMLayer2: 0.3
     - _LightColor: 0
     - _LightDirection: 0
+    - _LightingSystem: 0
     - _METALLICGLOSSMAP: 0
     - _MetalAIntensity: 1
     - _MetalBIntensity: 10
     - _OutlineColorIntensity: 1
     - _OutlineDiffuseMultEnable: 0
-    - _OutlineThickness: 0.5
+    - _OutlineThickness: 1
     - _PIXELSNAP: 0
     - _SOFTPARTICLES: 0
     - _ShadowBrightness: 0.431
@@ -140,7 +152,9 @@ Material:
     - _showOutlineSettings: 0
     m_Colors:
     - _BaseSSSAlphaColor: {r: 1, g: 1, b: 1, a: 0}
-    - _DarkHighlightMult: {r: 0.23921528, g: 0.23921528, b: 0.5294118, a: 0}
+    - _DarkHighlightMult: {r: 0.23921525, g: 0.23921525, b: 0.5294118, a: 0}
+    - _DebugColor: {r: 1, g: 1, b: 1, a: 0}
+    - _DetailColor: {r: 0, g: 1, b: 0, a: 0}
     - _FakeLightColor: {r: 1, g: 1, b: 1, a: 0}
     - _FakeLightDir: {r: 0, g: 0, b: 0, a: 0}
     - _GlowMaskTint: {r: 1, g: 1, b: 1, a: 0}

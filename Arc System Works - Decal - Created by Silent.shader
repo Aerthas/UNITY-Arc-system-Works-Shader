@@ -14,7 +14,7 @@ Shader ".Aerthas/Arc System Works/Decal - Created by Silent"
 	{
 		
 		
-		Tags { "RenderType"="Transparent" }
+		Tags { "RenderType"="Transparent" "Queue"="Transparent" }
 	LOD 100
 
 		CGINCLUDE
@@ -123,9 +123,9 @@ Shader ".Aerthas/Arc System Works/Decal - Created by Silent"
 }
 /*ASEBEGIN
 Version=17800
-2230;191;1691;682;1208.268;213.1588;1.016116;True;True
+3469;175;2060;940;1395.741;344.2378;1.016116;True;True
 Node;AmplifyShaderEditor.ColorSpaceDouble;3;-823,-208.5;Inherit;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SamplerNode;1;-878.7905,-22.24131;Inherit;True;Property;_MainTex;MainTex;0;0;Create;True;0;0;False;0;-1;None;8e20a11b3b72023449681c03c2f521e0;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SamplerNode;1;-878.7905,-22.24131;Inherit;True;Property;_MainTex;MainTex;0;0;Create;True;0;0;False;0;-1;None;a5c7c799920a6f94fadbedaef18812dd;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.RangedFloatNode;12;-844.4981,178.0457;Inherit;False;Property;_DiscolorationModifier;Discoloration Modifier;2;0;Create;True;0;0;False;0;1.1;1.1;1;2;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;11;-888,-496.5;Inherit;False;Constant;_Float1;Float 1;3;0;Create;True;0;0;False;0;2;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.VertexColorNode;4;-894,417.5;Inherit;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
@@ -134,7 +134,7 @@ Node;AmplifyShaderEditor.UnityObjToClipPosHlpNode;8;-698,538.5;Inherit;False;1;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;6;-390,319.5;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT4;0,0,0,0;False;1;FLOAT4;0
 Node;AmplifyShaderEditor.PosVertexDataNode;9;-425,591.5;Inherit;False;0;0;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;2;-445,-108.5;Inherit;False;3;3;0;COLOR;1,1,1,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;10;0,0;Float;False;True;-1;2;ASEMaterialInspector;100;1;.Aerthas/Arc System Works/Decal - Created by Silent;0770190933193b94aaa3065e307002fa;True;Unlit;0;0;Unlit;2;True;1;0;False;-1;3;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;True;False;True;2;False;-1;True;True;True;True;True;0;False;-1;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;RenderType=Transparent=RenderType;True;2;0;False;False;False;False;False;False;False;False;False;True;1;LightMode=ForwardBase;False;0;;0;0;Standard;1;Vertex Position,InvertActionOnDeselection;1;0;1;True;False;;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;10;0,0;Float;False;True;-1;2;ASEMaterialInspector;100;1;.Aerthas/Arc System Works/Decal - Created by Silent;0770190933193b94aaa3065e307002fa;True;Unlit;0;0;Unlit;2;True;1;0;False;-1;3;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;True;False;True;2;False;-1;True;True;True;True;True;0;False;-1;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;2;RenderType=Transparent=Queue=0;Queue=Transparent=Queue=0;True;2;0;False;False;False;False;False;False;False;False;False;True;1;LightMode=ForwardBase;False;0;;0;0;Standard;1;Vertex Position,InvertActionOnDeselection;1;0;1;True;False;;0
 WireConnection;8;0;4;0
 WireConnection;6;0;7;0
 WireConnection;6;1;8;0
@@ -143,4 +143,4 @@ WireConnection;2;1;1;0
 WireConnection;2;2;12;0
 WireConnection;10;0;2;0
 ASEEND*/
-//CHKSM=58745F3EC3AD4985F48AE78CFC516F00CFBF6093
+//CHKSM=8FC29EC819C563E0733804949D674A6091F95C3B
