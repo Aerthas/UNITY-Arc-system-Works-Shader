@@ -5,9 +5,26 @@ https://github.com/Aerthas/Aerthas-Unity-Shaders
 
 ## Arc System Works Shader - DISCLAIMER BELOW
 ## [If you are unfamiliar with GitHub, click here to download](https://github.com/Aerthas/Aerthas-Unity-Shaders/releases)
-![Example of a render using the shader!](https://i.imgur.com/eRlrYKg.png)<br/>
+
+## Granblue Fantasy: Versus
 (Yes this is a render using my shader)<br/>
-![Example of a render using the shader!](https://i.imgur.com/zRXvGlV.jpg)<br/><br/>
+![Percival Render](https://i.imgur.com/zRXvGlV.jpg)<br/><br/>
+![Zooey Render](https://i.imgur.com/eRlrYKg.png)<br/>
+![Zooey](Previews/Zooey.gif)<br/>
+
+## Guilty Gear Xrd
+![Sol Badguy 1](Previews/solbadguy.gif)<br/>
+![Sol Badguy 2](https://i.imgur.com/illkWYA.png)<br/>
+
+## Dragon Ball FighterZ
+![Goku](Previews/goku.gif)<br/>
+![Cell](Previews/Cell.gif)<br/>
+
+## Custom models using the shader!
+### Tanjiro - Created from scratch by [CrypticLight https://twitter.com/TheCrypticLight](https://twitter.com/TheCrypticLight)
+![Tanjiro 1](https://i.imgur.com/X4uAOh4.png)<br/>
+![Tanjiro 1](https://i.imgur.com/S6Y28dC.png)<br/>
+
 Emulates the look of the FABULOUS Arc System Works games.<br/><br/>
 Confirmed games this shader will work with:
 * Dragon Ball: FighterZ
