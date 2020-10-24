@@ -9,7 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Granblue_Percival
   m_Shader: {fileID: 4800000, guid: d11bb9eec1ac777489f013c4121dd663, type: 3}
-  m_ShaderKeywords: _COLOROVERLAY_ON _ENABLEHIGHLIGHT_ON _FADING_ON
+  m_ShaderKeywords: _COLOROVERLAY_ON _ENABLEBASECOLORMULT_ON _ENABLECAMERADISTANCEMULT_ON
+    _ENABLEFRESNEL_ON _ENABLELIGHTCOLORMULT_ON _FADING_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -28,7 +29,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GlowMask:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: b5f95137f8572da49a151061f4620224, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ILM:
@@ -60,9 +61,11 @@ Material:
     - _COLOROVERLAY: 1
     - _CameraDepthMult: 3
     - _CameraDistanceMult: 1
+    - _ColorReplacer: 0
     - _Cutoff: 0.5
     - _DebugGroup: 0
     - _DepthMultClamp: 0.5
+    - _DepthOffset: 1
     - _DepthScaleClamp: 6
     - _DetailColorSetting: 0
     - _DetailEmissiveIntensity: 0
@@ -72,7 +75,6 @@ Material:
     - _EnableDetailEmission: 0
     - _EnableFresnel: 1
     - _EnableGlowmask: 0
-    - _EnableHighlight: 1
     - _EnableILMEmission: 0
     - _EnableLightColorMult: 1
     - _EnableMatcap: 0
@@ -83,11 +85,11 @@ Material:
     - _FakeLightDirY: -135
     - _FakeLightFallbackDirToggle: 1
     - _FakeLightFallbackDirection: 1
-    - _FakeLightIntensity: 1
+    - _FakeLightIntensity: 0.4
     - _Float2: 0.5
     - _ForceFakeLight: 1
     - _ForceFakeLightDirection: 1
-    - _FresnelSystem: 0
+    - _FresnelSystem: 1
     - _GlobalIntensityMinimum: 0.1
     - _GlowMaskIntensity: 0.36
     - _GlowMaskMultSystem: 0
@@ -106,8 +108,9 @@ Material:
     - _ILMLayer2: 0
     - _IntensityMinimum: 0
     - _LightColor: 0
+    - _LightColorSetting: 0
     - _LightDirection: 0
-    - _LightingSystem: 0
+    - _LightDirectionSetting: 0
     - _METALLICGLOSSMAP: 0
     - _MetalAIntensity: 1
     - _MetalBIntensity: 10
@@ -115,7 +118,6 @@ Material:
     - _OutlineColorIntensity: 1
     - _OutlineThickness: 1
     - _PIXELSNAP: 0
-    - _SOFTPARTICLES: 0
     - _ShadowBrightness: 1
     - _ShadowLayer1Fuzziness: 0
     - _ShadowLayer1Gate: 1
@@ -125,9 +127,15 @@ Material:
     - _ShadowLayer2Gate: 0.91
     - _ShadowLayer2Intensity: 1
     - _ShadowLayer2Push: -0.393
+    - _Source1Fuzziness: 0.01
+    - _Source2Fuzziness: 0.01
+    - _Source3Fuzziness: 0
+    - _Source4Fuzziness: 0.01
+    - _Source5Fuzziness: 0.01
     - _SpecularFuzzy: 0
     - _SpecularIntensity: 2
     - _SpecularSize: 0.68
+    - _TotalReplacements: 1
     - _VertexChannel: 0
     - _VertexLayer1: 0.254
     - _VertexLayer2: 0.51
@@ -147,4 +155,14 @@ Material:
     - _ILMDebugColor: {r: 1, g: 1, b: 1, a: 0}
     - _IntensityMinimum: {r: 0.413, g: 0.413, b: 0.413, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
+    - _Source1Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source2Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source3Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source4Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source5Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target1Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target2Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target3Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target4Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target5Color: {r: 1, g: 1, b: 1, a: 1}
     - _VertexDebugColor: {r: 1, g: 1, b: 1, a: 0}

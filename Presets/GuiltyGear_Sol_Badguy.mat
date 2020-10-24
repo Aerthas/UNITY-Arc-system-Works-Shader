@@ -21,7 +21,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Base:
-        m_Texture: {fileID: 2800000, guid: d2da38049713df04cb2842b6ce906495, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -53,7 +53,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ILM:
-        m_Texture: {fileID: 2800000, guid: 853ac78659dac774398d8bf23c6a1fca, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -77,7 +77,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SSS:
-        m_Texture: {fileID: 2800000, guid: 3469f53e7d1befe49a63b70614962e6f, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
@@ -89,12 +89,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _ALPHABLEND: 0
     - _ALPHATEST: 0
     - _BaseSSSAlphaSwap: 0
     - _BumpScale: 1
     - _CameraDistanceMult: 1
+    - _ColorReplacer: 0
     - _Cutoff: 0.5
     - _DebugGroup: 0
+    - _DepthOffset: 1
     - _DetailColorSetting: 0
     - _DetailEmissiveIntensity: 0
     - _DetailNormalMapScale: 1
@@ -113,6 +116,7 @@ Material:
     - _FakeLightFallbackDirection: 0
     - _FakeLightIntensity: 1
     - _FresnelSystem: 0
+    - _Fuzziness: 0.1
     - _GlobalIntensityMinimum: 0.1
     - _GlossMapScale: 1
     - _Glossiness: 0
@@ -129,9 +133,11 @@ Material:
     - _ILMColorSetting: 0
     - _ILMEmissiveIntensity: 0
     - _ILMLayer1: 0.6
-    - _ILMLayer2: 0
+    - _ILMLayer2: 0.1
     - _LightColor: 0
+    - _LightColorSetting: 0
     - _LightDirection: 0
+    - _LightDirectionSetting: 0
     - _MetalAIntensity: 1
     - _MetalBIntensity: 5
     - _Metallic: 0
@@ -146,15 +152,22 @@ Material:
     - _ShadowLayer1Intensity: 1
     - _ShadowLayer1Push: 0
     - _ShadowLayer2Fuzziness: 0
-    - _ShadowLayer2Gate: 0.91
+    - _ShadowLayer2Gate: 1
     - _ShadowLayer2Intensity: 1
     - _ShadowLayer2Push: -1
     - _SmoothnessTextureChannel: 0
+    - _Source1Fuzziness: 0.01
+    - _Source2Fuzziness: 0.01
+    - _Source3Fuzziness: 0.01
+    - _Source4Fuzziness: 0.01
+    - _Source5Fuzziness: 0.01
+    - _SourceFuzziness: 0.1
     - _SpecularFuzzy: 0
     - _SpecularHighlights: 1
     - _SpecularIntensity: 1
     - _SpecularSize: 0.583
     - _SrcBlend: 1
+    - _TotalReplacements: 1
     - _UVSec: 0
     - _VertexChannel: 0
     - _VertexLayer1: 0.31
@@ -166,11 +179,23 @@ Material:
     - __dirty: 1
     m_Colors:
     - _Color: {r: 0.3, g: 0.3, b: 0.3, a: 1}
-    - _DarkHighlightMult: {r: 0.23921552, g: 0.23921552, b: 0.5294118, a: 0}
+    - _DarkHighlightMult: {r: 0, g: 0, b: 0, a: 0}
     - _DebugColor: {r: 1, g: 1, b: 1, a: 0}
     - _DetailColor: {r: 0, g: 1, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _FakeLightColor: {r: 1, g: 1, b: 1, a: 0}
     - _GlowMaskTint: {r: 1, g: 1, b: 1, a: 0}
-    - _ILMColor: {r: 1, g: 0, b: 0, a: 0}
+    - _ILMColor: {r: 0, g: 1, b: 0.15109718, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Source1Color: {r: 0.62352943, g: 0.24705875, b: 0.19215679, a: 1}
+    - _Source2Color: {r: 0.2039215, g: 0.15686265, b: 0.1372548, a: 1}
+    - _Source3Color: {r: 0.882353, g: 0.8705883, b: 0.7960785, a: 1}
+    - _Source4Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source5Color: {r: 1, g: 1, b: 1, a: 1}
+    - _SourceColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Target1Color: {r: 1, g: 0.98039216, b: 0.8705883, a: 1}
+    - _Target2Color: {r: 0.32156852, g: 0.42352936, b: 0.6666667, a: 1}
+    - _Target3Color: {r: 0.07450976, g: 0.21960777, b: 0.38823524, a: 1}
+    - _Target4Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target5Color: {r: 1, g: 1, b: 1, a: 1}
+    - _TargetColor: {r: 1, g: 1, b: 1, a: 1}

@@ -4,6 +4,7 @@ Shader ".Aerthas/Arc System Works/Decal - Created by Silent"
 {
 	Properties
 	{
+		[Toggle]_Enable("Enable", Float) = 1
 		_MainTex("MainTex", 2D) = "white" {}
 		_DiscolorationModifier("Discoloration Modifier", Range( 1 , 2)) = 1.1
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
@@ -25,7 +26,6 @@ Shader ".Aerthas/Arc System Works/Decal - Created by Silent"
 		ColorMask RGBA
 		ZWrite On
 		ZTest LEqual
-		Offset 0 , 0
 		
 		
 		
@@ -66,6 +66,7 @@ Shader ".Aerthas/Arc System Works/Decal - Created by Silent"
 				float4 ase_texcoord1 : TEXCOORD1;
 			};
 
+			uniform float _Enable;
 			uniform sampler2D _MainTex;
 			uniform float4 _MainTex_ST;
 			uniform float _DiscolorationModifier;
@@ -109,9 +110,10 @@ Shader ".Aerthas/Arc System Works/Decal - Created by Silent"
 				float3 WorldPosition = i.worldPos;
 #endif
 				float2 uv_MainTex = i.ase_texcoord1.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+				float4 color18 = IsGammaSpace() ? float4(1,1,1,0) : float4(1,1,1,0);
 				
 				
-				finalColor = ( unity_ColorSpaceDouble * tex2D( _MainTex, uv_MainTex ) * _DiscolorationModifier );
+				finalColor = (( _Enable == 1.0 ) ? ( unity_ColorSpaceDouble * tex2D( _MainTex, uv_MainTex ) * _DiscolorationModifier ) :  color18 );
 				return finalColor;
 			}
 			ENDCG
@@ -123,24 +125,21 @@ Shader ".Aerthas/Arc System Works/Decal - Created by Silent"
 }
 /*ASEBEGIN
 Version=17800
-3469;175;2060;940;1395.741;344.2378;1.016116;True;True
-Node;AmplifyShaderEditor.ColorSpaceDouble;3;-823,-208.5;Inherit;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SamplerNode;1;-878.7905,-22.24131;Inherit;True;Property;_MainTex;MainTex;0;0;Create;True;0;0;False;0;-1;None;a5c7c799920a6f94fadbedaef18812dd;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;12;-844.4981,178.0457;Inherit;False;Property;_DiscolorationModifier;Discoloration Modifier;2;0;Create;True;0;0;False;0;1.1;1.1;1;2;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;11;-888,-496.5;Inherit;False;Constant;_Float1;Float 1;3;0;Create;True;0;0;False;0;2;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.VertexColorNode;4;-894,417.5;Inherit;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;7;-770,246.5;Inherit;False;Property;_Float0;Float 0;1;0;Create;True;0;0;False;0;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.UnityObjToClipPosHlpNode;8;-698,538.5;Inherit;False;1;0;FLOAT3;0,0,0;False;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;6;-390,319.5;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT4;0,0,0,0;False;1;FLOAT4;0
-Node;AmplifyShaderEditor.PosVertexDataNode;9;-425,591.5;Inherit;False;0;0;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;2;-445,-108.5;Inherit;False;3;3;0;COLOR;1,1,1,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;10;0,0;Float;False;True;-1;2;ASEMaterialInspector;100;1;.Aerthas/Arc System Works/Decal - Created by Silent;0770190933193b94aaa3065e307002fa;True;Unlit;0;0;Unlit;2;True;1;0;False;-1;3;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;True;False;True;2;False;-1;True;True;True;True;True;0;False;-1;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;2;RenderType=Transparent=Queue=0;Queue=Transparent=Queue=0;True;2;0;False;False;False;False;False;False;False;False;False;True;1;LightMode=ForwardBase;False;0;;0;0;Standard;1;Vertex Position,InvertActionOnDeselection;1;0;1;True;False;;0
-WireConnection;8;0;4;0
-WireConnection;6;0;7;0
-WireConnection;6;1;8;0
+-2340;198;2259;952;1062.924;519.5056;1;True;True
+Node;AmplifyShaderEditor.SamplerNode;1;-592,-32;Inherit;True;Property;_MainTex;MainTex;1;0;Create;True;0;0;False;0;-1;None;c3dba02165458b4429798840a4b67c84;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;12;-576,160;Inherit;False;Property;_DiscolorationModifier;Discoloration Modifier;2;0;Create;True;0;0;False;0;1.1;1.1;1;2;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorSpaceDouble;3;-528,-192;Inherit;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;13;304,-128;Inherit;False;Property;_Enable;Enable;0;1;[Toggle];Create;True;0;0;False;0;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;18;240,32;Inherit;False;Constant;_Color0;Color 0;4;0;Create;True;0;0;False;0;1,1,1,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;2;16,-48;Inherit;False;3;3;0;COLOR;1,1,1,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
+Node;AmplifyShaderEditor.TFHCCompareEqual;16;528,-96;Inherit;False;4;0;FLOAT;0;False;1;FLOAT;1;False;2;COLOR;0,0,0,0;False;3;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;10;816,-96;Float;False;True;-1;2;ASEMaterialInspector;100;1;.Aerthas/Arc System Works/Decal - Created by Silent;0770190933193b94aaa3065e307002fa;True;Unlit;0;0;Unlit;2;True;1;0;False;-1;3;False;-1;0;0;False;-1;0;False;-1;True;0;False;-1;0;False;-1;True;False;True;2;False;-1;True;True;True;True;True;0;False;-1;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;1;False;-1;True;3;False;-1;True;False;0;False;-1;0;False;-1;True;2;RenderType=Transparent=RenderType;Queue=Transparent=Queue=0;True;2;0;False;False;False;False;False;False;False;False;False;True;1;LightMode=ForwardBase;False;0;;0;0;Standard;1;Vertex Position,InvertActionOnDeselection;1;0;1;True;False;;0
 WireConnection;2;0;3;0
 WireConnection;2;1;1;0
 WireConnection;2;2;12;0
-WireConnection;10;0;2;0
+WireConnection;16;0;13;0
+WireConnection;16;2;2;0
+WireConnection;16;3;18;0
+WireConnection;10;0;16;0
 ASEEND*/
-//CHKSM=8FC29EC819C563E0733804949D674A6091F95C3B
+//CHKSM=DD540645BEBEF804B5BA285F50181031853443E8

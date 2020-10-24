@@ -9,8 +9,9 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: FighterZ_Cell
   m_Shader: {fileID: 4800000, guid: d11bb9eec1ac777489f013c4121dd663, type: 3}
-  m_ShaderKeywords: _COLOROVERLAY_ON _ENABLEFRESNELHIGHLIGHT_ON _ENABLEFRESNELWORKINPROGRESS_ON
-    _ENABLEHIGHLIGHT_ON _ENABLESPECULAREMISSION_ON _FADING_ON
+  m_ShaderKeywords: _COLOROVERLAY_ON _COLORREPLACER_ON _ENABLEBASECOLORMULT_ON _ENABLECAMERADISTANCEMULT_ON
+    _ENABLEFRESNELHIGHLIGHT_ON _ENABLEFRESNELWORKINPROGRESS_ON _ENABLEFRESNEL_ON _ENABLEHIGHLIGHT_ON
+    _ENABLELIGHTCOLORMULT_ON _ENABLESPECULAREMISSION_ON _FADING_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -61,9 +62,11 @@ Material:
     - _COLOROVERLAY: 1
     - _CameraDepthMult: 2
     - _CameraDistanceMult: 1
+    - _ColorReplacer: 1
     - _Cutoff: 0.5
     - _DebugGroup: 0
     - _DepthMultClamp: 2
+    - _DepthOffset: 1
     - _DepthScaleClamp: 6
     - _DetailColorSetting: 0
     - _DetailEmissiveIntensity: 0
@@ -118,7 +121,9 @@ Material:
     - _ILMLayer1: 0.6
     - _ILMLayer2: 0.3
     - _LightColor: 0
+    - _LightColorSetting: 0
     - _LightDirection: 0
+    - _LightDirectionSetting: 0
     - _LightingSystem: 0
     - _METALLICGLOSSMAP: 0
     - _MetalAIntensity: 1
@@ -138,21 +143,27 @@ Material:
     - _ShadowLayer2Intensity: 1
     - _ShadowLayer2Push: 0.023
     - _ShowOutlineSettings: 0
+    - _Source1Fuzziness: 0.01
+    - _Source2Fuzziness: 0.01
+    - _Source3Fuzziness: 0.01
+    - _Source4Fuzziness: 0.01
+    - _Source5Fuzziness: 0.01
     - _SpecularFuzzy: 0
     - _SpecularIntensity: 1
     - _SpecularSize: 0.725
+    - _TotalReplacements: 1
     - _VertexChannel: 0
     - _VertexLayer1: 0.31
     - _VertexLayer2: 0.51
     - _ViewDirOffsetX: 0
-    - _ViewDirOffsetY: 0
+    - _ViewDirOffsetY: 15.2
     - _ViewDirOffsetZ: 0
     - _WrongVertexColors: 0
     - __dirty: 1
     - _showOutlineSettings: 0
     m_Colors:
     - _BaseSSSAlphaColor: {r: 1, g: 1, b: 1, a: 0}
-    - _DarkHighlightMult: {r: 0.23921525, g: 0.23921525, b: 0.5294118, a: 0}
+    - _DarkHighlightMult: {r: 0.23921522, g: 0.23921522, b: 0.5294118, a: 0}
     - _DebugColor: {r: 1, g: 1, b: 1, a: 0}
     - _DetailColor: {r: 0, g: 1, b: 0, a: 0}
     - _FakeLightColor: {r: 1, g: 1, b: 1, a: 0}
@@ -161,4 +172,14 @@ Material:
     - _ILMColor: {r: 1, g: 0, b: 0, a: 0}
     - _ILMDebugColor: {r: 1, g: 1, b: 1, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
+    - _Source1Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source2Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source3Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source4Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source5Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target1Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target2Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target3Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target4Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target5Color: {r: 1, g: 1, b: 1, a: 1}
     - _VertexDebugColor: {r: 1, g: 1, b: 1, a: 0}

@@ -10,7 +10,7 @@ Material:
   m_Name: FighterZ_Goku
   m_Shader: {fileID: 4800000, guid: d11bb9eec1ac777489f013c4121dd663, type: 3}
   m_ShaderKeywords: _COLOROVERLAY_ON _ENABLEBASECOLORMULT_ON _ENABLECAMERADISTANCEMULT_ON
-    _ENABLEHIGHLIGHT_ON _ENABLELIGHTCOLORMULT_ON _FORCEFAKELIGHT_ON
+    _ENABLEFRESNEL_ON _ENABLELIGHTCOLORMULT_ON _FORCEFAKELIGHT_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -71,12 +71,15 @@ Material:
     - _COLOROVERLAY: 1
     - _CameraDepthMult: 3
     - _CameraDistanceMult: 1
+    - _ColorReplacer: 0
     - _Cutoff: 0.5
     - _DebugGroup: 0
+    - _DebugGroup1: 0
     - _DepthMultClamp: 2
+    - _DepthOffset: 1
     - _DepthScaleClamp: 6
     - _DetailColorSetting: 0
-    - _DetailEmissiveIntensity: 0
+    - _DetailEmissiveIntensity: 1
     - _ENABLETHISFORGUILTYGEAR: 0
     - _EnableBaseColorMult: 1
     - _EnableCameraDistanceMult: 1
@@ -86,7 +89,7 @@ Material:
     - _EnableFresnelWORKINPROGRESS: 0
     - _EnableGlowmask: 0
     - _EnableGranblueBlackFresnel: 0
-    - _EnableHighlight: 1
+    - _EnableHighlight: 0
     - _EnableILMEmission: 0
     - _EnableLightColorMult: 1
     - _EnableMatcap: 0
@@ -132,7 +135,9 @@ Material:
     - _ILMLayer1: 0.396
     - _ILMLayer2: 0.59
     - _LightColor: 0
+    - _LightColorSetting: 0
     - _LightDirection: 0
+    - _LightDirectionSetting: 0
     - _LightIntensity: 1.33
     - _LightLayer1: 0
     - _LightLayer1Fuzziness: 0
@@ -166,13 +171,20 @@ Material:
     - _ShineIntensity: 1
     - _ShineSize: 4
     - _ShowOutlineSettings: 0
+    - _Source1Fuzziness: 0.01
+    - _Source2Fuzziness: 0.01
+    - _Source3Fuzziness: 0.01
+    - _Source4Fuzziness: 0.01
+    - _Source5Fuzziness: 0.01
     - _SpecularFuzzy: 0
     - _SpecularFuzzySolid: 0
     - _SpecularIntensity: 2.92
     - _SpecularMult: 0
     - _SpecularMult2: 5
     - _SpecularSize: 0.425
+    - _TotalReplacements: 5
     - _VertexChannel: 1
+    - _VertexChannel2: 1
     - _VertexColorOpacity: 1
     - _VertexColorScale: 0.7
     - _VertexLayer1: 0.265
@@ -185,7 +197,7 @@ Material:
     - _showOutlineSettings: 1
     m_Colors:
     - _BaseSSSAlphaColor: {r: 1, g: 1, b: 1, a: 0}
-    - _DarkHighlightMult: {r: 0.36762354, g: 0.36762354, b: 0.7411765, a: 0}
+    - _DarkHighlightMult: {r: 0.5492118, g: 0.5492118, b: 0.7411765, a: 0}
     - _DebugColor: {r: 1, g: 1, b: 1, a: 0}
     - _DetailColor: {r: 0, g: 1, b: 0, a: 0}
     - _FakeLightColor: {r: 1, g: 1, b: 1, a: 0}
@@ -193,8 +205,20 @@ Material:
     - _GlowMaskTint: {r: 1, g: 1, b: 1, a: 0}
     - _ILMColor: {r: 1, g: 0, b: 0, a: 0}
     - _ILMDebugColor: {r: 1, g: 1, b: 1, a: 0}
+    - _ILMDebugColor1: {r: 1, g: 1, b: 1, a: 0}
     - _LightColor: {r: 1, g: 1, b: 1, a: 0}
     - _LightDir: {r: 1, g: 1, b: 1, a: 0}
-    - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
+    - _OutlineColor: {r: 0, g: 0, b: 1, a: 0}
     - _ShadowTint: {r: 0, g: 0, b: 0, a: 0}
+    - _Source1Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source2Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source3Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source4Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source5Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target1Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target2Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target3Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target4Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target5Color: {r: 1, g: 1, b: 1, a: 1}
     - _VertexDebugColor: {r: 1, g: 1, b: 1, a: 0}
+    - _VertexDebugColor1: {r: 1, g: 1, b: 1, a: 0}

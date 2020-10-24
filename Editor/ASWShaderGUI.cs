@@ -27,6 +27,30 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _SSS = null;
     MaterialProperty _ILM = null;
     MaterialProperty _Detail = null;
+
+    MaterialProperty _ALPHABLEND = null;
+    MaterialProperty _TotalReplacements = null;
+
+    MaterialProperty _Source1Color = null;
+    MaterialProperty _Source1Fuzziness = null;
+    MaterialProperty _Target1Color = null;
+
+    MaterialProperty _Source2Color = null;
+    MaterialProperty _Source2Fuzziness = null;
+    MaterialProperty _Target2Color = null;
+
+    MaterialProperty _Source3Color = null;
+    MaterialProperty _Source3Fuzziness = null;
+    MaterialProperty _Target3Color = null;
+
+    MaterialProperty _Source4Color = null;
+    MaterialProperty _Source4Fuzziness = null;
+    MaterialProperty _Target4Color = null;
+
+    MaterialProperty _Source5Color = null;
+    MaterialProperty _Source5Fuzziness = null;
+    MaterialProperty _Target5Color = null;
+
     MaterialProperty _ILMColorSetting = null;
     MaterialProperty _ILMColor = null;
     MaterialProperty _ILMEmissiveIntensity = null;
@@ -51,8 +75,8 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _FakeLightDirY = null;
     //MaterialProperty _ViewDirOffsetX = null;
     MaterialProperty _ViewDirOffsetY = null;
-    MaterialProperty _LightDirection = null;
-    MaterialProperty _LightColor = null;
+    MaterialProperty _LightDirectionSetting = null;
+    MaterialProperty _LightColorSetting = null;
     MaterialProperty _FakeLightFallbackDirection = null;
     MaterialProperty _GlobalIntensityMinimum = null;
     MaterialProperty _FakeLightIntensity = null;
@@ -83,6 +107,7 @@ public class ASWShaderGUI : ShaderGUI
     MaterialProperty _GranblueDarkenPower = null;
     MaterialProperty _EnableOutline = null;
     MaterialProperty _OutlineThickness = null;
+    MaterialProperty _DepthOffset = null;
     MaterialProperty _OutlineColor = null;
     MaterialProperty _OutlineColorIntensity = null;
     MaterialProperty _EnableLightColorMult = null;
@@ -104,6 +129,7 @@ public class ASWShaderGUI : ShaderGUI
 			false, // Global
 				false,
 			true, // Main Textures
+        false,
 				false,
 				false,
         false,
@@ -125,6 +151,7 @@ public class ASWShaderGUI : ShaderGUI
 			"Global Settings",
 				"Fake Light Settings",
 			"Main Textures",
+        "Color Replacer",
 				"ILM Body Lines Color",
   			"Detail Lines Color",
 				"Metal Matcap",
@@ -191,21 +218,66 @@ public class ASWShaderGUI : ShaderGUI
 			ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light v" + "<color=#ff0000ff> "+shaderVersion[1]+"</color>" + "<color=#000000ff>  }</color>");
 	        // Global props
 			if (ASWStyles.DoFoldout(foldouts, mat, me, "Global Settings")){
-		        //me.ShaderProperty(_LightDirection, _LightDirection.displayName);
+		        //me.ShaderProperty(_LightDirectionSetting, _LightDirectionSetting.displayName);
 		        me.ShaderProperty(_WrongVertexColors, "Are your vertex colors correct?");
 	        }
 	        // Primary props
 	        if (ASWStyles.DoFoldout(foldouts, mat, me, "Main Textures")){
 		        me.TexturePropertySingleLine(Styles.baseText, _Base);
+				    GUILayout.Space(-18);
+		        me.ShaderProperty(_ALPHABLEND,"                                         Enable Color Replacer");
 		        me.TexturePropertySingleLine(Styles.sssText, _SSS);
 		        me.TexturePropertySingleLine(Styles.ilmText, _ILM);
-				GUILayout.Space(-18);
+		        GUILayout.Space(-18);
 		        me.ShaderProperty(_ILMColorSetting," ");
 				//GUILayout.Space(24);
 		        me.TexturePropertySingleLine(Styles.detailText, _Detail);
-				GUILayout.Space(-18);
+		        GUILayout.Space(-18);
 		        me.ShaderProperty(_DetailColorSetting," ");
 
+        if ( _ALPHABLEND.floatValue == 1){
+          if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Color Replacer", Color.cyan) ){
+            if (_FresnelSystem.floatValue != 0 && _EnableFresnel.floatValue == 1){
+              GUILayout.Label("WARNING! PLEASE DISABLE FRESNEL WHILE WORKING ON GRANBLUE MODELS!\nTHE FRESNEL CONFLICTS WITH THE COLOR PICKER TOOL!\nENABLE FRESNEL AFTER FINISHED PICKING COLORS!", EditorStyles.textArea);
+            }
+            me.ShaderProperty(_TotalReplacements, _TotalReplacements.displayName);
+
+            for (int i = 1; i <= _TotalReplacements.floatValue; ++i) {
+              switch (i) {
+                case 1:
+                  ASWStyles.PartingLine();
+                  me.ShaderProperty(_Source1Color, _Source1Color.displayName);
+                  me.ShaderProperty(_Target1Color, _Target1Color.displayName);
+                  me.ShaderProperty(_Source1Fuzziness, _Source1Fuzziness.displayName);
+                  break;
+                case 2:
+                  ASWStyles.PartingLine();
+                  me.ShaderProperty(_Source2Color, _Source2Color.displayName);
+                  me.ShaderProperty(_Target2Color, _Target2Color.displayName);
+                  me.ShaderProperty(_Source2Fuzziness, _Source2Fuzziness.displayName);
+                  break;
+                case 3:
+                  ASWStyles.PartingLine();
+                  me.ShaderProperty(_Source3Color, _Source3Color.displayName);
+                  me.ShaderProperty(_Target3Color, _Target3Color.displayName);
+                  me.ShaderProperty(_Source3Fuzziness, _Source3Fuzziness.displayName);
+                  break;
+                case 4:
+                  ASWStyles.PartingLine();
+                  me.ShaderProperty(_Source4Color, _Source4Color.displayName);
+                  me.ShaderProperty(_Target4Color, _Target4Color.displayName);
+                  me.ShaderProperty(_Source4Fuzziness, _Source4Fuzziness.displayName);
+                  break;
+                case 5:
+                  ASWStyles.PartingLine();
+                  me.ShaderProperty(_Source5Color, _Source5Color.displayName);
+                  me.ShaderProperty(_Target5Color, _Target5Color.displayName);
+                  me.ShaderProperty(_Source5Fuzziness, _Source5Fuzziness.displayName);
+                  break;
+              }
+            }
+          }
+        }
 				if ( _ILMColorSetting.floatValue > 0 ){
 					if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "ILM Body Lines Color", Color.cyan) ){
 						me.ShaderProperty(_ILMColor, _ILMColor.displayName);
@@ -248,8 +320,8 @@ public class ASWShaderGUI : ShaderGUI
 		    //Light Layer Proprties
 	        if(ASWStyles.DoFoldout(foldouts, mat, me, "Light Settings")){
 
-		        me.ShaderProperty(_LightDirection, new GUIContent(_LightDirection.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
-		        me.ShaderProperty(_LightColor, new GUIContent(_LightColor.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
+		        me.ShaderProperty(_LightDirectionSetting, new GUIContent(_LightDirectionSetting.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
+		        me.ShaderProperty(_LightColorSetting, new GUIContent(_LightColorSetting.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
 
 				ASWStyles.PartingLine();
 				me.ShaderProperty(_GlobalIntensityMinimum, _GlobalIntensityMinimum.displayName);
@@ -343,6 +415,8 @@ public class ASWShaderGUI : ShaderGUI
             if(_EnableCameraDistanceMult.floatValue == 1){
 			        me.ShaderProperty(_CameraDistanceMult, _CameraDistanceMult.displayName);
             }
+            ASWStyles.PartingLine();
+            me.ShaderProperty(_DepthOffset, _DepthOffset.displayName);
 					}
 					if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Color", Color.cyan)){
 						me.ShaderProperty(_EnableLightColorMult, _EnableLightColorMult.displayName);
@@ -440,6 +514,7 @@ public class ASWOutlineGUI : ShaderGUI
     MaterialProperty _WrongVertexColors = null;
     MaterialProperty _OutlineColor = null;
     MaterialProperty _OutlineThickness = null;
+    MaterialProperty _DepthOffset = null;
     MaterialProperty _EnableBaseColorMult = null;
     MaterialProperty _EnableCameraDistanceMult = null;
     MaterialProperty _CameraDistanceMult = null;
@@ -447,7 +522,7 @@ public class ASWOutlineGUI : ShaderGUI
     MaterialProperty _Base = null;
     MaterialProperty _EnableLightColorMult = null;
     MaterialProperty _GlobalIntensityMinimum = null;
-    MaterialProperty _LightColor = null;
+    MaterialProperty _LightColorSetting = null;
     MaterialProperty _FakeLightColor = null;
     MaterialProperty _FakeLightIntensity = null;
 
@@ -491,6 +566,8 @@ public class ASWOutlineGUI : ShaderGUI
         if(_EnableCameraDistanceMult.floatValue == 1){
           me.ShaderProperty(_CameraDistanceMult, _CameraDistanceMult.displayName);
         }
+        ASWStyles.PartingLine();
+        me.ShaderProperty(_DepthOffset, _DepthOffset.displayName);
 			}
 			if (ASWStyles.DoFoldout(foldouts, mat, me, "Color Settings")){
 				me.ShaderProperty(_EnableBaseColorMult, _EnableBaseColorMult.displayName);
@@ -504,9 +581,9 @@ public class ASWOutlineGUI : ShaderGUI
 				ASWStyles.PartingLine();
 				me.ShaderProperty(_EnableLightColorMult, _EnableLightColorMult.displayName);
 				if( _EnableLightColorMult.floatValue == 1 ){
-					me.ShaderProperty(_LightColor, new GUIContent(_LightColor.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
+					me.ShaderProperty(_LightColorSetting, new GUIContent(_LightColorSetting.displayName, "Overrides the system that checks if there is a light source in the scene/world."));
 					me.ShaderProperty(_GlobalIntensityMinimum, _GlobalIntensityMinimum.displayName);
-          if(_LightColor.floatValue == 1){
+          if(_LightColorSetting.floatValue == 1){
   					ASWStyles.PartingLine();
   					me.ShaderProperty(_FakeLightColor, _FakeLightColor.displayName);
   					me.ShaderProperty(_FakeLightIntensity, _FakeLightIntensity.displayName);
