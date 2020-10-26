@@ -97,6 +97,7 @@ Material:
     - _ColorReplacer: 0
     - _Cutoff: 0.5
     - _DebugGroup: 0
+    - _DepthCalculation: 1
     - _DepthOffset: 1
     - _DetailColorSetting: 0
     - _DetailEmissiveIntensity: 0
@@ -165,7 +166,7 @@ Material:
     - _SpecularFuzzy: 0
     - _SpecularHighlights: 1
     - _SpecularIntensity: 1
-    - _SpecularSize: 0.583
+    - _SpecularSize: 0.45
     - _SrcBlend: 1
     - _TotalReplacements: 1
     - _UVSec: 0
