@@ -22,7 +22,8 @@ public class ASWShaderGUI : ShaderGUI
       public static GUIContent glowMaskText = new GUIContent("Glow Mask", "[Character Indentifier]_GlowMask. Used by few characters.");
   }
 
-  MaterialProperty _WrongVertexColors = null;
+  MaterialProperty _EditorVersion = null;
+
   MaterialProperty _Base = null;
   MaterialProperty _SSS = null;
   MaterialProperty _ILM = null;
@@ -127,6 +128,7 @@ public class ASWShaderGUI : ShaderGUI
   public static Dictionary<Material, ASWToggles > foldouts = new Dictionary<Material, ASWToggles>();
   ASWToggles toggles = new ASWToggles(
   	new bool[] {
+      false, // Presets
   		false, // Global
   			false,
   		true, // Main Textures
@@ -145,10 +147,10 @@ public class ASWShaderGUI : ShaderGUI
   			false,
   			false,
   		false, // Debug
-  		false, // Credits
-  		false // Presets
+  		false // Credits
   	},
   	new string[] {
+  		"PRESETS",
   		"Global Settings",
   			"Fake Light Settings",
   		"Main Textures",
@@ -167,8 +169,7 @@ public class ASWShaderGUI : ShaderGUI
   			"Thickness",
   			"Color",
   		"Debug",
-  		"Credits",
-  		"PRESETS"
+  		"Credits"
   	}
   );
 
@@ -212,27 +213,77 @@ public class ASWShaderGUI : ShaderGUI
 
     string[] shaderVersion = mat.shader.name.Split('v');
 
-		ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light v" + "<color=#ff0000ff> "+shaderVersion[1]+"</color>" + "<color=#000000ff>  }</color>");
+    if(_EditorVersion.floatValue == 1){
+      ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light v" + "<color=#aa0000ff> "+shaderVersion[1]+"</color>" + "<color=#000000ff> - </color><color=#edba00ff> Advanced</color><color=#000000ff>  }</color>");
+    }
+    else{
+		  ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light v" + "<color=#aa0000ff> "+shaderVersion[1]+"</color>" + "<color=#000000ff> - </color><color=#00aaaaff> Basic</color><color=#000000ff>  }</color>");
+    }
 
 		EditorGUI.BeginChangeCheck();
 		{
-	        // Global props
+      if (ASWStyles.DoFoldout(foldouts, mat, me, "PRESETS")){
+        GUILayout.Space(4);
+        float buttonWidth = EditorGUIUtility.labelWidth-5.0f;
+        if (ASWStyles.SimpleButton("Capture", buttonWidth, 0)){
+          presetText = ASWStyles.ReplaceInvalidChars(presetText);
+          string filePath = dirPath + presetText + ".mat";
+          Material newMat = new Material(mat);
+          AssetDatabase.CreateAsset(newMat, filePath);
+          AssetDatabase.Refresh();
+        }
+        GUILayout.Space(-17);
+        Rect r = EditorGUILayout.GetControlRect();
+        r.x += EditorGUIUtility.labelWidth;
+        r.width = ASWStyles.GetPropertyWidth();
+        presetText = EditorGUI.TextArea(r, presetText);
+        if (ASWStyles.SimpleButton("Apply", buttonWidth, 0)){
+          string presetPath = dirPath + presets[popupIndex] + ".mat";
+          Material selectedMat = (Material)AssetDatabase.LoadAssetAtPath(presetPath, typeof(Material));
+          mat.CopyPropertiesFromMaterial(selectedMat);
+        }
+        GUILayout.Space(-17);
+        r = EditorGUILayout.GetControlRect();
+        r.x += EditorGUIUtility.labelWidth;
+        r.width = ASWStyles.GetPropertyWidth();
+        popupIndex = EditorGUI.Popup(r, popupIndex, presets);
+        GUILayout.Label("Presets are stored in:\n\""+dirPath+"\"",EditorStyles.textArea);
+      }
+
+	    // Global props
 			if (ASWStyles.DoFoldout(foldouts, mat, me, "Global Settings")){
-        me.ShaderProperty(_WrongVertexColors, "Are your vertex colors correct?");
+        me.ShaderProperty(_EditorVersion, _EditorVersion.displayName);
+        GUILayout.BeginHorizontal ("box");
+        GUILayout.FlexibleSpace();
+        if(_EditorVersion.floatValue == 1){
+          GUILayout.Label("                                                                 WARNING!\nAdvanced settings can allow you to fine tune settings if a preset is not close enough.\n                              Only use this if you KNOW what you are doing!",EditorStyles.boldLabel);
+        }
+        else{
+          GUILayout.Label("Recommend loading a Preset from above!");
+        }
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        ASWStyles.PartingLine();
+        GUILayout.Label("Looking for \"Wrong Vertex Colors\"? This setting has been removed as the updated Guilty Gear Blender script solves this issue. Please use the updated script which can be found on my Discord or in the Guilty Gear Script Guide video description.", EditorStyles.textArea);
 	    }
 	    // Primary props
 	     if (ASWStyles.DoFoldout(foldouts, mat, me, "Main Textures")){
          me.TexturePropertySingleLine(Styles.baseText, _Base);
-         GUILayout.Space(-18);
-         me.ShaderProperty(_ALPHABLEND,"                                         Enable Color Replacer");
+         if(_EditorVersion.floatValue == 1){
+           GUILayout.Space(-18);
+           me.ShaderProperty(_ALPHABLEND,"                                         Enable Color Replacer");
+         }
          me.TexturePropertySingleLine(Styles.sssText, _SSS);
          me.TexturePropertySingleLine(Styles.ilmText, _ILM);
-         GUILayout.Space(-18);
-         me.ShaderProperty(_ILMColorSetting," ");
-         //GUILayout.Space(24);
+         if(_EditorVersion.floatValue == 1){
+           GUILayout.Space(-18);
+           me.ShaderProperty(_ILMColorSetting," ");
+         }
          me.TexturePropertySingleLine(Styles.detailText, _Detail);
-         GUILayout.Space(-18);
-         me.ShaderProperty(_DetailColorSetting," ");
+         if(_EditorVersion.floatValue == 1){
+           GUILayout.Space(-18);
+           me.ShaderProperty(_DetailColorSetting," ");
+         }
 
          if ( _ALPHABLEND.floatValue == 1){
            if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Color Replacer", Color.cyan) ){
@@ -301,18 +352,21 @@ public class ASWShaderGUI : ShaderGUI
           if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, _EnableMatcap, "Metal Matcap", Color.cyan) ){
           	ASWStyles.ToggleGroup(_EnableMatcap.floatValue == 0);
           	me.TexturePropertySingleLine(Styles._MetalMatcapText, _MetalMatcap);
-          	me.ShaderProperty(_MetalAIntensity, _MetalAIntensity.displayName);
-          	me.ShaderProperty(_MetalBIntensity, _MetalBIntensity.displayName);
+            if(_EditorVersion.floatValue == 1){
+            	me.ShaderProperty(_MetalAIntensity, _MetalAIntensity.displayName);
+            	me.ShaderProperty(_MetalBIntensity, _MetalBIntensity.displayName);
+            }
           	ASWStyles.ToggleGroupEnd();
           }
-
           if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, _EnableGlowmask, "Glow Mask", Color.cyan) ){
           	ASWStyles.ToggleGroup(_EnableGlowmask.floatValue == 0);
          		me.TexturePropertySingleLine(Styles.glowMaskText, _GlowMask);
-          	me.ShaderProperty(_GlowMaskMultSystem, _GlowMaskMultSystem.displayName);
-          	me.ShaderProperty(_GlowMaskTint, _GlowMaskTint.displayName);
-          	me.ShaderProperty(_GlowMaskIntensity, _GlowMaskIntensity.displayName);
-          	ASWStyles.ToggleGroupEnd();
+            me.ShaderProperty(_GlowMaskIntensity, _GlowMaskIntensity.displayName);
+            if(_EditorVersion.floatValue == 1){
+            	me.ShaderProperty(_GlowMaskMultSystem, _GlowMaskMultSystem.displayName);
+            	me.ShaderProperty(_GlowMaskTint, _GlowMaskTint.displayName);
+            }
+            ASWStyles.ToggleGroupEnd();
           }
         }
 
@@ -331,15 +385,17 @@ public class ASWShaderGUI : ShaderGUI
   					me.ShaderProperty(_FakeLightFallbackDirection, new GUIContent(_FakeLightFallbackDirection.displayName, "Toggle between different light directions if the scene/world has no light source."));
   					me.ShaderProperty(_FakeLightIntensity, _FakeLightIntensity.displayName);
   					me.ShaderProperty(_FakeLightColor, _FakeLightColor.displayName);
-  					if(_FakeLightFallbackDirection.floatValue == 0){
-  						me.ShaderProperty(_FakeLightDirX, _FakeLightDirX.displayName);
-  						me.ShaderProperty(_FakeLightDirY, _FakeLightDirY.displayName);
-  					}
-  					else{
-  						//me.ShaderProperty(_ViewDirOffsetX, _ViewDirOffsetX.displayName);
-  						me.ShaderProperty(_ViewDirOffsetY, _ViewDirOffsetY.displayName);
-  						//GUILayout.Label("Note: VRChat flips the 'X' direction from what is visible here. Negate any value you put in the X to see what it will look like in game.", EditorStyles.helpBox);
-  					}
+            if(_EditorVersion.floatValue == 1){
+    					if(_FakeLightFallbackDirection.floatValue == 0){
+    						me.ShaderProperty(_FakeLightDirX, _FakeLightDirX.displayName);
+    						me.ShaderProperty(_FakeLightDirY, _FakeLightDirY.displayName);
+    					}
+    					else{
+    						//me.ShaderProperty(_ViewDirOffsetX, _ViewDirOffsetX.displayName);
+    						me.ShaderProperty(_ViewDirOffsetY, _ViewDirOffsetY.displayName);
+    						//GUILayout.Label("Note: VRChat flips the 'X' direction from what is visible here. Negate any value you put in the X to see what it will look like in game.", EditorStyles.helpBox);
+    					}
+            }
           }
           if( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Shadow Settings", Color.yellow) ){
   					me.ShaderProperty(_ShadowBrightness, _ShadowBrightness.displayName);
@@ -347,20 +403,24 @@ public class ASWShaderGUI : ShaderGUI
   					ASWStyles.PartingLine();
 
   					me.ShaderProperty(_ShadowLayer1Push, _ShadowLayer1Push.displayName);
-  					me.ShaderProperty(_ShadowLayer1Gate, _ShadowLayer1Gate.displayName);
-  					me.ShaderProperty(_ShadowLayer1Fuzziness, _ShadowLayer1Fuzziness.displayName);
-  					me.ShaderProperty(_ShadowLayer1Intensity, _ShadowLayer1Intensity.displayName);
-  					me.ShaderProperty(_ILMLayer1, _ILMLayer1.displayName);
-  					me.ShaderProperty(_VertexLayer1, _VertexLayer1.displayName);
+            if(_EditorVersion.floatValue == 1){
+    					me.ShaderProperty(_ShadowLayer1Gate, _ShadowLayer1Gate.displayName);
+    					me.ShaderProperty(_ShadowLayer1Fuzziness, _ShadowLayer1Fuzziness.displayName);
+    					me.ShaderProperty(_ShadowLayer1Intensity, _ShadowLayer1Intensity.displayName);
+    					me.ShaderProperty(_ILMLayer1, _ILMLayer1.displayName);
+    					me.ShaderProperty(_VertexLayer1, _VertexLayer1.displayName);
+            }
 
   					ASWStyles.PartingLine();
 
   					me.ShaderProperty(_ShadowLayer2Push, _ShadowLayer2Push.displayName);
-  					me.ShaderProperty(_ShadowLayer2Gate, _ShadowLayer2Gate.displayName);
-  					me.ShaderProperty(_ShadowLayer2Fuzziness, _ShadowLayer2Fuzziness.displayName);
-  					me.ShaderProperty(_ShadowLayer2Intensity, _ShadowLayer2Intensity.displayName);
-  					me.ShaderProperty(_ILMLayer2, _ILMLayer2.displayName);
-  					me.ShaderProperty(_VertexLayer2, _VertexLayer2.displayName);
+            if(_EditorVersion.floatValue == 1){
+    					me.ShaderProperty(_ShadowLayer2Gate, _ShadowLayer2Gate.displayName);
+    					me.ShaderProperty(_ShadowLayer2Fuzziness, _ShadowLayer2Fuzziness.displayName);
+    					me.ShaderProperty(_ShadowLayer2Intensity, _ShadowLayer2Intensity.displayName);
+    					me.ShaderProperty(_ILMLayer2, _ILMLayer2.displayName);
+    					me.ShaderProperty(_VertexLayer2, _VertexLayer2.displayName);
+            }
   				}
 
   				//Specular Settings
@@ -371,25 +431,26 @@ public class ASWShaderGUI : ShaderGUI
   				}
         }
         if(ASWStyles.DoFoldout(foldouts, mat, me, "Fresnel Settings")){
-  				//if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, _EnableFresnel, "Highlight Fresnel", Color.cyan)){
   				me.ShaderProperty(_EnableFresnel, "Enable Fresnel");
   				ASWStyles.PartingLine();
   				ASWStyles.ToggleGroup(_EnableFresnel.floatValue == 0);
   				me.ShaderProperty(_FresnelSystem, _FresnelSystem.displayName);
-  				ASWStyles.PartingLine();
-  				me.ShaderProperty(_HighlightPower, _HighlightPower.displayName);
-  				me.ShaderProperty(_HighlightIntensity, _HighlightIntensity.displayName);
-  				me.ShaderProperty(_HighlightScale, _HighlightScale.displayName);
-  				me.ShaderProperty(_HighlightFreselFuzzy, _HighlightFreselFuzzy.displayName);
-  				ASWStyles.PartingLine();
+          if(_EditorVersion.floatValue == 1){
+    				ASWStyles.PartingLine();
+    				me.ShaderProperty(_HighlightPower, _HighlightPower.displayName);
+    				me.ShaderProperty(_HighlightIntensity, _HighlightIntensity.displayName);
+    				me.ShaderProperty(_HighlightScale, _HighlightScale.displayName);
+    				me.ShaderProperty(_HighlightFreselFuzzy, _HighlightFreselFuzzy.displayName);
+    				ASWStyles.PartingLine();
 
-  				if ( _FresnelSystem.floatValue == 1 ){
-  					me.ShaderProperty(_GranblueDarkenScale, _GranblueDarkenScale.displayName);
-  					me.ShaderProperty(_GranblueDarkenPower, _GranblueDarkenPower.displayName);
-  				}
-  				else{
-  					me.ShaderProperty(_DarkHighlightMult, _DarkHighlightMult.displayName);
-  				}
+    				if ( _FresnelSystem.floatValue == 1 ){
+    					me.ShaderProperty(_GranblueDarkenScale, _GranblueDarkenScale.displayName);
+    					me.ShaderProperty(_GranblueDarkenPower, _GranblueDarkenPower.displayName);
+    				}
+    				else{
+    					me.ShaderProperty(_DarkHighlightMult, _DarkHighlightMult.displayName);
+    				}
+          }
   				ASWStyles.ToggleGroupEnd();
         }
         // Outline props
@@ -397,6 +458,10 @@ public class ASWShaderGUI : ShaderGUI
   				ASWStyles.PartingLine();
   				EditorGUILayout.BeginHorizontal();
           GUILayout.FlexibleSpace();
+          // if (GUILayout.Button("Looking for outlines?\nThe built-in outlines have been removed due to incompatablity with the most recent updates.\nPlease click this button to learn how to set up your outlines properly.", GUILayout.Width(550), GUILayout.Height(75)) == true){
+	        // 	Application.OpenURL("https://www.youtube.com/watch?v=SYS3XlRmDaA");
+	        //     Debug.Log("Opened external url: https://www.youtube.com/watch?v=SYS3XlRmDaA");
+	        // }
   				if (GUILayout.Button("DO NOT USE THIS UNLESS YOU ARE SUPER LAZY\nCLICK THIS TO LEARN HOW TO\nPROPERLY SET UP YOUR OUTLINES", GUILayout.Width(400), GUILayout.Height(50)) == true){
 	        	Application.OpenURL("https://www.youtube.com/watch?v=SYS3XlRmDaA");
 	            Debug.Log("Opened external url: https://www.youtube.com/watch?v=SYS3XlRmDaA");
@@ -408,73 +473,51 @@ public class ASWShaderGUI : ShaderGUI
   				if (_EnableOutline.floatValue == 1){
   					if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Thickness", Color.cyan)){
   						me.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
-  						me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
-              if(_EnableCameraDistanceMult.floatValue == 1){
-  			        me.ShaderProperty(_CameraDistanceMult, _CameraDistanceMult.displayName);
+              if(_EditorVersion.floatValue == 1){
+    						me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
+                if(_EnableCameraDistanceMult.floatValue == 1){
+    			        me.ShaderProperty(_CameraDistanceMult, _CameraDistanceMult.displayName);
+                }
+                ASWStyles.PartingLine();
+                me.ShaderProperty(_DepthOffset, _DepthOffset.displayName);
+                me.ShaderProperty(_DepthCalculation, _DepthCalculation.displayName);
               }
-              ASWStyles.PartingLine();
-              me.ShaderProperty(_DepthOffset, _DepthOffset.displayName);
-              me.ShaderProperty(_DepthCalculation, _DepthCalculation.displayName);
   					}
-  					if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Color", Color.cyan)){
-  						me.ShaderProperty(_EnableLightColorMult, _EnableLightColorMult.displayName);
-  						me.ShaderProperty(_EnableBaseColorMult, _EnableBaseColorMult.displayName);
-  						if (_EnableBaseColorMult.floatValue == 0){
-  							me.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
-  						}
-  						me.ShaderProperty(_OutlineColorIntensity, _OutlineColorIntensity.displayName);
-  					}
+            if(_EditorVersion.floatValue == 1){
+    					if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Color", Color.cyan)){
+    						me.ShaderProperty(_EnableLightColorMult, _EnableLightColorMult.displayName);
+    						me.ShaderProperty(_EnableBaseColorMult, _EnableBaseColorMult.displayName);
+    						if (_EnableBaseColorMult.floatValue == 0){
+    							me.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
+    						}
+    						me.ShaderProperty(_OutlineColorIntensity, _OutlineColorIntensity.displayName);
+    					}
+            }
   				}
 		    }
-        if ( ASWStyles.DoFoldout(foldouts, mat, me, "Debug") ){
-          ASWStyles.PartingLine();
-        	me.ShaderProperty(_ALPHATEST, "Enable Debug");
-        	ASWStyles.PartingLine();
-          if(_ALPHATEST.floatValue == 1){
-            me.ShaderProperty(_DebugGroup,_DebugGroup.displayName);
-            me.ShaderProperty(_DebugColor,_DebugColor.displayName);
-	        	ASWStyles.PartingLine();
-            switch(_DebugGroup.floatValue){
-              case 0 :
-                me.ShaderProperty(_VertexChannel,_VertexChannel.displayName);
-                break;
-              case 1 :
-                me.ShaderProperty(_ILMChannel,_ILMChannel.displayName);
-                break;
-              case 2 :
-                me.ShaderProperty(_BaseSSSAlphaSwap,_BaseSSSAlphaSwap.displayName);
-                break;
+        if(_EditorVersion.floatValue == 1){
+          if ( ASWStyles.DoFoldout(foldouts, mat, me, "Debug") ){
+            ASWStyles.PartingLine();
+          	me.ShaderProperty(_ALPHATEST, "Enable Debug");
+          	ASWStyles.PartingLine();
+            if(_ALPHATEST.floatValue == 1){
+              me.ShaderProperty(_DebugGroup,_DebugGroup.displayName);
+              me.ShaderProperty(_DebugColor,_DebugColor.displayName);
+  	        	ASWStyles.PartingLine();
+              switch(_DebugGroup.floatValue){
+                case 0 :
+                  me.ShaderProperty(_VertexChannel,_VertexChannel.displayName);
+                  break;
+                case 1 :
+                  me.ShaderProperty(_ILMChannel,_ILMChannel.displayName);
+                  break;
+                case 2 :
+                  me.ShaderProperty(_BaseSSSAlphaSwap,_BaseSSSAlphaSwap.displayName);
+                  break;
+              }
             }
           }
         }
-
-	      if (ASWStyles.DoFoldout(foldouts, mat, me, "PRESETS")){
-  				GUILayout.Space(4);
-  				float buttonWidth = EditorGUIUtility.labelWidth-5.0f;
-  				if (ASWStyles.SimpleButton("Capture", buttonWidth, 0)){
-  					presetText = ASWStyles.ReplaceInvalidChars(presetText);
-  					string filePath = dirPath + presetText + ".mat";
-  					Material newMat = new Material(mat);
-  					AssetDatabase.CreateAsset(newMat, filePath);
-  					AssetDatabase.Refresh();
-  				}
-  				GUILayout.Space(-17);
-  				Rect r = EditorGUILayout.GetControlRect();
-  				r.x += EditorGUIUtility.labelWidth;
-  				r.width = ASWStyles.GetPropertyWidth();
-  				presetText = EditorGUI.TextArea(r, presetText);
-  				if (ASWStyles.SimpleButton("Apply", buttonWidth, 0)){
-  					string presetPath = dirPath + presets[popupIndex] + ".mat";
-  					Material selectedMat = (Material)AssetDatabase.LoadAssetAtPath(presetPath, typeof(Material));
-  					mat.CopyPropertiesFromMaterial(selectedMat);
-  				}
-  				GUILayout.Space(-17);
-  				r = EditorGUILayout.GetControlRect();
-  				r.x += EditorGUIUtility.labelWidth;
-  				r.width = ASWStyles.GetPropertyWidth();
-  				popupIndex = EditorGUI.Popup(r, popupIndex, presets);
-  				GUILayout.Label("Presets are stored in:\n\""+dirPath+"\"",EditorStyles.textArea);
-	      }
 
   			if ( ASWStyles.DoFoldout(foldouts, mat, me, "Credits") ){
   				GUILayout.Label("»Thanks to Shamwow for the absolute first guide on the absolute first initial version of the shader.\n\n»Thanks to VCD/Velon for his constant riding of me to keep working on my shader\n\n»Thanks to Nars290 for his constant positivity and assistance with testing and debugging\n\n»Thanks to Syll for their knowledge on the outline generation.\n\n»Dolce Swenos for being a grammar nazi. \n\n»Thanks to Morioh for showing me how to use custom editor styles and letting me use his Shuriken functions. Really helped make the shader UI look a lot better!\n\n»Thanks to Mochie for his presets system. Even if it is jank and hacked together, its still fantastic.\n\n»Thanks to EdwardsVSGaming for taking a VERY old version of my shader, editing it a small ammount, claiming the entire thing as his own without credit to me, and using deceptive comparisons between that shader and mine forcing me to get off my lazy streak and actually work on my shader again. *clap* *clap* Good job.", EditorStyles.textArea);
@@ -507,7 +550,6 @@ public class ASWOutlineGUI : ShaderGUI
 		}
 	);
 
-    MaterialProperty _WrongVertexColors = null;
     MaterialProperty _OutlineColor = null;
     MaterialProperty _OutlineThickness = null;
     MaterialProperty _DepthOffset = null;
@@ -555,7 +597,6 @@ public class ASWOutlineGUI : ShaderGUI
 
 	        // Outline props
 	        GUILayout.Label("Outline Settings", EditorStyles.boldLabel);
-	        me.ShaderProperty(_WrongVertexColors, "Are your vertex colors correct?");
 
 			if (ASWStyles.DoFoldout(foldouts, mat, me, "Thickness Settings")){
 				me.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
@@ -619,7 +660,7 @@ public class ASWDecalGUI : ShaderGUI
     }
     string[] shaderVersion = mat.shader.name.Split('v');
 
-    ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Decal v" + "<color=#ff0000ff> "+shaderVersion[1]+"</color>" + "<color=#000000ff> - Created by Silent  }</color>");
+    ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Decal v" + "<color=#ff0000ff> "+shaderVersion[1]+"</color>" + "  }</color>");
     EditorGUI.BeginChangeCheck();
 		{
       me.ShaderProperty(_Enable, _Enable.displayName);

@@ -65,11 +65,13 @@ Material:
     - _Cutoff: 0.5
     - _DebugGroup: 0
     - _DebugGroup1: 0
+    - _DepthCalculation: 1
     - _DepthMultClamp: 0.5
     - _DepthOffset: 1
     - _DepthScaleClamp: 6
     - _DetailColorSetting: 0
     - _DetailEmissiveIntensity: 0
+    - _EditorVersion: 0
     - _EnableBaseColorMult: 1
     - _EnableCameraDepthMult: 0
     - _EnableCameraDistanceMult: 1
@@ -86,8 +88,8 @@ Material:
     - _FakeLightDirX: 35
     - _FakeLightDirY: -135
     - _FakeLightFallbackDirToggle: 1
-    - _FakeLightFallbackDirection: 1
-    - _FakeLightIntensity: 1
+    - _FakeLightFallbackDirection: 0
+    - _FakeLightIntensity: 0.4
     - _Float2: 0.5
     - _ForceFakeLight: 1
     - _ForceFakeLightDirection: 1
