@@ -81,22 +81,21 @@ public class ASWShaderGUI : ShaderGUI
   MaterialProperty _FakeLightFallbackDirection = null;
   MaterialProperty _GlobalIntensityMinimum = null;
   MaterialProperty _FakeLightIntensity = null;
+  MaterialProperty _ShadowBrightness = null;
+  MaterialProperty _ILMGShadingThreshold = null;
   MaterialProperty _ShadowLayer1Push = null;
-  MaterialProperty _ShadowLayer1Gate = null;
   MaterialProperty _ShadowLayer1Fuzziness = null;
   MaterialProperty _ShadowLayer1Intensity = null;
   MaterialProperty _ShadowLayer2Push = null;
-  MaterialProperty _ShadowLayer2Gate = null;
   MaterialProperty _ShadowLayer2Fuzziness = null;
   MaterialProperty _ShadowLayer2Intensity = null;
   MaterialProperty _ILMLayer1 = null;
   MaterialProperty _ILMLayer2 = null;
   MaterialProperty _VertexLayer1 = null;
   MaterialProperty _VertexLayer2 = null;
-  MaterialProperty _ShadowBrightness = null;
   MaterialProperty _SpecularSize = null;
   MaterialProperty _SpecularIntensity = null;
-  MaterialProperty _SpecularFuzzy = null;
+  //MaterialProperty _SpecularFuzzy = null;
   MaterialProperty _EnableFresnel = null;
   MaterialProperty _DarkHighlightMult = null;
   MaterialProperty _HighlightPower = null;
@@ -399,12 +398,13 @@ public class ASWShaderGUI : ShaderGUI
           }
           if( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Shadow Settings", Color.yellow) ){
   					me.ShaderProperty(_ShadowBrightness, _ShadowBrightness.displayName);
-
+            if(_EditorVersion.floatValue == 1){
+              me.ShaderProperty(_ILMGShadingThreshold, _ILMGShadingThreshold.displayName);
+            }
   					ASWStyles.PartingLine();
 
   					me.ShaderProperty(_ShadowLayer1Push, _ShadowLayer1Push.displayName);
             if(_EditorVersion.floatValue == 1){
-    					me.ShaderProperty(_ShadowLayer1Gate, _ShadowLayer1Gate.displayName);
     					me.ShaderProperty(_ShadowLayer1Fuzziness, _ShadowLayer1Fuzziness.displayName);
     					me.ShaderProperty(_ShadowLayer1Intensity, _ShadowLayer1Intensity.displayName);
     					me.ShaderProperty(_ILMLayer1, _ILMLayer1.displayName);
@@ -415,7 +415,6 @@ public class ASWShaderGUI : ShaderGUI
 
   					me.ShaderProperty(_ShadowLayer2Push, _ShadowLayer2Push.displayName);
             if(_EditorVersion.floatValue == 1){
-    					me.ShaderProperty(_ShadowLayer2Gate, _ShadowLayer2Gate.displayName);
     					me.ShaderProperty(_ShadowLayer2Fuzziness, _ShadowLayer2Fuzziness.displayName);
     					me.ShaderProperty(_ShadowLayer2Intensity, _ShadowLayer2Intensity.displayName);
     					me.ShaderProperty(_ILMLayer2, _ILMLayer2.displayName);
@@ -427,7 +426,7 @@ public class ASWShaderGUI : ShaderGUI
   				if( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Specular Settings", Color.yellow) ){
   					me.ShaderProperty(_SpecularIntensity, _SpecularIntensity.displayName);
   					me.ShaderProperty(_SpecularSize, _SpecularSize.displayName);
-  					me.ShaderProperty(_SpecularFuzzy, _SpecularFuzzy.displayName);
+  					//me.ShaderProperty(_SpecularFuzzy, _SpecularFuzzy.displayName);
   				}
         }
         if(ASWStyles.DoFoldout(foldouts, mat, me, "Fresnel Settings")){
@@ -659,8 +658,7 @@ public class ASWDecalGUI : ShaderGUI
         }
     }
     string[] shaderVersion = mat.shader.name.Split('v');
-
-    ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Decal v" + "<color=#ff0000ff> "+shaderVersion[1]+"</color>" + "  }</color>");
+    ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Decal v" + "<color=#ff0000ff> "+shaderVersion[1]+"</color><color=#000000ff>" + "  }</color>");
     EditorGUI.BeginChangeCheck();
 		{
       me.ShaderProperty(_Enable, _Enable.displayName);

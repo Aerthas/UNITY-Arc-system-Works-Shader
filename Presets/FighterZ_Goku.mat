@@ -103,7 +103,7 @@ Material:
     - _FakeLightDirY: -135
     - _FakeLightFallbackDirToggle: 0
     - _FakeLightFallbackDirection: 0
-    - _FakeLightIntensity: 0.4
+    - _FakeLightIntensity: 1
     - _FighterZHighlightFreselFuzzy: 0.01
     - _FighterZHighlightIntensity: 1
     - _FighterZHighlightPower: 5
@@ -130,12 +130,13 @@ Material:
     - _HighlightIntensity: 1
     - _HighlightPower: 5
     - _HighlightScale: 1
-    - _ILMChannel: 0
+    - _ILMChannel: 1
     - _ILMColorSetting: 0
     - _ILMDetailScale: 5
     - _ILMEmissiveIntensity: 1
-    - _ILMLayer1: 0.396
-    - _ILMLayer2: 0.59
+    - _ILMGShadingThreshold: 0.7
+    - _ILMLayer1: 0.3
+    - _ILMLayer2: 0
     - _LightColor: 0
     - _LightColorSetting: 0
     - _LightDirection: 0
@@ -180,17 +181,17 @@ Material:
     - _Source5Fuzziness: 0.01
     - _SpecularFuzzy: 0
     - _SpecularFuzzySolid: 0
-    - _SpecularIntensity: 2.92
+    - _SpecularIntensity: 1
     - _SpecularMult: 0
     - _SpecularMult2: 5
-    - _SpecularSize: 0.425
+    - _SpecularSize: -0.15
     - _TotalReplacements: 5
-    - _VertexChannel: 1
+    - _VertexChannel: 0
     - _VertexChannel2: 1
     - _VertexColorOpacity: 1
     - _VertexColorScale: 0.7
-    - _VertexLayer1: 0.265
-    - _VertexLayer2: 0.51
+    - _VertexLayer1: 0.31
+    - _VertexLayer2: 0.31
     - _ViewDirOffsetX: 0
     - _ViewDirOffsetY: 0
     - _ViewDirOffsetZ: 0

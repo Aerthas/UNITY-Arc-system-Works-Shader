@@ -29,7 +29,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GlowMask:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: b5f95137f8572da49a151061f4620224, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ILM:
@@ -70,6 +70,7 @@ Material:
     - _DepthScaleClamp: 6
     - _DetailColorSetting: 0
     - _DetailEmissiveIntensity: 0
+    - _EdgeLength: 21.4
     - _EditorVersion: 0
     - _EnableBaseColorMult: 1
     - _EnableCameraDepthMult: 0
@@ -86,14 +87,14 @@ Material:
     - _FakeLightDirX: 35
     - _FakeLightDirY: -135
     - _FakeLightFallbackDirToggle: 1
-    - _FakeLightFallbackDirection: 0
+    - _FakeLightFallbackDirection: 1
     - _FakeLightIntensity: 0.4
     - _Float2: 0.5
     - _ForceFakeLight: 1
     - _ForceFakeLightDirection: 1
     - _FresnelSystem: 1
     - _GlobalIntensityMinimum: 0.1
-    - _GlowMaskIntensity: 1
+    - _GlowMaskIntensity: 0.36
     - _GlowMaskMultSystem: 0
     - _GranblueDarkenPower: 1
     - _GranblueDarkenScale: 1.5
@@ -106,6 +107,7 @@ Material:
     - _ILMChannel: 0
     - _ILMColorSetting: 0
     - _ILMEmissiveIntensity: 0
+    - _ILMGShadingThreshold: 0.7
     - _ILMLayer1: 0.335
     - _ILMLayer2: 0
     - _IntensityMinimum: 0
@@ -135,8 +137,8 @@ Material:
     - _Source4Fuzziness: 0.01
     - _Source5Fuzziness: 0.01
     - _SpecularFuzzy: 0
-    - _SpecularIntensity: 2
-    - _SpecularSize: 0.68
+    - _SpecularIntensity: 1
+    - _SpecularSize: -0.15
     - _TotalReplacements: 1
     - _VertexChannel: 0
     - _VertexLayer1: 0.254
@@ -148,7 +150,7 @@ Material:
     - __dirty: 1
     m_Colors:
     - _BaseSSSAlphaColor: {r: 1, g: 1, b: 1, a: 0}
-    - _DarkHighlightMult: {r: 0.23921517, g: 0.23921517, b: 0.5294118, a: 0}
+    - _DarkHighlightMult: {r: 0.23921514, g: 0.23921514, b: 0.5294118, a: 0}
     - _DebugColor: {r: 1, g: 1, b: 1, a: 0}
     - _DetailColor: {r: 0, g: 1, b: 0, a: 0}
     - _FakeLightColor: {r: 1, g: 1, b: 1, a: 0}

@@ -116,8 +116,9 @@ Material:
     - _EnableOutline: 0
     - _FakeLightDirX: 35
     - _FakeLightDirY: -135
-    - _FakeLightFallbackDirection: 0
+    - _FakeLightFallbackDirection: 1
     - _FakeLightIntensity: 0.4
+    - _Float3: 0.18
     - _FresnelSystem: 0
     - _Fuzziness: 0.1
     - _GlobalIntensityMinimum: 0.1
@@ -132,11 +133,13 @@ Material:
     - _HighlightIntensity: 1
     - _HighlightPower: 5
     - _HighlightScale: 0.31
-    - _ILMChannel: 0
+    - _ILMChannel: 1
     - _ILMColorSetting: 0
     - _ILMEmissiveIntensity: 0
-    - _ILMLayer1: 0.6
+    - _ILMGShadingThreshold: 0.7
+    - _ILMLayer1: 0.2
     - _ILMLayer2: 0.1
+    - _ILMLightGate: 1
     - _LightColor: 0
     - _LightColorSetting: 0
     - _LightDirection: 0
@@ -147,13 +150,13 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _OutlineColorIntensity: 1
-    - _OutlineThickness: 0.15
+    - _OutlineThickness: 1
     - _Parallax: 0.02
     - _ShadowBrightness: 1
     - _ShadowLayer1Fuzziness: 0
     - _ShadowLayer1Gate: 1
     - _ShadowLayer1Intensity: 1
-    - _ShadowLayer1Push: 0
+    - _ShadowLayer1Push: 0.3
     - _ShadowLayer2Fuzziness: 0
     - _ShadowLayer2Gate: 0.91
     - _ShadowLayer2Intensity: 1
@@ -168,14 +171,14 @@ Material:
     - _SpecularFuzzy: 0
     - _SpecularHighlights: 1
     - _SpecularIntensity: 1
-    - _SpecularSize: 0.45
+    - _SpecularSize: -0.15
     - _SrcBlend: 1
     - _TotalReplacements: 1
     - _UVSec: 0
-    - _VertexChannel: 4
+    - _VertexChannel: 0
     - _VertexLayer1: 0.31
     - _VertexLayer2: 1
-    - _ViewDirOffsetY: 0
+    - _ViewDirOffsetY: 35
     - _ViewDirOffsetZ: 0
     - _WrongVertexColors: 1
     - _ZWrite: 1
@@ -188,17 +191,17 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _FakeLightColor: {r: 1, g: 1, b: 1, a: 0}
     - _GlowMaskTint: {r: 1, g: 1, b: 1, a: 0}
-    - _ILMColor: {r: 0, g: 1, b: 0.15109703, a: 0}
+    - _ILMColor: {r: 0, g: 1, b: 0.15109679, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Source1Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Source2Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Source3Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Source4Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source1Color: {r: 0.62352943, g: 0.24705863, b: 0.19215667, a: 1}
+    - _Source2Color: {r: 0.20392138, g: 0.15686253, b: 0.13725469, a: 1}
+    - _Source3Color: {r: 0.882353, g: 0.8705883, b: 0.7960785, a: 1}
+    - _Source4Color: {r: 0.24705863, g: 0.1607841, b: 0.117646836, a: 1}
     - _Source5Color: {r: 1, g: 1, b: 1, a: 1}
     - _SourceColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Target1Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Target2Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Target3Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Target4Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target1Color: {r: 1, g: 0.98039216, b: 0.8705883, a: 1}
+    - _Target2Color: {r: 0.22352922, g: 0.21960765, b: 0.19215667, a: 1}
+    - _Target3Color: {r: 0.3215684, g: 0.4235292, b: 0.6666667, a: 1}
+    - _Target4Color: {r: 0.93725497, g: 0.854902, b: 0.63529414, a: 1}
     - _Target5Color: {r: 1, g: 1, b: 1, a: 1}
     - _TargetColor: {r: 1, g: 1, b: 1, a: 1}

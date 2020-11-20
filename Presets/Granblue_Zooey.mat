@@ -88,8 +88,8 @@ Material:
     - _FakeLightDirX: 35
     - _FakeLightDirY: -135
     - _FakeLightFallbackDirToggle: 1
-    - _FakeLightFallbackDirection: 0
-    - _FakeLightIntensity: 0.4
+    - _FakeLightFallbackDirection: 1
+    - _FakeLightIntensity: 1
     - _Float2: 0.5
     - _ForceFakeLight: 1
     - _ForceFakeLightDirection: 1
@@ -113,6 +113,7 @@ Material:
     - _ILMChannel: 0
     - _ILMColorSetting: 0
     - _ILMEmissiveIntensity: 0
+    - _ILMGShadingThreshold: 0.5
     - _ILMLayer1: 0.396
     - _ILMLayer2: 0
     - _IntensityMinimum: 0
@@ -144,8 +145,8 @@ Material:
     - _Source4Fuzziness: 0.01
     - _Source5Fuzziness: 0.01
     - _SpecularFuzzy: 0
-    - _SpecularIntensity: 2.92
-    - _SpecularSize: 0.425
+    - _SpecularIntensity: 1
+    - _SpecularSize: -0.15
     - _TotalReplacements: 1
     - _VertexChannel: 0
     - _VertexChannel2: 0
