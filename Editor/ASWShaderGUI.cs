@@ -29,7 +29,7 @@ public class ASWShaderGUI : ShaderGUI
   MaterialProperty _ILM = null;
   MaterialProperty _Detail = null;
 
-  MaterialProperty _ALPHABLEND = null;
+  MaterialProperty _EnableColorReplacer = null;
   MaterialProperty _TotalReplacements = null;
 
   MaterialProperty _Source1Color = null;
@@ -74,8 +74,9 @@ public class ASWShaderGUI : ShaderGUI
   MaterialProperty _FakeLightColor = null;
   MaterialProperty _FakeLightDirX = null;
   MaterialProperty _FakeLightDirY = null;
-  //MaterialProperty _ViewDirOffsetX = null;
-  MaterialProperty _ViewDirOffsetY = null;
+  MaterialProperty _ViewDirOffsetPitch = null;
+  MaterialProperty _ViewDirOffsetYaw = null;
+  //MaterialProperty _ViewDirOffsetZ = null;
   MaterialProperty _LightDirectionSetting = null;
   MaterialProperty _LightColorSetting = null;
   MaterialProperty _FakeLightFallbackDirection = null;
@@ -270,7 +271,7 @@ public class ASWShaderGUI : ShaderGUI
          me.TexturePropertySingleLine(Styles.baseText, _Base);
          if(_EditorVersion.floatValue == 1){
            GUILayout.Space(-18);
-           me.ShaderProperty(_ALPHABLEND,"                                         Enable Color Replacer");
+           me.ShaderProperty(_EnableColorReplacer,"                                         Enable Color Replacer");
          }
          me.TexturePropertySingleLine(Styles.sssText, _SSS);
          me.TexturePropertySingleLine(Styles.ilmText, _ILM);
@@ -284,7 +285,7 @@ public class ASWShaderGUI : ShaderGUI
            me.ShaderProperty(_DetailColorSetting," ");
          }
 
-         if ( _ALPHABLEND.floatValue == 1){
+         if ( _EnableColorReplacer.floatValue == 1){
            if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Color Replacer", Color.cyan) ){
               if (_FresnelSystem.floatValue != 0 && _EnableFresnel.floatValue == 1){
                 GUILayout.Label("WARNING! PLEASE DISABLE FRESNEL WHILE WORKING ON GRANBLUE MODELS!\nTHE FRESNEL CONFLICTS WITH THE COLOR PICKER TOOL!\nENABLE FRESNEL AFTER FINISHED PICKING COLORS!", EditorStyles.textArea);
@@ -390,8 +391,9 @@ public class ASWShaderGUI : ShaderGUI
     						me.ShaderProperty(_FakeLightDirY, _FakeLightDirY.displayName);
     					}
     					else{
-    						//me.ShaderProperty(_ViewDirOffsetX, _ViewDirOffsetX.displayName);
-    						me.ShaderProperty(_ViewDirOffsetY, _ViewDirOffsetY.displayName);
+    						me.ShaderProperty(_ViewDirOffsetPitch, _ViewDirOffsetPitch.displayName);
+    						me.ShaderProperty(_ViewDirOffsetYaw, _ViewDirOffsetYaw.displayName);
+    						//me.ShaderProperty(_ViewDirOffsetZ, _ViewDirOffsetZ.displayName);
     						//GUILayout.Label("Note: VRChat flips the 'X' direction from what is visible here. Negate any value you put in the X to see what it will look like in game.", EditorStyles.helpBox);
     					}
             }
