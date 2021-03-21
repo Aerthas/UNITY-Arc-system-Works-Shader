@@ -1,10 +1,8 @@
-
-# If you aren't aware, I have a much larger release of shaders on my main GitHub shader page which can be found here:
-https://github.com/Aerthas/Aerthas-Unity-Shaders
-
-
-## Arc System Works Shader - DISCLAIMER BELOW
-## [If you are unfamiliar with GitHub, click here to download](https://github.com/Aerthas/Aerthas-Unity-Shaders/releases)
+# [DOWNLOAD FROM RELEASES HERE, NOT AS A ZIP](https://github.com/Aerthas/Aerthas-Unity-Shaders/releases)
+# Arc System Works Shader - Unity Edition
+## If you are looking for my Blender Arc System Works shaders, they are found here:
+https://github.com/Aerthas/BLENDER-Arc-System-Works-Shader<br/>
+If you have any questions, or want to show off some renders, [feel free to join my discord](https://discord.gg/EkCSZg8).
 
 ## Granblue Fantasy: Versus
 (Yes this is a render using my shader)<br/>
