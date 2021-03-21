@@ -1,0 +1,290 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Sol 1
+  m_Shader: {fileID: 4800000, guid: c52c4ad8a0b39c946a720c88ac16a33d, type: 3}
+  m_ShaderKeywords: _COLORADDSUBDIFF_ON _COLOROVERLAY_ON _ENABLECAMERADISTANCEMULT_ON
+  m_LightmapFlags: 0
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Base:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlowMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ILM:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetalMatcap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SSS:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _ALPHABLEND: 0
+    - _ALPHATEST: 0
+    - _AdvancedSettings: 0
+    - _BaseEmissionIntensity: 1
+    - _BaseEmissiveToggle: 0
+    - _BaseIntensity: 1
+    - _BaseSSSAlphaSwap: 0
+    - _BaseSaturation: 1
+    - _BumpScale: 1
+    - _CameraDistanceMult: 1
+    - _ColorReplacer: 0
+    - _Cutoff: 0.5
+    - _DebugGroup: 0
+    - _DepthCalculation: 1
+    - _DepthOffset: 0.5
+    - _DetailColorSetting: 0
+    - _DetailEmissiveIntensity: 0
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _EditorVersion: 1
+    - _EmissionIntensity: 1
+    - _EnableBaseColorMult: 1
+    - _EnableCameraDistanceMult: 1
+    - _EnableColorReplacer: 0
+    - _EnableDebug: 0
+    - _EnableDetailEmission: 0
+    - _EnableFresnel: 1
+    - _EnableGlowmask: 0
+    - _EnableILMEmission: 0
+    - _EnableLightColorMult: 1
+    - _EnableMatcap: 0
+    - _EnableOutline: 0
+    - _EnableRimlight: 1
+    - _FakeGlobalLightIntensity: 1
+    - _FakeLightDirX: 35
+    - _FakeLightDirY: -135
+    - _FakeLightFallbackDirection: 1
+    - _FakeLightIntensity: 1
+    - _FallbackLightDirection: 1
+    - _Float0: 1
+    - _Float1: 1
+    - _Float2: 0
+    - _Float3: 0
+    - _Float4: 1
+    - _FresnelSystem: 0
+    - _Fuzziness: 0.1
+    - _GlobalIntensityMinimum: 0.4
+    - _GlobalLightPush: 1
+    - _GlossMapScale: 1
+    - _Glossiness: 0
+    - _GlossyReflections: 1
+    - _GlowMaskIntensity: 1
+    - _GlowMaskMultSystem: 0
+    - _GranblueDarkenPower: 1
+    - _GranblueDarkenScale: 1
+    - _HighlightFreselFuzzy: 0.01
+    - _HighlightIntensity: 1
+    - _HighlightPower: 5
+    - _HighlightRimlightEmissiveToggle: 0
+    - _HighlightRimlightIntensity: 1
+    - _HighlightRimlightSaturation: 1
+    - _HighlightScale: 0.31
+    - _ILMAlphaEmissionIntensity: 1
+    - _ILMAlphaLinesEmissionToggle: 0
+    - _ILMChannel: 0
+    - _ILMColorSetting: 0
+    - _ILMEmissionIntensity: 1
+    - _ILMEmissiveIntensity: 0
+    - _ILMGShadingThreshold: 0.7
+    - _ILMLayer1: 0.2
+    - _ILMLayer2: 0.1
+    - _ILMLightGate: 1
+    - _Keyword0: 0
+    - _LightColor: 0
+    - _LightColorSetting: 0
+    - _LightDirection: 0
+    - _LightDirectionSetting: 0
+    - _LightPush: 0
+    - _MetalAIntensity: 1
+    - _MetalBIntensity: 5
+    - _Metallic: 0
+    - _MinimumGlobalLightIntensity: 0.4
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _OutlineColorIntensity: 1
+    - _OutlineEnableBaseColorMult: 1
+    - _OutlineThickness: 1
+    - _Parallax: 0.02
+    - _PermanentShadowThreshold: 0.1
+    - _Pitch: 0
+    - _PointLightBrightnessThreshold: 0
+    - _Push: 0
+    - _RimlightEmissionIntensity: 1
+    - _RimlightEmissiveToggle: 0
+    - _RimlightIntensity: 0.1
+    - _RimlightSaturation: 1
+    - _RimlightSize: 0.4
+    - _SSS1HueShift: 0
+    - _SSS2HueShift: 0
+    - _SSS3HueShift: 0
+    - _SSS4HueShift: 0
+    - _SSS5HueShift: 0
+    - _SSSHueShift1: 0
+    - _SSSHueShift2: 0
+    - _SSSHueShift3: 0
+    - _SSSHueShift4: 0
+    - _SSSHueShift5: 0
+    - _Shadow1EmissionIntensity: 1
+    - _Shadow1EmissiveToggle: 0
+    - _Shadow1Intensity: 1
+    - _Shadow1Push: 0.556
+    - _Shadow1Saturation: 1
+    - _Shadow1VertexRThreshold: 0.5
+    - _Shadow2EmissionIntensity: 1
+    - _Shadow2EmissiveToggle: 0
+    - _Shadow2Intensity: 1
+    - _Shadow2Push: -1
+    - _Shadow2Saturation: 1
+    - _Shadow2VertexRThreshold: 0.1
+    - _ShadowBrightness: 1
+    - _ShadowLayer1Fuzziness: 0
+    - _ShadowLayer1Gate: 1
+    - _ShadowLayer1Intensity: 1
+    - _ShadowLayer1Push: 0.088235274
+    - _ShadowLayer2Fuzziness: 0
+    - _ShadowLayer2Gate: 0.91
+    - _ShadowLayer2Intensity: 1
+    - _ShadowLayer2Push: -1
+    - _ShadowRimlightEmissiveToggle: 0
+    - _ShadowRimlightIntensity: 1
+    - _ShadowRimlightSaturation: 1
+    - _SmoothnessTextureChannel: 0
+    - _Source1Fuzziness: 0.01
+    - _Source2Fuzziness: 0.01
+    - _Source3Fuzziness: 0.01
+    - _Source4Fuzziness: 0.01
+    - _Source5Fuzziness: 0.01
+    - _SourceFuzziness: 0.1
+    - _SpecularEmissionIntensity: 1
+    - _SpecularEmissiveToggle: 0
+    - _SpecularFuzzy: 0
+    - _SpecularHighlights: 1
+    - _SpecularIntensity: 1
+    - _SpecularSaturation: 1
+    - _SpecularSize: 0.3
+    - _SrcBlend: 1
+    - _Threshold: 0.3
+    - _Tone1Threshold: 0.5
+    - _Tone2Threshold: 0.2
+    - _TotalReplacements: 1
+    - _UNITY_PASS_FORWARDADD: 0
+    - _UVSec: 0
+    - _VertexChannel: 0
+    - _VertexLayer1: 0.31
+    - _VertexLayer2: 1
+    - _ViewDirOffsetPitch: 0
+    - _ViewDirOffsetX: 0
+    - _ViewDirOffsetY: -19.7
+    - _ViewDirOffsetYaw: 0
+    - _ViewDirOffsetZ: 0
+    - _WrongVertexColors: 1
+    - _Yaw: 0
+    - _ZWrite: 1
+    - __dirty: 1
+    m_Colors:
+    - _AmbientColor: {r: 1, g: 1, b: 1, a: 0}
+    - _BaseTint: {r: 1, g: 1, b: 1, a: 0}
+    - _Color: {r: 0.3, g: 0.3, b: 0.3, a: 1}
+    - _Color0: {r: 1, g: 0, b: 0, a: 0}
+    - _Color1: {r: 0, g: 0, b: 1, a: 0}
+    - _DarkHighlightMult: {r: 0, g: 0, b: 0, a: 0}
+    - _DebugColor: {r: 1, g: 1, b: 1, a: 0}
+    - _DetailColor: {r: 0, g: 1, b: 0, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - _FakeGlobalLightColor: {r: 1, g: 1, b: 1, a: 0}
+    - _FakeLightColor: {r: 0, g: 0, b: 1, a: 1}
+    - _GlowMaskTint: {r: 1, g: 1, b: 1, a: 0}
+    - _HighlightRimlightTint: {r: 1, g: 1, b: 1, a: 0}
+    - _ILMAlphaColor: {r: 1, g: 0, b: 0, a: 0}
+    - _ILMColor: {r: 0, g: 1, b: 0.1510965, a: 0}
+    - _LightColor: {r: 1, g: 1, b: 1, a: 0}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimlightTint: {r: 1, g: 1, b: 1, a: 0}
+    - _Shadow1Tint: {r: 1, g: 1, b: 1, a: 0}
+    - _Shadow2Tint: {r: 1, g: 1, b: 1, a: 0}
+    - _ShadowRimlightTint: {r: 1, g: 1, b: 1, a: 0}
+    - _Source1Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source2Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source3Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source4Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Source5Color: {r: 1, g: 1, b: 1, a: 1}
+    - _SourceColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecularTint: {r: 1, g: 1, b: 1, a: 0}
+    - _Target1Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target2Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target3Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target4Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Target5Color: {r: 1, g: 1, b: 1, a: 1}
+    - _TargetColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Vector0: {r: 1, g: 0, b: 0, a: 0}
