@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using System.IO;
+using System;
 
 // help link https://docs.unity3d.com/ScriptReference/EditorStyles.html
 [InitializeOnLoad]
@@ -28,6 +29,67 @@ public class ASWStyles : MonoBehaviour
         return foldouts[mat].GetState(header);
     }
 
+    public static bool DoSmallFoldout(Dictionary<Material, ASWToggles> foldouts, Material mat, MaterialEditor me, string header){
+			foldouts[mat].SetState(header, SmallFoldout(header, foldouts[mat].GetState(header)));
+			return foldouts[mat].GetState(header);
+		}
+
+		public static bool SmallFoldout(string header, bool display){
+			float lw = EditorGUIUtility.labelWidth-13;
+			GUILayoutOption clickArea = GUILayout.MaxWidth(lw);
+			Rect rect = GUILayoutUtility.GetRect(0, 18f, clickArea);
+			GUILayout.Space(-20);
+			header = "    " + header;
+			EditorGUILayout.LabelField(header);
+			GUILayout.Space(20);
+			return DoSmallToggle(display, rect);
+		}
+
+    public static bool DoSmallToggle(bool display, Rect rect){
+			Event evt = Event.current;
+			Rect arrowRect = new Rect(rect.x+2f, rect.y, 0f, 0f);
+			if (evt.rawType == EventType.Repaint)
+				EditorStyles.foldout.Draw(arrowRect, false, false, display, false);
+			if (evt.rawType == EventType.MouseDown && rect.Contains(evt.mousePosition)){
+				display = !display;
+				evt.Use();
+			}
+			GUILayout.Space(-18);
+			return display;
+		}
+
+    public static void PropertyGroup(Action action){
+			EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+			GUILayout.Space(2);
+			action();
+			GUILayout.Space(2);
+			EditorGUILayout.EndVertical();
+			GUILayout.Space(2);
+		}
+
+		public static void PropertyGroup(bool shouldDisplay, Action action){
+			if (shouldDisplay){
+				EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+  			GUILayout.Space(2);
+				action();
+  			GUILayout.Space(2);
+				EditorGUILayout.EndVertical();
+  			GUILayout.Space(2);
+			}
+		}
+
+		public static void PropertyGroupLayer(Action action){
+			Color col = GUI.backgroundColor;
+			GUI.backgroundColor = new Color(0.85f,0.85f,0.85f,1);
+			EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+			GUILayout.Space(2);
+			action();
+			GUILayout.Space(2);
+			GUI.backgroundColor = col;
+			EditorGUILayout.EndVertical();
+			GUILayout.Space(-2);
+		}
+
     public static float GetInspectorWidth(){
         EditorGUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
@@ -50,7 +112,7 @@ public class ASWStyles : MonoBehaviour
 
     // Replace invalid windows characters with underscores
     public static string ReplaceInvalidChars(string filename) {
-        string updated = string.Join("_", filename.Split(Path.GetInvalidFileNameChars())); 
+        string updated = string.Join("_", filename.Split(Path.GetInvalidFileNameChars()));
         updated = updated.Replace(" ", "_");
         if (updated == "")
             updated = "_";
@@ -62,16 +124,16 @@ public class ASWStyles : MonoBehaviour
         float space = 0;
         float offset = 0;
         switch (size){
-            case 0: 
+            case 0:
                 offset = 4f;
                 space = -2f;
                 break;
-            case 1: 
+            case 1:
                 offset = 2f;
-                space = -22f; 
+                space = -22f;
                 break;
-            case 2: 
-                space = -18f; 
+            case 2:
+                space = -18f;
                 break;
             default: break;
         }
@@ -103,7 +165,7 @@ public class ASWStyles : MonoBehaviour
         GUILayout.Space(space);
         return display;
     }
-    
+
     //Header Centered
     private static Rect DrawShurikenCenteredTitle(string title, Vector2 contentOffset, int HeaderHeight)
     {
@@ -126,7 +188,7 @@ public class ASWStyles : MonoBehaviour
         formatting.hover.textColor = Color.gray;
         formatting.fixedHeight = 28f;
         formatting.fontSize = 10;
-		
+
         formatting.alignment = TextAnchor.MiddleCenter;
 		Rect rect = GUILayoutUtility.GetRect(GetInspectorWidth(), formatting.fixedHeight, formatting);
         rect.width += 8f;
@@ -135,7 +197,7 @@ public class ASWStyles : MonoBehaviour
         Event evt = Event.current;
         Color bgCol = GUI.backgroundColor;
 		GUI.Box(rect, title, formatting);
-		
+
 		return rect;
 	}
 	public static void ShurikenHeaderCentered(string title)
@@ -165,12 +227,12 @@ public class ASWStyles : MonoBehaviour
             foldoutClicked = true;
             evt.Use();
         }
-            
+
         else if (evt.type == EventType.Repaint && foldoutClicked && mouseOver){
             GUI.backgroundColor = Color.gray;
             me.Repaint();
         }
-        
+
         GUI.Box(rect, header, formatting);
         GUI.backgroundColor = bgCol;
 
@@ -180,7 +242,7 @@ public class ASWStyles : MonoBehaviour
 
     //Medium Foldout
     public static bool MediumFoldout(string header, bool display, MaterialEditor me, Color color){
-        
+
         GUIStyle formatting = new GUIStyle("ShurikenModuleTitle");
         float lw = EditorGUIUtility.labelWidth;
         formatting.contentOffset = new Vector2(20f, -3f);
@@ -202,7 +264,7 @@ public class ASWStyles : MonoBehaviour
             foldoutClicked = true;
             evt.Use();
         }
-            
+
         else if (evt.type == EventType.Repaint && foldoutClicked && mouseOver){
             GUI.backgroundColor = Color.gray;
             me.Repaint();
@@ -210,10 +272,43 @@ public class ASWStyles : MonoBehaviour
 
         GUI.Box(rect, header, formatting);
         GUI.backgroundColor = bgCol;
-        
+
         return FoldoutToggle(rect, evt, mouseOver, display, 1);
     }
     //End Medium Foldout
+
+    public static void CenteredTexture(Texture2D tex1, Texture2D tex2, float spacing, float upperMargin, float lowerMargin){
+			GUILayout.Space(upperMargin);
+			GUILayout.BeginHorizontal();
+			GUILayout.FlexibleSpace();
+			GUILayout.Label(tex1);
+			GUILayout.Space(spacing);
+			GUILayout.Label(tex2);
+			GUILayout.FlexibleSpace();
+			GUILayout.EndHorizontal();
+			GUILayout.Space(lowerMargin);
+		}
+		public static void CenteredTexture(Texture2D tex, float upperMargin, float lowerMargin){
+			GUILayout.Space(upperMargin);
+			GUILayout.BeginHorizontal();
+			GUILayout.FlexibleSpace();
+			GUILayout.Label(tex);
+			GUILayout.FlexibleSpace();
+			GUILayout.EndHorizontal();
+			GUILayout.Space(lowerMargin);
+		}
+
+		public static void CenteredText(string text, int fontSize, float upperMargin, float lowerMargin){
+			GUIStyle f = new GUIStyle(EditorStyles.boldLabel);
+			f.fontSize = fontSize;
+			GUILayout.Space(upperMargin);
+			GUILayout.BeginHorizontal();
+			GUILayout.FlexibleSpace();
+			GUILayout.Label(text, f);
+			GUILayout.FlexibleSpace();
+			GUILayout.EndHorizontal();
+			GUILayout.Space(lowerMargin);
+		}
 
     //Start Toggle Group
     public static void ToggleGroup(bool isToggled){
@@ -294,7 +389,7 @@ public class ASWStyles : MonoBehaviour
         }
     }
 
-    
+
 
     public static void DrawButtons()
     {
