@@ -117,6 +117,19 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
   MaterialProperty _OutlineColor = null;
   MaterialProperty _OutlineColorIntensity = null;
 
+  MaterialProperty _Reference = null;
+  MaterialProperty _ReadMask = null;
+  MaterialProperty _WriteMask = null;
+  MaterialProperty _Comparison = null;
+  MaterialProperty _PassFront = null;
+  MaterialProperty _FailFront = null;
+  MaterialProperty _ZFailFront = null;
+
+  MaterialProperty _ZWriteMode = null;
+  MaterialProperty _ZTestMode = null;
+  MaterialProperty _Factor = null;
+  MaterialProperty _Units = null;
+
   MaterialProperty _EnableDebug = null;
   MaterialProperty _DebugColor = null;
   MaterialProperty _DebugGroup = null;
@@ -152,6 +165,9 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
       false, // Outline
         false, // Outline Thickness Settings
         false, // Outline Color Settings
+      false, // Rendering Options
+        false, // Stencil Buffer
+        false, // Depth
       false, // Debug
       false // Credits
     },
@@ -180,6 +196,9 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
       "Outline",
         "Outline Thickness Settings",
         "Outline Color Settings",
+      "Rendering Options",
+        "Stencil Buffer",
+        "Depth",
       "Debug",
       "Credits"
     }
@@ -552,6 +571,27 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
         }
       }
       if(_EditorVersion.floatValue == 1){
+        if ( ASWStyles.DoFoldout(foldouts, mat, me, "Rendering Options") ){
+          if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Stencil Buffer",Color.yellow)){
+            ASWStyles.PropertyGroupLayer( () => {
+              me.ShaderProperty(_Reference,_Reference.displayName);
+              me.ShaderProperty(_ReadMask,_ReadMask.displayName);
+              me.ShaderProperty(_WriteMask,_WriteMask.displayName);
+              me.ShaderProperty(_Comparison,_Comparison.displayName);
+              me.ShaderProperty(_PassFront,_PassFront.displayName);
+              me.ShaderProperty(_FailFront,_FailFront.displayName);
+              me.ShaderProperty(_ZFailFront,_ZFailFront.displayName);
+            });
+          }
+          if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Depth",Color.yellow)){
+            ASWStyles.PropertyGroupLayer( () => {
+              me.ShaderProperty(_ZWriteMode,_ZWriteMode.displayName);
+              me.ShaderProperty(_ZTestMode,_ZTestMode.displayName);
+              me.ShaderProperty(_Factor,_Factor.displayName);
+              me.ShaderProperty(_Units,_Units.displayName);
+            });
+          }
+        }
         if ( ASWStyles.DoFoldout(foldouts, mat, me, "Debug") ){
           ASWStyles.PropertyGroup( () => {
             me.ShaderProperty(_EnableDebug, "Enable Debug");
@@ -608,7 +648,7 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
       }
 
       if ( ASWStyles.DoFoldout(foldouts, mat, me, "Credits") ){
-        GUILayout.Label("»Thanks to Shamwow for the absolute first guide on the absolute first initial version of the shader.\n\n»Thanks to VCD/Velon for his constant riding of me to keep working on my shader\n\n»Thanks to Nars290 for his constant positivity and assistance with testing and debugging\n\n»Thanks to Syll for their knowledge on the outline generation.\n\n»Dolce Swenos for being a grammar nazi. \n\n»Thanks to Morioh for showing me how to use custom editor styles. Really helped make the shader UI look a lot better!\n\n»Thanks to Mochie for his foldouts, the toggles that power it, and the presets system. (Even if it is jank and hacked together, its still fantastic!)\n\n»Thanks to ScruffyRuffles for his absolutely HUGE brain and explaining how to solve point lights and light attenuation. No more solar flares near point lights!\n\n»Thanks to ACIIL for his help in understanding the Unity View Matrix to fix the View Direction Offset.\n\n»Big thanks to everyone in the VRC Shaderd Development Discord for answering general questions and tips on how things work.\n\n»Thanks to EdwardsVSGaming for taking a VERY old version of my shader, editing it a small ammount, claiming the entire thing as his own without credit to me, and using deceptive comparisons between that shader and mine forcing me to get off my lazy streak and actually work on my shader again. *clap* *clap* Good job.", EditorStyles.textArea);
+        GUILayout.Label("»Thanks to Shamwow for the absolute first guide on the absolute first initial version of the shader.\n\n»Thanks to VCD/Velon for his constant riding of me to keep working on my shader\n\n»Thanks to Nars290 for his constant positivity and assistance with testing and debugging\n\n»Thanks to AreCreeps for information on how the FighterZ Rimlight system works.\n\n»Thanks to Syll for their knowledge on the outline generation.\n\n»Dolce Swenos for being a grammar nazi. \n\n»Thanks to Morioh for showing me how to use custom editor styles. Really helped make the shader UI look a lot better!\n\n»Thanks to Mochie for his foldouts, the toggles that power it, and the presets system. (Even if it is jank and hacked together, its still fantastic!)\n\n»Thanks to ScruffyRuffles for his absolutely HUGE brain and explaining how to solve point lights and light attenuation. No more solar flares near point lights!\n\n»Thanks to ACIIL for his help in understanding the Unity View Matrix to fix the View Direction Offset.\n\n»Big thanks to everyone in the VRC Shaderd Development Discord for answering general questions and tips on how things work.\n\n»Thanks to EdwardsVSGaming for taking a VERY old version of my shader, editing it a small ammount, claiming the entire thing as his own without credit to me, and using deceptive comparisons between that shader and mine forcing me to get off my lazy streak and actually work on my shader again. *clap* *clap* Good job.", EditorStyles.textArea);
       }
       ASWStyles.DrawButtons();
       ASWStyles.CenteredTexture(gameTex, 0, 0);

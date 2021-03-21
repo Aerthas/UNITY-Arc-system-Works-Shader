@@ -1,6 +1,6 @@
 // Made with Amplify Shader Editor
 // Available at the Unity Asset Store - http://u3d.as/y3X 
-Shader ".Aerthas/Arc System Works/Utils/Outline v5.0.0"
+Shader ".Aerthas/Arc System Works/Utils/Outline v5.0.1"
 {
 	Properties
 	{
@@ -99,11 +99,12 @@ Shader ".Aerthas/Arc System Works/Utils/Outline v5.0.0"
 
 				float3 objectToViewPos = UnityObjectToViewPos(v.vertex.xyz);
 				float eyeDepth = -objectToViewPos.z;
-				float3 temp_output_135_0_g16 = ( ( v.ase_normal * 2E-05 ) * ( ( _EnableCameraDistanceMult * eyeDepth * v.color.g ) + ( v.color.a * _OutlineThickness ) ) );
-				float3 objectSpaceViewDir136_g16 = ObjSpaceViewDir( float4( temp_output_135_0_g16 , 0.0 ) );
-				float4 normalizeResult142_g16 = ASESafeNormalize( ( float4( objectSpaceViewDir136_g16 , 0.0 ) - v.vertex ) );
-				float clampResult141_g16 = clamp( ( v.color.b + _DepthOffset ) , 0.0 , 1.0 );
-				float4 lerpResult145_g16 = lerp( float4( temp_output_135_0_g16 , 0.0 ) , -normalizeResult142_g16 , ( 1.0 - clampResult141_g16 ));
+				float temp_output_33_0_g17 = _OutlineThickness;
+				float3 temp_output_135_0_g17 = ( ( v.ase_normal * 2E-05 ) * ( ( _EnableCameraDistanceMult * eyeDepth * v.color.g * temp_output_33_0_g17 ) + ( v.color.a * temp_output_33_0_g17 ) ) );
+				float3 objectSpaceViewDir136_g17 = ObjSpaceViewDir( float4( temp_output_135_0_g17 , 0.0 ) );
+				float4 normalizeResult142_g17 = ASESafeNormalize( ( float4( objectSpaceViewDir136_g17 , 0.0 ) - v.vertex ) );
+				float clampResult141_g17 = clamp( ( v.color.b + _DepthOffset ) , 0.0 , 1.0 );
+				float4 lerpResult145_g17 = lerp( float4( temp_output_135_0_g17 , 0.0 ) , -normalizeResult142_g17 , ( 1.0 - clampResult141_g17 ));
 				
 				o.ase_texcoord1.xy = v.ase_texcoord.xy;
 				
@@ -113,7 +114,7 @@ Shader ".Aerthas/Arc System Works/Utils/Outline v5.0.0"
 				#if ASE_ABSOLUTE_VERTEX_POS
 				vertexValue = v.vertex.xyz;
 				#endif
-				vertexValue = lerpResult145_g16.xyz;
+				vertexValue = lerpResult145_g17.xyz;
 				#if ASE_ABSOLUTE_VERTEX_POS
 				v.vertex.xyz = vertexValue;
 				#else
@@ -136,10 +137,10 @@ Shader ".Aerthas/Arc System Works/Utils/Outline v5.0.0"
 				float3 WorldPosition = i.worldPos;
 				#endif
 				float2 uv_Base16 = i.ase_texcoord1.xy;
-				float4 temp_output_13_0_g16 = max( float4( 0,0,0,0 ) , ( 0.2 * tex2D( _Base, uv_Base16 ) ) );
+				float4 temp_output_13_0_g17 = max( float4( 0,0,0,0 ) , ( 0.2 * tex2D( _Base, uv_Base16 ) ) );
 				
 				
-				finalColor = ( ( _EnableBaseColorMult > 0.0 ? ( temp_output_13_0_g16 * temp_output_13_0_g16 ) : _OutlineColor ) * _OutlineColorIntensity );
+				finalColor = ( ( _EnableBaseColorMult > 0.0 ? ( temp_output_13_0_g17 * temp_output_13_0_g17 ) : _OutlineColor ) * _OutlineColorIntensity );
 				return finalColor;
 			}
 			ENDCG
@@ -151,24 +152,24 @@ Shader ".Aerthas/Arc System Works/Utils/Outline v5.0.0"
 }
 /*ASEBEGIN
 Version=18900
-2844;381;1776;843;2334.214;659.2144;1.725734;True;True
-Node;AmplifyShaderEditor.RangedFloatNode;34;-1392,-192;Inherit;False;Property;_OutlineThickness;Outline Thickness;2;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+-2067;215;1776;843;1530.397;211.2802;1;True;True
+Node;AmplifyShaderEditor.RangedFloatNode;34;-1392,-192;Inherit;False;Property;_OutlineThickness;Outline Thickness;2;0;Create;True;0;0;0;False;0;False;1;8.02;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;41;-1460,-66;Inherit;False;Property;_EnableCameraDistanceMult;Enable Camera Distance Mult;5;1;[ToggleUI];Create;True;0;2;Disable;0;Enable;1;0;False;0;False;1;1;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.ColorNode;20;-1398,127;Inherit;False;Property;_OutlineColor;Outline Color;0;0;Create;True;0;0;0;False;0;False;0,0,0,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.RangedFloatNode;29;-1446,383;Inherit;False;Property;_EnableBaseColorMult;Enable Base Color Mult;3;1;[Toggle];Create;True;0;2;Disable;0;Enable;1;0;False;0;False;1;1;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;107;-1446,303;Inherit;False;Property;_OutlineColorIntensity;Outline Color Intensity;4;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SamplerNode;16;-1494,463;Inherit;True;Property;_Base;Base;1;1;[NoScaleOffset];Create;True;0;0;0;False;0;False;-1;None;72ec7e5fb8db9a64090e6520468b394a;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.RangedFloatNode;217;-1360,32;Inherit;False;Property;_DepthOffset;Depth Offset;6;0;Create;True;0;0;0;False;0;False;0.45;0.5;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.FunctionNode;395;-744.9083,28.20754;Inherit;False;ASWOutline;-1;;16;ea9f2d47913480c4f9e91454af7efa45;0;7;33;FLOAT;0;False;47;FLOAT;0;False;127;FLOAT;0.5;False;35;COLOR;0,0,0,0;False;37;FLOAT;0;False;36;FLOAT;0;False;31;COLOR;0,0,0,0;False;2;COLOR;0;FLOAT4;109
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;393;-156.1603,34.63445;Float;False;True;-1;2;ASWUtilsOutlineGUI;100;1;.Aerthas/Arc System Works/Utils/Outline v5.0.0;0770190933193b94aaa3065e307002fa;True;Unlit;0;0;Unlit;2;False;True;0;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;True;0;False;-1;True;True;1;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;RenderType=Opaque=RenderType;True;2;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=ForwardBase;False;0;;0;0;Standard;1;Vertex Position,InvertActionOnDeselection;1;0;1;True;False;;False;0
-WireConnection;395;33;34;0
-WireConnection;395;47;41;0
-WireConnection;395;127;217;0
-WireConnection;395;35;20;0
-WireConnection;395;37;107;0
-WireConnection;395;36;29;0
-WireConnection;395;31;16;0
-WireConnection;393;0;395;0
-WireConnection;393;1;395;109
+Node;AmplifyShaderEditor.FunctionNode;396;-744.9083,28.20754;Inherit;False;ASWOutline;-1;;17;ea9f2d47913480c4f9e91454af7efa45;0;7;33;FLOAT;0;False;47;FLOAT;0;False;127;FLOAT;0.5;False;35;COLOR;0,0,0,0;False;37;FLOAT;0;False;36;FLOAT;0;False;31;COLOR;0,0,0,0;False;2;COLOR;0;FLOAT4;109
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;393;-156.1603,34.63445;Float;False;True;-1;2;ASWUtilsOutlineGUI;100;1;.Aerthas/Arc System Works/Utils/Outline v5.0.1;0770190933193b94aaa3065e307002fa;True;Unlit;0;0;Unlit;2;False;True;0;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;True;0;False;-1;True;True;1;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;RenderType=Opaque=RenderType;True;2;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=ForwardBase;False;0;;0;0;Standard;1;Vertex Position,InvertActionOnDeselection;1;0;1;True;False;;False;0
+WireConnection;396;33;34;0
+WireConnection;396;47;41;0
+WireConnection;396;127;217;0
+WireConnection;396;35;20;0
+WireConnection;396;37;107;0
+WireConnection;396;36;29;0
+WireConnection;396;31;16;0
+WireConnection;393;0;396;0
+WireConnection;393;1;396;109
 ASEEND*/
-//CHKSM=4066813F642A9744504126693D8F392487F3FE2F
+//CHKSM=239FB1193E2B0104297CD1D0F3E6F9EC14B64741

@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Sol 1
+  m_Name: Sol Badguy
   m_Shader: {fileID: 4800000, guid: c52c4ad8a0b39c946a720c88ac16a33d, type: 3}
   m_ShaderKeywords: _COLORADDSUBDIFF_ON _COLOROVERLAY_ON _ENABLECAMERADISTANCEMULT_ON
   m_LightmapFlags: 0
@@ -99,6 +99,7 @@ Material:
     - _BumpScale: 1
     - _CameraDistanceMult: 1
     - _ColorReplacer: 0
+    - _Comparison: 0
     - _Cutoff: 0.5
     - _DebugGroup: 0
     - _DepthCalculation: 1
@@ -121,6 +122,8 @@ Material:
     - _EnableMatcap: 0
     - _EnableOutline: 0
     - _EnableRimlight: 1
+    - _Factor: 0
+    - _FailFront: 0
     - _FakeGlobalLightIntensity: 1
     - _FakeLightDirX: 35
     - _FakeLightDirY: -135
@@ -176,10 +179,13 @@ Material:
     - _OutlineEnableBaseColorMult: 1
     - _OutlineThickness: 1
     - _Parallax: 0.02
+    - _PassFront: 0
     - _PermanentShadowThreshold: 0.1
     - _Pitch: 0
     - _PointLightBrightnessThreshold: 0
     - _Push: 0
+    - _ReadMask: 255
+    - _Reference: 0
     - _RimlightEmissionIntensity: 1
     - _RimlightEmissiveToggle: 0
     - _RimlightIntensity: 0.1
@@ -240,6 +246,7 @@ Material:
     - _TotalReplacements: 1
     - _UNITY_PASS_FORWARDADD: 0
     - _UVSec: 0
+    - _Units: 0
     - _VertexChannel: 0
     - _VertexLayer1: 0.31
     - _VertexLayer2: 1
@@ -248,9 +255,13 @@ Material:
     - _ViewDirOffsetY: -19.7
     - _ViewDirOffsetYaw: 0
     - _ViewDirOffsetZ: 0
+    - _WriteMask: 255
     - _WrongVertexColors: 1
     - _Yaw: 0
+    - _ZFailFront: 0
+    - _ZTestMode: 4
     - _ZWrite: 1
+    - _ZWriteMode: 1
     - __dirty: 1
     m_Colors:
     - _AmbientColor: {r: 1, g: 1, b: 1, a: 0}
