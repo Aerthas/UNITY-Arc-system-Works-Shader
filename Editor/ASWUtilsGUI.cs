@@ -100,7 +100,7 @@ public class ASWUtilsDecalGUI : ShaderGUI
 
   MaterialProperty _Enable = null;
   MaterialProperty _MainTex = null;
-  MaterialProperty _DiscolorationModifier = null;
+  //MaterialProperty _DiscolorationModifier = null;
 
   public override void OnGUI (MaterialEditor me, MaterialProperty[] props)
   {
@@ -119,7 +119,7 @@ public class ASWUtilsDecalGUI : ShaderGUI
     {
       me.ShaderProperty(_Enable, _Enable.displayName);
       me.TexturePropertySingleLine(Styles.mainTex, _MainTex);
-      me.ShaderProperty(_DiscolorationModifier, _DiscolorationModifier.displayName);
+      //me.ShaderProperty(_DiscolorationModifier, _DiscolorationModifier.displayName);
     }
   }
 }
@@ -141,6 +141,7 @@ public class ASWUtilsMatcapGUI : ShaderGUI
   MaterialProperty _MinimumGlobalLightIntensity = null;
   MaterialProperty _FakeGlobalLightColor = null;
   MaterialProperty _FakeGlobalLightIntensity = null;
+  MaterialProperty _Opacity = null;
 
   MaterialProperty _Base = null;
   MaterialProperty _Metal = null;
@@ -153,6 +154,19 @@ public class ASWUtilsMatcapGUI : ShaderGUI
   MaterialProperty _OutlineColor = null;
   MaterialProperty _OutlineColorIntensity = null;
 
+  MaterialProperty _Reference = null;
+  MaterialProperty _ReadMask = null;
+  MaterialProperty _WriteMask = null;
+  MaterialProperty _Comparison = null;
+  MaterialProperty _PassFront = null;
+  MaterialProperty _FailFront = null;
+  MaterialProperty _ZFailFront = null;
+
+  MaterialProperty _ZWriteMode = null;
+  MaterialProperty _ZTestMode = null;
+  MaterialProperty _Factor = null;
+  MaterialProperty _Units = null;
+
   public static Dictionary<Material, ASWToggles > foldouts = new Dictionary<Material, ASWToggles>();
   ASWToggles toggles = new ASWToggles(
     new bool[] {
@@ -162,6 +176,9 @@ public class ASWUtilsMatcapGUI : ShaderGUI
       false, // Outline
         false, // Outline Thickness Settings
         false, // Outline Color Settings
+      false, // Rendering Options
+        false, // Stencil Buffer
+        false, // Depth
     },
     new string[] {
       "Color Settings",
@@ -170,9 +187,13 @@ public class ASWUtilsMatcapGUI : ShaderGUI
       "Outline",
         "Outline Thickness Settings",
         "Outline Color Settings",
+      "Rendering Options",
+        "Stencil Buffer",
+        "Depth",
       "Debug",
     }
   );
+  public static bool isTransparent = false;
 
   public override void OnGUI(MaterialEditor me, MaterialProperty[] props)
   {
@@ -193,11 +214,17 @@ public class ASWUtilsMatcapGUI : ShaderGUI
     EditorGUIUtility.fieldWidth = 50f;   // Use default labelWidth
 
     string[] shaderVersion = mat.shader.name.Split('v');
+    if(shaderVersion[0].Contains("Transparent")){
+      isTransparent = true;
+    }
 
     ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Metal/Matcap v" + "<color=#aa0000ff> "+shaderVersion[1]+"</color>" + "<color=#ffffffff>  }</color>");
 
     EditorGUI.BeginChangeCheck();
     {
+      if(isTransparent){
+        me.ShaderProperty(_Opacity, _Opacity.displayName);
+      }
       if (ASWStyles.DoFoldout(foldouts, mat, me, "Color Settings")){
         ASWStyles.PropertyGroup( () => {
           me.TexturePropertySingleLine(Styles.baseText, _Base);
@@ -248,6 +275,27 @@ public class ASWUtilsMatcapGUI : ShaderGUI
               }
             });
           }
+        }
+      }
+      if ( ASWStyles.DoFoldout(foldouts, mat, me, "Rendering Options") ){
+        if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Stencil Buffer",Color.yellow)){
+          ASWStyles.PropertyGroupLayer( () => {
+            me.ShaderProperty(_Reference,_Reference.displayName);
+            me.ShaderProperty(_ReadMask,_ReadMask.displayName);
+            me.ShaderProperty(_WriteMask,_WriteMask.displayName);
+            me.ShaderProperty(_Comparison,_Comparison.displayName);
+            me.ShaderProperty(_PassFront,_PassFront.displayName);
+            me.ShaderProperty(_FailFront,_FailFront.displayName);
+            me.ShaderProperty(_ZFailFront,_ZFailFront.displayName);
+          });
+        }
+        if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Depth",Color.yellow)){
+          ASWStyles.PropertyGroupLayer( () => {
+            me.ShaderProperty(_ZWriteMode,_ZWriteMode.displayName);
+            me.ShaderProperty(_ZTestMode,_ZTestMode.displayName);
+            me.ShaderProperty(_Factor,_Factor.displayName);
+            me.ShaderProperty(_Units,_Units.displayName);
+          });
         }
       }
     }

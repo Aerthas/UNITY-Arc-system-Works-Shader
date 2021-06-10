@@ -30,6 +30,7 @@ public class ASWFighterZGUI : ShaderGUI
   MaterialProperty _FakeLightDirY = null;
   MaterialProperty _ViewDirOffsetPitch = null;
   MaterialProperty _ViewDirOffsetYaw = null;
+  MaterialProperty _Opacity = null;
 
   MaterialProperty _LightColorSetting = null;
   MaterialProperty _MinimumGlobalLightIntensity = null;
@@ -84,6 +85,13 @@ public class ASWFighterZGUI : ShaderGUI
   MaterialProperty _HighlightRimlightSaturation = null;
   MaterialProperty _HighlightRimlightEmissiveToggle = null;
   MaterialProperty _HighlightRimlightEmissionIntensity = null;
+  MaterialProperty _ShadowRimlightBaseColor = null;
+  MaterialProperty _ShadowRimlightIntensity = null;
+  MaterialProperty _ShadowRimlightTint = null;
+  MaterialProperty _ShadowRimlightSaturation = null;
+  MaterialProperty _ShadowRimlightEmissiveToggle = null;
+  MaterialProperty _ShadowRimlightEmissionIntensity = null;
+
   MaterialProperty _SpecularIntensity = null;
   MaterialProperty _SpecularTint = null;
   MaterialProperty _SpecularSaturation = null;
@@ -162,13 +170,12 @@ public class ASWFighterZGUI : ShaderGUI
         false, // Light Direction Settings
         false, // Light Color Settings
           false, // Game Style Light Tinting
-        false, // Ramp Color Modifications
-          false, // Rimlight
-          false, // Specular
-          false, // Base
-          false, // Shadow 1
-          false, // Shadow 2
       true, // Ramp Settings
+        false, // Rimlight
+        false, // Specular
+        false, // Base
+        false, // Shadow 1
+        false, // Shadow 2
       false, // Outline
         false, // Outline Thickness Settings
         false, // Outline Color Settings
@@ -194,13 +201,12 @@ public class ASWFighterZGUI : ShaderGUI
         "Light Direction Settings",
         "Light Color Settings",
           "Game Style Light Tinting",
-        "Ramp Color Modifications",
-          "Rimlight",
-          "Specular",
-          "Base",
-          "Shadow 1",
-          "Shadow 2",
       "Ramp Settings",
+        "Rimlight",
+        "Specular",
+        "Base",
+        "Shadow 1",
+        "Shadow 2",
       "Outline",
         "Outline Thickness Settings",
         "Outline Color Settings",
@@ -215,6 +221,7 @@ public class ASWFighterZGUI : ShaderGUI
   public static List<string> presetsList = new List<string>();
   public static string[] presets;
   string explain = null;
+  static bool isTransparent = false;
 
   int popupIndex = 0;
   string presetText = "";
@@ -252,6 +259,12 @@ public class ASWFighterZGUI : ShaderGUI
     EditorGUIUtility.fieldWidth = 50f;   // Use default labelWidth
 
     string[] shaderVersion = mat.shader.name.Split('v');
+    if(shaderVersion[0].Contains("Transparent")){
+      isTransparent = true;
+    }
+    else{
+      isTransparent = false;
+    }
 
     if(_EditorVersion.floatValue == 1){
       ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light v" + "<color=#aa0000ff> "+shaderVersion[1]+"</color>" + "<color=#ffffffff> - </color><color=#edba00ff> Advanced</color><color=#ffffffff>  }</color>");
@@ -279,6 +292,9 @@ public class ASWFighterZGUI : ShaderGUI
           });
         }
       });
+      if(isTransparent){
+        me.ShaderProperty(_Opacity, _Opacity.displayName);
+      }
       if (ASWStyles.DoFoldout(foldouts, mat, me, "PRESETS")){
         GUILayout.Space(4);
         float buttonWidth = EditorGUIUtility.labelWidth-5.0f;
@@ -421,75 +437,6 @@ public class ASWFighterZGUI : ShaderGUI
             });
           }
         }
-        if(_EditorVersion.floatValue == 1){
-          if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Ramp Color Modifications", Color.yellow) ){
-            ASWStyles.PropertyGroup( () => {
-              if (ASWStyles.DoSmallFoldout(foldouts, mat, me, "Rimlight")){
-                ASWStyles.PropertyGroupLayer( () => {
-                  me.ShaderProperty(_HighlightRimlightIntensity, _HighlightRimlightIntensity.displayName);
-                  me.ShaderProperty(_HighlightRimlightTint, _HighlightRimlightTint.displayName);
-                  me.ShaderProperty(_HighlightRimlightSaturation, _HighlightRimlightSaturation.displayName);
-                  me.ShaderProperty(_HighlightRimlightEmissiveToggle, _HighlightRimlightEmissiveToggle.displayName);
-                  if(_HighlightRimlightEmissiveToggle.floatValue == 1){
-                    me.ShaderProperty(_HighlightRimlightEmissionIntensity, _HighlightRimlightEmissionIntensity.displayName);
-                  }
-                });
-              }
-            });
-            ASWStyles.PropertyGroup( () => {
-              if (ASWStyles.DoSmallFoldout(foldouts, mat, me, "Specular")){
-                ASWStyles.PropertyGroupLayer( () => {
-                  me.ShaderProperty(_SpecularIntensity, _SpecularIntensity.displayName);
-                  me.ShaderProperty(_SpecularTint, _SpecularTint.displayName);
-                  me.ShaderProperty(_SpecularSaturation, _SpecularSaturation.displayName);
-                  me.ShaderProperty(_SpecularEmissiveToggle, _SpecularEmissiveToggle.displayName);
-                  if(_SpecularEmissiveToggle.floatValue == 1){
-                    me.ShaderProperty(_SpecularEmissionIntensity, _SpecularEmissionIntensity.displayName);
-                  }
-                });
-              }
-            });
-            ASWStyles.PropertyGroup( () => {
-              if (ASWStyles.DoSmallFoldout(foldouts, mat, me, "Base")){
-                ASWStyles.PropertyGroupLayer( () => {
-                  me.ShaderProperty(_BaseIntensity, _BaseIntensity.displayName);
-                  me.ShaderProperty(_BaseTint, _BaseTint.displayName);
-                  me.ShaderProperty(_BaseSaturation, _BaseSaturation.displayName);
-                  me.ShaderProperty(_BaseEmissiveToggle, _BaseEmissiveToggle.displayName);
-                  if(_BaseEmissiveToggle.floatValue == 1){
-                    me.ShaderProperty(_BaseEmissionIntensity, _BaseEmissionIntensity.displayName);
-                  }
-                });
-              }
-            });
-            ASWStyles.PropertyGroup( () => {
-              if (ASWStyles.DoSmallFoldout(foldouts, mat, me, "Shadow 1")){
-                ASWStyles.PropertyGroupLayer( () => {
-                  me.ShaderProperty(_Shadow1Intensity, _Shadow1Intensity.displayName);
-                  me.ShaderProperty(_Shadow1Tint, _Shadow1Tint.displayName);
-                  me.ShaderProperty(_Shadow1Saturation, _Shadow1Saturation.displayName);
-                  me.ShaderProperty(_Shadow1EmissiveToggle, _Shadow1EmissiveToggle.displayName);
-                  if(_Shadow1EmissiveToggle.floatValue == 1){
-                    me.ShaderProperty(_HighlightRimlightEmissiveToggle, _Shadow1EmissionIntensity.displayName);
-                  }
-                });
-              }
-            });
-            ASWStyles.PropertyGroup( () => {
-              if (ASWStyles.DoSmallFoldout(foldouts, mat, me, "Shadow 2")){
-                ASWStyles.PropertyGroupLayer( () => {
-                  me.ShaderProperty(_Shadow2Intensity, _Shadow2Intensity.displayName);
-                  me.ShaderProperty(_Shadow2Tint, _Shadow2Tint.displayName);
-                  me.ShaderProperty(_Shadow2Saturation, _Shadow2Saturation.displayName);
-                  me.ShaderProperty(_Shadow2EmissiveToggle, _Shadow2EmissiveToggle.displayName);
-                  if(_Shadow2EmissiveToggle.floatValue == 1){
-                    me.ShaderProperty(_Shadow2EmissionIntensity, _Shadow2EmissionIntensity.displayName);
-                  }
-                });
-              }
-            });
-          }
-        }
       }
 
       if ( ASWStyles.DoFoldout(foldouts, mat, me, "Light Settings") ){
@@ -537,27 +484,98 @@ public class ASWFighterZGUI : ShaderGUI
         ASWStyles.PropertyGroup( () => {
           me.ShaderProperty(_GlobalLightPush, _GlobalLightPush.displayName);
         });
-        ASWStyles.PropertyGroup( () => {
-          me.ShaderProperty(_EnableRimlight, _EnableRimlight.displayName);
-          ASWStyles.ToggleGroup(_EnableRimlight.floatValue == 0);
-          me.ShaderProperty(_RimlightSize, _RimlightSize.displayName);
-          ASWStyles.ToggleGroupEnd();
-        });
-        ASWStyles.PropertyGroup( () => {
-          me.ShaderProperty(_SpecularSize, _SpecularSize.displayName);
-        });
-        if(_EditorVersion.floatValue == 1){
-          ASWStyles.PropertyGroup( () => {
-            me.ShaderProperty(_Shadow1Push, _Shadow1Push.displayName);
-            me.ShaderProperty(_Shadow1VertexRThreshold, _Shadow1VertexRThreshold.displayName);
-          });
-          ASWStyles.PropertyGroup( () => {
-            me.ShaderProperty(_Shadow2Push, _Shadow2Push.displayName);
-            me.ShaderProperty(_Shadow2VertexRThreshold, _Shadow2VertexRThreshold.displayName);
-          });
+        if (_EditorVersion.floatValue == 1){
           ASWStyles.PropertyGroup( () => {
             me.ShaderProperty(_PermanentShadowThreshold, _PermanentShadowThreshold.displayName);
           });
+        }
+        if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Rimlight", Color.yellow) ){
+          ASWStyles.PropertyGroup( () => {
+            me.ShaderProperty(_EnableRimlight, _EnableRimlight.displayName);
+            ASWStyles.ToggleGroup(_EnableRimlight.floatValue == 0);
+            me.ShaderProperty(_RimlightSize, _RimlightSize.displayName);
+          });
+          if(_EditorVersion.floatValue == 1){
+            ASWStyles.PropertyGroup( () => {
+              me.ShaderProperty(_HighlightRimlightIntensity, _HighlightRimlightIntensity.displayName);
+              me.ShaderProperty(_HighlightRimlightTint, _HighlightRimlightTint.displayName);
+              me.ShaderProperty(_HighlightRimlightSaturation, _HighlightRimlightSaturation.displayName);
+              me.ShaderProperty(_HighlightRimlightEmissiveToggle, _HighlightRimlightEmissiveToggle.displayName);
+              if(_HighlightRimlightEmissiveToggle.floatValue == 1){
+                me.ShaderProperty(_HighlightRimlightEmissionIntensity, _HighlightRimlightEmissionIntensity.displayName);
+              }
+            });
+            ASWStyles.PropertyGroup( () => {
+              me.ShaderProperty(_ShadowRimlightBaseColor, _ShadowRimlightBaseColor.displayName);
+              me.ShaderProperty(_ShadowRimlightIntensity, _ShadowRimlightIntensity.displayName);
+              me.ShaderProperty(_ShadowRimlightTint, _ShadowRimlightTint.displayName);
+              me.ShaderProperty(_ShadowRimlightSaturation, _ShadowRimlightSaturation.displayName);
+              me.ShaderProperty(_ShadowRimlightEmissiveToggle, _ShadowRimlightEmissiveToggle.displayName);
+              if(_ShadowRimlightEmissiveToggle.floatValue == 1){
+                me.ShaderProperty(_ShadowRimlightEmissionIntensity, _ShadowRimlightEmissionIntensity.displayName);
+              }
+            });
+          }
+          ASWStyles.ToggleGroupEnd();
+        }
+        if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Specular", Color.yellow) ){
+          ASWStyles.PropertyGroup( () => {
+            me.ShaderProperty(_SpecularSize, _SpecularSize.displayName);
+          });
+          if(_EditorVersion.floatValue == 1){
+            ASWStyles.PropertyGroup( () => {
+              me.ShaderProperty(_SpecularIntensity, _SpecularIntensity.displayName);
+              me.ShaderProperty(_SpecularTint, _SpecularTint.displayName);
+              me.ShaderProperty(_SpecularSaturation, _SpecularSaturation.displayName);
+              me.ShaderProperty(_SpecularEmissiveToggle, _SpecularEmissiveToggle.displayName);
+              if(_SpecularEmissiveToggle.floatValue == 1){
+                me.ShaderProperty(_SpecularEmissionIntensity, _SpecularEmissionIntensity.displayName);
+              }
+            });
+          }
+        }
+        if(_EditorVersion.floatValue == 1){
+          if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Base", Color.yellow) ){
+            ASWStyles.PropertyGroup( () => {
+              me.ShaderProperty(_BaseIntensity, _BaseIntensity.displayName);
+              me.ShaderProperty(_BaseTint, _BaseTint.displayName);
+              me.ShaderProperty(_BaseSaturation, _BaseSaturation.displayName);
+              me.ShaderProperty(_BaseEmissiveToggle, _BaseEmissiveToggle.displayName);
+              if(_BaseEmissiveToggle.floatValue == 1){
+                me.ShaderProperty(_BaseEmissionIntensity, _BaseEmissionIntensity.displayName);
+              }
+            });
+          }
+          if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Shadow 1", Color.yellow) ){
+            ASWStyles.PropertyGroup( () => {
+              me.ShaderProperty(_Shadow1Push, _Shadow1Push.displayName);
+              me.ShaderProperty(_Shadow1VertexRThreshold, _Shadow1VertexRThreshold.displayName);
+            });
+            ASWStyles.PropertyGroup( () => {
+              me.ShaderProperty(_Shadow1Intensity, _Shadow1Intensity.displayName);
+              me.ShaderProperty(_Shadow1Tint, _Shadow1Tint.displayName);
+              me.ShaderProperty(_Shadow1Saturation, _Shadow1Saturation.displayName);
+              me.ShaderProperty(_Shadow1EmissiveToggle, _Shadow1EmissiveToggle.displayName);
+              if(_Shadow1EmissiveToggle.floatValue == 1){
+                me.ShaderProperty(_Shadow1EmissionIntensity, _Shadow1EmissionIntensity.displayName);
+              }
+            });
+          }
+          if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Shadow 2", Color.yellow) ){
+            ASWStyles.PropertyGroup( () => {
+              me.ShaderProperty(_Shadow2Push, _Shadow2Push.displayName);
+              me.ShaderProperty(_Shadow2VertexRThreshold, _Shadow2VertexRThreshold.displayName);
+            });
+            ASWStyles.PropertyGroup( () => {
+              me.ShaderProperty(_Shadow2Intensity, _Shadow2Intensity.displayName);
+              me.ShaderProperty(_Shadow2Tint, _Shadow2Tint.displayName);
+              me.ShaderProperty(_Shadow2Saturation, _Shadow2Saturation.displayName);
+              me.ShaderProperty(_Shadow2EmissiveToggle, _Shadow2EmissiveToggle.displayName);
+              if(_Shadow2EmissiveToggle.floatValue == 1){
+                me.ShaderProperty(_Shadow2EmissionIntensity, _Shadow2EmissionIntensity.displayName);
+              }
+            });
+          }
         }
       }
 
@@ -672,7 +690,7 @@ public class ASWFighterZGUI : ShaderGUI
       }
 
       if ( ASWStyles.DoFoldout(foldouts, mat, me, "Credits") ){
-        GUILayout.Label("»Thanks to Shamwow for the absolute first guide on the absolute first initial version of the shader.\n\n»Thanks to VCD/Velon for his constant riding of me to keep working on my shader\n\n»Thanks to Nars290 for his constant positivity and assistance with testing and debugging\n\n»Thanks to AreCreeps for information on how the FighterZ Rimlight system works.\n\n»Thanks to Syll for their knowledge on the outline generation.\n\n»Dolce Swenos for being a grammar nazi. \n\n»Thanks to Morioh for showing me how to use custom editor styles. Really helped make the shader UI look a lot better!\n\n»Thanks to Mochie for his foldouts, the toggles that power it, and the presets system. (Even if it is jank and hacked together, its still fantastic!)\n\n»Thanks to ScruffyRuffles for his absolutely HUGE brain and explaining how to solve point lights and light attenuation. No more solar flares near point lights!\n\n»Thanks to ACIIL for his help in understanding the Unity View Matrix to fix the View Direction Offset.\n\n»Big thanks to everyone in the VRC Shaderd Development Discord for answering general questions and tips on how things work.\n\n»Thanks to EdwardsVSGaming for taking a VERY old version of my shader, editing it a small ammount, claiming the entire thing as his own without credit to me, and using deceptive comparisons between that shader and mine forcing me to get off my lazy streak and actually work on my shader again. *clap* *clap* Good job.", EditorStyles.textArea);
+        GUILayout.Label("»Thanks to Shamwow for the absolute first guide on the absolute first initial version of the shader.\n\n»Thanks to VCD/Velon for his constant riding of me to keep working on my shader\n\n»Thanks to Nars290 for his constant positivity and assistance with testing and debugging\n\n»Thanks to AreCreeps for information on how the FighterZ Rimlight system works.\n\n»Thanks to Syll for their knowledge on the outline generation.\n\n»Dulce Sueños for being a grammar nazi. \n\n»Thanks to Morioh for showing me how to use custom editor styles. Really helped make the shader UI look a lot better!\n\n»Thanks to Mochie for his foldouts, the toggles that power it, and the presets system. (Even if it is jank and hacked together, its still fantastic!)\n\n»Thanks to ScruffyRuffles for his absolutely HUGE brain and explaining how to solve point lights and light attenuation. No more solar flares near point lights!\n\n»Thanks to ACIIL for his help in understanding the Unity View Matrix to fix the View Direction Offset.\n\n»Big thanks to everyone in the VRC Shader Development Discord for answering general questions and tips on how things work.\n\n»Thanks to EdwardsVSGaming for taking a VERY old version of my shader, editing it a small ammount, claiming the entire thing as his own without credit to me, and using deceptive comparisons between that shader and mine forcing me to get off my lazy streak and actually work on my shader again. *clap* *clap* Good job.", EditorStyles.textArea);
       }
       ASWStyles.DrawButtons();
       ASWStyles.CenteredTexture(gameTex, 0, 0);
