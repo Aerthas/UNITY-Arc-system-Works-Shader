@@ -258,8 +258,8 @@ public class ASWFighterZGUI : ShaderGUI
     EditorGUIUtility.labelWidth = 300f;   // Use default labelWidth
     EditorGUIUtility.fieldWidth = 50f;   // Use default labelWidth
 
-    string[] shaderVersion = mat.shader.name.Split('v');
-    if(shaderVersion[0].Contains("Transparent")){
+    string[] shaderVersion = mat.shader.name.Split('/');
+    if(shaderVersion[4].Contains("Transparent")){
       isTransparent = true;
     }
     else{
@@ -267,10 +267,10 @@ public class ASWFighterZGUI : ShaderGUI
     }
 
     if(_EditorVersion.floatValue == 1){
-      ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light v" + "<color=#aa0000ff> "+shaderVersion[1]+"</color>" + "<color=#ffffffff> - </color><color=#edba00ff> Advanced</color><color=#ffffffff>  }</color>");
+      ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light " + "<color=#aa0000ff> "+shaderVersion[4]+"</color>" + "<color=#ffffffff> - </color><color=#edba00ff> Advanced</color><color=#ffffffff>  }</color>");
     }
     else{
-      ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light v" + "<color=#aa0000ff> "+shaderVersion[1]+"</color>" + "<color=#ffffffff> - </color><color=#00aaaaff> Basic</color><color=#ffffffff>  }</color>");
+      ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Merged Light " + "<color=#aa0000ff> "+shaderVersion[4]+"</color>" + "<color=#ffffffff> - </color><color=#00aaaaff> Basic</color><color=#ffffffff>  }</color>");
     }
 
     EditorGUI.BeginChangeCheck();
@@ -580,35 +580,47 @@ public class ASWFighterZGUI : ShaderGUI
       }
 
       if ( ASWStyles.DoFoldout(foldouts, mat, me, "Outline") ){
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.FlexibleSpace();
-        if (GUILayout.Button("DO NOT USE THIS UNLESS YOU ARE SUPER LAZY\nCLICK THIS TO LEARN HOW TO\nPROPERLY SET UP YOUR OUTLINES", GUILayout.Width(400), GUILayout.Height(50)) == true){
-          Application.OpenURL("https://www.youtube.com/watch?v=SYS3XlRmDaA");
-            Debug.Log("Opened external url: https://www.youtube.com/watch?v=SYS3XlRmDaA");
-        }
-        GUILayout.FlexibleSpace();
-        EditorGUILayout.EndHorizontal();
-        ASWStyles.PropertyGroup( () => {
-          me.ShaderProperty(_EnableOutline, _EnableOutline.displayName);
-        });
-        if(_EnableOutline.floatValue == 1){
-          if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Outline Thickness Settings",Color.cyan)){
-            ASWStyles.PropertyGroup( () => {
-              me.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
-              me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
-              me.ShaderProperty(_DepthOffset, _DepthOffset.displayName);
-            });
+        if(isTransparent){
+          EditorGUILayout.BeginHorizontal();
+          GUILayout.FlexibleSpace();
+          if (GUILayout.Button("Outlines are not supported here on Transparent versions\nof the shader. Click here to learn how to\nproperly set up your outlines.", GUILayout.Width(400), GUILayout.Height(50)) == true){
+            Application.OpenURL("https://www.youtube.com/watch?v=SYS3XlRmDaA");
+              Debug.Log("Opened external url: https://www.youtube.com/watch?v=SYS3XlRmDaA");
           }
-          if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Outline Color Settings",Color.cyan)){
-            ASWStyles.PropertyGroup( () => {
-              me.ShaderProperty(_OutlineEnableBaseColorMult, _OutlineEnableBaseColorMult.displayName);
-              if(_OutlineEnableBaseColorMult.floatValue == 0){
-                ASWStyles.PropertyGroup( () => {
-                  me.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
-                  me.ShaderProperty(_OutlineColorIntensity, _OutlineColorIntensity.displayName);
-                });
-              }
-            });
+          GUILayout.FlexibleSpace();
+          EditorGUILayout.EndHorizontal();
+        }
+        else{
+          EditorGUILayout.BeginHorizontal();
+          GUILayout.FlexibleSpace();
+          if (GUILayout.Button("DO NOT USE THIS UNLESS YOU ARE SUPER LAZY\nCLICK THIS TO LEARN HOW TO\nPROPERLY SET UP YOUR OUTLINES", GUILayout.Width(400), GUILayout.Height(50)) == true){
+            Application.OpenURL("https://www.youtube.com/watch?v=SYS3XlRmDaA");
+              Debug.Log("Opened external url: https://www.youtube.com/watch?v=SYS3XlRmDaA");
+          }
+          GUILayout.FlexibleSpace();
+          EditorGUILayout.EndHorizontal();
+          ASWStyles.PropertyGroup( () => {
+            me.ShaderProperty(_EnableOutline, _EnableOutline.displayName);
+          });
+          if(_EnableOutline.floatValue == 1){
+            if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Outline Thickness Settings",Color.cyan)){
+              ASWStyles.PropertyGroup( () => {
+                me.ShaderProperty(_OutlineThickness, _OutlineThickness.displayName);
+                me.ShaderProperty(_EnableCameraDistanceMult, _EnableCameraDistanceMult.displayName);
+                me.ShaderProperty(_DepthOffset, _DepthOffset.displayName);
+              });
+            }
+            if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Outline Color Settings",Color.cyan)){
+              ASWStyles.PropertyGroup( () => {
+                me.ShaderProperty(_OutlineEnableBaseColorMult, _OutlineEnableBaseColorMult.displayName);
+                if(_OutlineEnableBaseColorMult.floatValue == 0){
+                  ASWStyles.PropertyGroup( () => {
+                    me.ShaderProperty(_OutlineColor, _OutlineColor.displayName);
+                    me.ShaderProperty(_OutlineColorIntensity, _OutlineColorIntensity.displayName);
+                  });
+                }
+              });
+            }
           }
         }
       }
@@ -692,6 +704,8 @@ public class ASWFighterZGUI : ShaderGUI
       if ( ASWStyles.DoFoldout(foldouts, mat, me, "Credits") ){
         GUILayout.Label("»Thanks to Shamwow for the absolute first guide on the absolute first initial version of the shader.\n\n»Thanks to VCD/Velon for his constant riding of me to keep working on my shader\n\n»Thanks to Nars290 for his constant positivity and assistance with testing and debugging\n\n»Thanks to AreCreeps for information on how the FighterZ Rimlight system works.\n\n»Thanks to Syll for their knowledge on the outline generation.\n\n»Dulce Sueños for being a grammar nazi. \n\n»Thanks to Morioh for showing me how to use custom editor styles. Really helped make the shader UI look a lot better!\n\n»Thanks to Mochie for his foldouts, the toggles that power it, and the presets system. (Even if it is jank and hacked together, its still fantastic!)\n\n»Thanks to ScruffyRuffles for his absolutely HUGE brain and explaining how to solve point lights and light attenuation. No more solar flares near point lights!\n\n»Thanks to ACIIL for his help in understanding the Unity View Matrix to fix the View Direction Offset.\n\n»Big thanks to everyone in the VRC Shader Development Discord for answering general questions and tips on how things work.\n\n»Thanks to EdwardsVSGaming for taking a VERY old version of my shader, editing it a small ammount, claiming the entire thing as his own without credit to me, and using deceptive comparisons between that shader and mine forcing me to get off my lazy streak and actually work on my shader again. *clap* *clap* Good job.", EditorStyles.textArea);
       }
+      ASWStyles.PartingLine();
+      me.RenderQueueField();
       ASWStyles.DrawButtons();
       ASWStyles.CenteredTexture(gameTex, 0, 0);
     }

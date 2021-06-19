@@ -49,8 +49,8 @@ public class ASWUtilsOutlineGUI : ShaderGUI
             property.SetValue(this, FindProperty(property.Name, props));
         }
     }
-    string[] shaderVersion = mat.shader.name.Split('v');
-    ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Outline v" + "<color=#ff0000ff> "+shaderVersion[1]+"</color>" + "<color=#ffffffff>  }</color>");
+    string[] shaderVersion = mat.shader.name.Split('/');
+    ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Outline " + "<color=#ff0000ff> "+shaderVersion[4]+"</color>" + "<color=#ffffffff>  }</color>");
 
     EditorGUI.BeginChangeCheck();
     {
@@ -84,6 +84,8 @@ public class ASWUtilsOutlineGUI : ShaderGUI
           }
         });
       }
+      ASWStyles.PartingLine();
+      me.RenderQueueField();
     }
   }
 }
@@ -113,12 +115,14 @@ public class ASWUtilsDecalGUI : ShaderGUI
             property.SetValue(this, FindProperty(property.Name, props));
         }
     }
-    string[] shaderVersion = mat.shader.name.Split('v');
-    ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Decal v" + "<color=#ff0000ff> "+shaderVersion[1]+"</color><color=#ffffffff>" + "  }</color>");
+    string[] shaderVersion = mat.shader.name.Split('/');
+    ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Decal " + "<color=#ff0000ff> "+shaderVersion[3]+"</color><color=#ffffffff>" + "  }</color>");
     EditorGUI.BeginChangeCheck();
     {
       me.ShaderProperty(_Enable, _Enable.displayName);
       me.TexturePropertySingleLine(Styles.mainTex, _MainTex);
+      ASWStyles.PartingLine();
+      me.RenderQueueField();
       //me.ShaderProperty(_DiscolorationModifier, _DiscolorationModifier.displayName);
     }
   }
@@ -213,12 +217,15 @@ public class ASWUtilsMatcapGUI : ShaderGUI
     EditorGUIUtility.labelWidth = 300f;   // Use default labelWidth
     EditorGUIUtility.fieldWidth = 50f;   // Use default labelWidth
 
-    string[] shaderVersion = mat.shader.name.Split('v');
-    if(shaderVersion[0].Contains("Transparent")){
+    string[] shaderVersion = mat.shader.name.Split('/');
+    if(shaderVersion[4].Contains("Transparent")){
       isTransparent = true;
     }
+    else{
+      isTransparent = false;
+    }
 
-    ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Metal/Matcap v" + "<color=#aa0000ff> "+shaderVersion[1]+"</color>" + "<color=#ffffffff>  }</color>");
+    ASWStyles.ShurikenHeaderCentered("{  Arc System Works - Metal/Matcap " + "<color=#aa0000ff> "+shaderVersion[4]+"</color>" + "<color=#ffffffff>  }</color>");
 
     EditorGUI.BeginChangeCheck();
     {
@@ -298,6 +305,8 @@ public class ASWUtilsMatcapGUI : ShaderGUI
           });
         }
       }
+      ASWStyles.PartingLine();
+      me.RenderQueueField();
     }
   }
 }

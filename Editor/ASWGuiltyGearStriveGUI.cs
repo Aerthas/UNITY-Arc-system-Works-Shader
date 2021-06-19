@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-public class ASWGuiltyGearXrdGUI : ShaderGUI
+public class ASWGuiltyGearStriveGUI : ShaderGUI
 {
   BindingFlags bindingFlags = BindingFlags.Public |
                               BindingFlags.NonPublic |
@@ -16,11 +16,13 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
   {
       public static GUIContent baseText = new GUIContent("Base Texture", "[Character Indentifier]_Base");
       public static GUIContent sssText = new GUIContent("SSS Texture", "[Character Indentifier]_SSS");
+      public static GUIContent olmText = new GUIContent("OLM Texture", "[Character Indentifier]_OLM");
       public static GUIContent ilmText = new GUIContent("ILM Texture", "[Character Indentifier]_ILM");
+      public static GUIContent detailText = new GUIContent("Detail Texture", "[Character Indentifier]_Detail");
       public static GUIContent glowMaskText = new GUIContent("Glow Mask", "[Character Indentifier]_GlowMask. Used by few characters.");
   }
 
-  static string game = "GGXrdR2_Logo";
+  static string game = "GGStrive_Logo";
 
   MaterialProperty _EditorVersion = null;
   MaterialProperty _LightDirectionSetting = null;
@@ -40,11 +42,17 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
 
   MaterialProperty _Base = null;
   MaterialProperty _SSS = null;
+  MaterialProperty _OLM = null;
   MaterialProperty _ILM = null;
   MaterialProperty _ILMColorSetting = null;
   MaterialProperty _ILMAlphaColor = null;
   MaterialProperty _ILMAlphaEmissionIntensity = null;
   MaterialProperty _ILMAlphaLinesEmissionToggle = null;
+  MaterialProperty _Detail = null;
+  MaterialProperty _DetailColorSetting = null;
+  MaterialProperty _BodyLinesColor = null;
+  //MaterialProperty _BodyLinesEmissionToggle = null;
+  //MaterialProperty _BodyLinesEmissionIntensity = null;
 
   MaterialProperty _EnableColorReplacer = null;
   MaterialProperty _TotalReplacements = null;
@@ -146,6 +154,7 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
       true, // Editor Version
       true, // Texture Settings
         false, // ILM Body Lines
+        false, // Detail Body Lines
         false, // Color Replacer
           true, // Color 1
           true, // Color 2
@@ -176,6 +185,7 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
       "Editor Version",
       "Texture Settings",
         "ILM Alpha Body Lines",
+        "Detail Body Lines",
         "Color Replacer",
           "Color 1",
           "Color 2",
@@ -317,13 +327,16 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
             me.ShaderProperty(_EnableColorReplacer,"                                         Enable Color Replacer");
           }
           me.TexturePropertySingleLine(Styles.sssText, _SSS);
+          me.TexturePropertySingleLine(Styles.olmText, _OLM);
           me.TexturePropertySingleLine(Styles.ilmText, _ILM);
           if(_EditorVersion.floatValue == 1){
             GUILayout.Space(-18);
             me.ShaderProperty(_ILMColorSetting," ");
           }
+          me.TexturePropertySingleLine(Styles.detailText, _Detail);
           if(_EditorVersion.floatValue == 1){
-          //GUILayout.Space(-18);
+            GUILayout.Space(-18);
+            me.ShaderProperty(_DetailColorSetting," ");
           }
         });
 
@@ -406,6 +419,17 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
               }
             });
           }
+        }
+      }
+      if(_DetailColorSetting.floatValue > 0){
+        if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Detail Body Lines", Color.cyan) ){
+          ASWStyles.PropertyGroup( () => {
+            me.ShaderProperty(_BodyLinesColor, _BodyLinesColor.displayName);
+            //me.ShaderProperty(_BodyLinesEmissionToggle, _BodyLinesEmissionToggle.displayName);
+            //if(_BodyLinesEmissionToggle.floatValue == 1){
+            //  me.ShaderProperty(_BodyLinesEmissionIntensity, _BodyLinesEmissionIntensity.displayName);
+            //}
+          });
         }
       }
 
