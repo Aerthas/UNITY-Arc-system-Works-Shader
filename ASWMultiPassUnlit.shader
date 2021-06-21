@@ -26,8 +26,6 @@ Shader /*ase_name*/ "Hidden/ASW/BaseTemplate" /*end*/
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			#pragma multi_compile_fwdbase
-			#define UNITY_PASS_FORWARDBASE
 			#include "UnityCG.cginc"
 			/*ase_pragma*/
 			/*ase_globals*/
@@ -89,7 +87,6 @@ Shader /*ase_name*/ "Hidden/ASW/BaseTemplate" /*end*/
 			#pragma vertex vert
 			#pragma fragment frag
 			#pragma multi_compile_fwdadd_fullshadows
-			#define UNITY_PASS_FORWARDADD
 			#include "UnityCG.cginc"
 			/*ase_pragma*/
 			/*ase_globals*/
@@ -158,7 +155,6 @@ Shader /*ase_name*/ "Hidden/ASW/BaseTemplate" /*end*/
 			#pragma vertex vert
 			#pragma fragment frag
 			#pragma multi_compile_prepassfinal
-			#define UNITY_PASS_DEFERRED
 			#include "UnityCG.cginc"
 			/*ase_pragma*/
 			/*ase_globals*/
@@ -279,7 +275,6 @@ Shader /*ase_name*/ "Hidden/ASW/BaseTemplate" /*end*/
 			#pragma vertex vert
 			#pragma fragment frag
 			#pragma multi_compile_shadowcaster
-			#define UNITY_PASS_SHADOWCASTER
 			#include "UnityCG.cginc"
 			/*ase_pragma*/
 			/*ase_globals*/
