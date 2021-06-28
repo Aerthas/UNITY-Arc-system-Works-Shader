@@ -97,6 +97,8 @@ public class ASWGuiltyGearStriveGUI : ShaderGUI
   MaterialProperty _BaseSaturation = null;
   MaterialProperty _BaseEmissiveToggle = null;
   MaterialProperty _BaseEmissionIntensity = null;
+  MaterialProperty _SSSAlphaEmissiveToggle = null;
+  MaterialProperty _SSSAlphaEmissiveIntensity = null;
   MaterialProperty _Shadow1Intensity = null;
   MaterialProperty _Shadow1Tint = null;
   MaterialProperty _Shadow1Saturation = null;
@@ -144,6 +146,7 @@ public class ASWGuiltyGearStriveGUI : ShaderGUI
   MaterialProperty _DebugGroup = null;
   MaterialProperty _VertexChannel = null;
   MaterialProperty _ILMChannel = null;
+  MaterialProperty _BaseSSSAlphaSwap = null;
 
   Texture2D gameTex = (Texture2D)Resources.Load(game, typeof(Texture2D));
 
@@ -529,6 +532,12 @@ public class ASWGuiltyGearStriveGUI : ShaderGUI
                 me.ShaderProperty(_BaseEmissionIntensity, _BaseEmissionIntensity.displayName);
               }
             });
+            ASWStyles.PropertyGroup( () => {
+              me.ShaderProperty(_SSSAlphaEmissiveToggle, _SSSAlphaEmissiveToggle.displayName);
+              if(_SSSAlphaEmissiveToggle.floatValue == 1){
+                me.ShaderProperty(_SSSAlphaEmissiveIntensity, _SSSAlphaEmissiveIntensity.displayName);
+              }
+            });
           }
           if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Shadow 1", Color.yellow) ){
             ASWStyles.PropertyGroup( () => {
@@ -675,7 +684,15 @@ public class ASWGuiltyGearStriveGUI : ShaderGUI
                     }
                     break;
                   case 2 :
-                    explain = "Rimlight scale. The brighter the channel, the larger the rimlight.";
+                    me.ShaderProperty(_BaseSSSAlphaSwap,_BaseSSSAlphaSwap.displayName);
+                    switch(_BaseSSSAlphaSwap.floatValue){
+                      case 0 :
+                        explain = "Rimlight scale. The brighter the channel, the larger the rimlight.";
+                        break;
+                      case 1 :
+                        explain = "Currently unknown exact use";
+                        break;
+                    }
                     break;
                 }
                 GUILayout.Label("Explaination of this channel:\n"+explain, EditorStyles.helpBox);
