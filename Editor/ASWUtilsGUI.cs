@@ -19,11 +19,17 @@ public class ASWUtilsOutlineGUI : ShaderGUI
     ASWToggles toggles = new ASWToggles(
     new bool[] {
       true, // Thickness
-      true,
+      true, // Color Settings
+      false, // Rendering Options
+        false, // Stencil Buffer
+        false, // Depth
     },
     new string[] {
       "Thickness Settings",
-      "Color Settings"
+      "Color Settings",
+      "Rendering Options",
+        "Stencil Buffer",
+        "Depth",
     }
   );
 
@@ -34,6 +40,19 @@ public class ASWUtilsOutlineGUI : ShaderGUI
     MaterialProperty _EnableCameraDistanceMult = null;
     MaterialProperty _OutlineColorIntensity = null;
     MaterialProperty _Base = null;
+
+    MaterialProperty _Reference = null;
+    MaterialProperty _ReadMask = null;
+    MaterialProperty _WriteMask = null;
+    MaterialProperty _Comparison = null;
+    MaterialProperty _PassFront = null;
+    MaterialProperty _FailFront = null;
+    MaterialProperty _ZFailFront = null;
+
+    MaterialProperty _ZWriteMode = null;
+    MaterialProperty _ZTestMode = null;
+    MaterialProperty _Factor = null;
+    MaterialProperty _Units = null;
 
     public override void OnGUI (MaterialEditor me, MaterialProperty[] props)
     {
@@ -83,6 +102,27 @@ public class ASWUtilsOutlineGUI : ShaderGUI
             me.ShaderProperty(_OutlineColorIntensity, _OutlineColorIntensity.displayName);
           }
         });
+      }
+      if ( ASWStyles.DoFoldout(foldouts, mat, me, "Rendering Options") ){
+        if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Stencil Buffer",Color.yellow)){
+          ASWStyles.PropertyGroupLayer( () => {
+            me.ShaderProperty(_Reference,_Reference.displayName);
+            me.ShaderProperty(_ReadMask,_ReadMask.displayName);
+            me.ShaderProperty(_WriteMask,_WriteMask.displayName);
+            me.ShaderProperty(_Comparison,_Comparison.displayName);
+            me.ShaderProperty(_PassFront,_PassFront.displayName);
+            me.ShaderProperty(_FailFront,_FailFront.displayName);
+            me.ShaderProperty(_ZFailFront,_ZFailFront.displayName);
+          });
+        }
+        if (ASWStyles.DoMediumFoldout(foldouts, mat, me, "Depth",Color.yellow)){
+          ASWStyles.PropertyGroupLayer( () => {
+            me.ShaderProperty(_ZWriteMode,_ZWriteMode.displayName);
+            me.ShaderProperty(_ZTestMode,_ZTestMode.displayName);
+            me.ShaderProperty(_Factor,_Factor.displayName);
+            me.ShaderProperty(_Units,_Units.displayName);
+          });
+        }
       }
       ASWStyles.PartingLine();
       me.RenderQueueField();

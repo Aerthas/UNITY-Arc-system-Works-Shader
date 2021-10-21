@@ -1,6 +1,6 @@
 // Made with Amplify Shader Editor
 // Available at the Unity Asset Store - http://u3d.as/y3X 
-Shader ".Aerthas/Arc System Works/Utils/Outline/Transparent v5.2.0"
+Shader ".Aerthas/Arc System Works/Utils/Outline/Transparent v5.2.1"
 {
 	Properties
 	{
@@ -10,7 +10,18 @@ Shader ".Aerthas/Arc System Works/Utils/Outline/Transparent v5.2.0"
 		[ToggleUI]_EnableBaseColorMult("Enable Base Color Mult", Float) = 1
 		_OutlineColorIntensity("Outline Color Intensity", Float) = 1
 		[ToggleUI]_EnableCameraDistanceMult("Enable Camera Distance Mult", Float) = 1
-		[ASEEnd]_DepthOffset("Depth Offset", Float) = 0.45
+		_DepthOffset("Depth Offset", Float) = 0.45
+		[IntRange]_Reference("Reference", Range( 0 , 255)) = 0
+		[IntRange]_ReadMask("Read Mask", Range( 0 , 255)) = 255
+		[IntRange]_WriteMask("Write Mask", Range( 0 , 255)) = 255
+		[Enum(UnityEngine.Rendering.CompareFunction)]_Comparison("Comparison", Float) = 0
+		[Enum(UnityEngine.Rendering.StencilOp)]_PassFront("Pass Front", Float) = 0
+		[Enum(UnityEngine.Rendering.StencilOp)]_FailFront("Fail Front", Float) = 0
+		[Enum(UnityEngine.Rendering.StencilOp)]_ZFailFront("ZFail Front", Float) = 0
+		[Enum(UnityEngine.Rendering.CompareFunction)]_ZTestMode("ZTest Mode", Float) = 4
+		[Enum(Off,0,On,1)]_ZWriteMode("ZWrite Mode", Float) = 1
+		_Factor("Factor", Float) = 0
+		[ASEEnd]_Units("Units", Float) = 0
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 
 	}
@@ -32,10 +43,19 @@ Shader ".Aerthas/Arc System Works/Utils/Outline/Transparent v5.2.0"
 			AlphaToMask Off
 			Cull Back
 			ColorMask 0
-			ZWrite On
-			ZTest LEqual
-			Offset 0 , 0
-			
+			ZWrite [_ZWriteMode]
+			ZTest [_ZTestMode]
+			Offset [_Factor] , [_Units]
+			Stencil
+			{
+				Ref [_Reference]
+				ReadMask [_ReadMask]
+				WriteMask [_WriteMask]
+				Comp [_Comparison]
+				Pass [_PassFront]
+				Fail [_FailFront]
+				ZFail [_ZFailFront]
+			}
 			CGPROGRAM
 			
 			#pragma vertex vert
@@ -57,7 +77,18 @@ Shader ".Aerthas/Arc System Works/Utils/Outline/Transparent v5.2.0"
 				
 			};
 
-			
+			uniform float _Reference;
+			uniform float _WriteMask;
+			uniform float _Units;
+			uniform float _Factor;
+			uniform float _FailFront;
+			uniform float _ZFailFront;
+			uniform float _ZWriteMode;
+			uniform float _Comparison;
+			uniform float _ZTestMode;
+			uniform float _ReadMask;
+			uniform float _PassFront;
+
 			
 			v2f vert ( appdata v )
 			{
@@ -94,10 +125,19 @@ Shader ".Aerthas/Arc System Works/Utils/Outline/Transparent v5.2.0"
 			AlphaToMask Off
 			Cull Front
 			ColorMask RGBA
-			ZWrite On
-			ZTest LEqual
-			Offset 0 , 0
-			
+			ZWrite [_ZWriteMode]
+			ZTest [_ZTestMode]
+			Offset [_Factor] , [_Units]
+			Stencil
+			{
+				Ref [_Reference]
+				ReadMask [_ReadMask]
+				WriteMask [_WriteMask]
+				Comp [_Comparison]
+				Pass [_PassFront]
+				Fail [_FailFront]
+				ZFail [_ZFailFront]
+			}
 			CGPROGRAM
 			
 			#pragma vertex vert
@@ -122,6 +162,17 @@ Shader ".Aerthas/Arc System Works/Utils/Outline/Transparent v5.2.0"
 				float4 ase_texcoord : TEXCOORD0;
 			};
 
+			uniform float _Reference;
+			uniform float _WriteMask;
+			uniform float _Units;
+			uniform float _Factor;
+			uniform float _FailFront;
+			uniform float _ZFailFront;
+			uniform float _ZWriteMode;
+			uniform float _Comparison;
+			uniform float _ZTestMode;
+			uniform float _ReadMask;
+			uniform float _PassFront;
 			uniform float _EnableCameraDistanceMult;
 			uniform float _OutlineThickness;
 			uniform float _DepthOffset;
@@ -180,7 +231,7 @@ Shader ".Aerthas/Arc System Works/Utils/Outline/Transparent v5.2.0"
 }
 /*ASEBEGIN
 Version=18900
--2375;195;2298;1017;2201.336;527.4727;1.379509;True;True
+104;227;1939;816;1535.92;661.9638;1.239252;True;True
 Node;AmplifyShaderEditor.RangedFloatNode;34;-1392,-192;Inherit;False;Property;_OutlineThickness;Outline Thickness;2;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;41;-1460,-66;Inherit;False;Property;_EnableCameraDistanceMult;Enable Camera Distance Mult;5;1;[ToggleUI];Create;True;0;2;Disable;0;Enable;1;0;False;0;False;1;1;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.ColorNode;20;-1398,127;Inherit;False;Property;_OutlineColor;Outline Color;0;0;Create;True;0;0;0;False;0;False;0,0,0,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
@@ -188,9 +239,22 @@ Node;AmplifyShaderEditor.RangedFloatNode;107;-1446,303;Inherit;False;Property;_O
 Node;AmplifyShaderEditor.SamplerNode;16;-1494,463;Inherit;True;Property;_Base;Base;1;1;[NoScaleOffset];Create;True;0;0;0;False;0;False;-1;None;63ca6c08f2180a944b3599d6f3229619;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.RangedFloatNode;217;-1360,32;Inherit;False;Property;_DepthOffset;Depth Offset;6;0;Create;True;0;0;0;False;0;False;0.45;0.45;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;29;-1446,383;Inherit;False;Property;_EnableBaseColorMult;Enable Base Color Mult;3;1;[ToggleUI];Create;True;0;2;Disable;0;Enable;1;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.CommentaryNode;409;-552.2121,-621.0335;Inherit;False;253;357;;4;419;417;414;413;Depth;1,1,1,1;0;0
+Node;AmplifyShaderEditor.CommentaryNode;410;-936.2119,-621.0335;Inherit;False;352;549;;7;421;420;418;416;415;412;411;Stencil Buffer;1,1,1,1;0;0
+Node;AmplifyShaderEditor.RangedFloatNode;421;-888.2119,-317.0334;Inherit;False;Property;_PassFront;Pass Front;11;1;[Enum];Create;True;0;9;Default;0;Keep;1;Zero;2;Replace;3;IncrSat;4;DecrSat;5;Invert;6;IncrWrap;7;DecrWrap;8;1;UnityEngine.Rendering.StencilOp;True;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.FunctionNode;397;-737.9083,177.2076;Inherit;False;ASWOutline;-1;;18;ea9f2d47913480c4f9e91454af7efa45;0;7;33;FLOAT;0;False;47;FLOAT;0;False;127;FLOAT;0.5;False;35;COLOR;0,0,0,0;False;37;FLOAT;0;False;36;FLOAT;0;False;31;COLOR;0,0,0,0;False;2;COLOR;0;FLOAT4;109
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;408;-25.1603,165.6344;Float;False;False;-1;2;ASEMaterialInspector;0;11;New Amplify Shader;003dfa9c16768d048b74f75c088119d8;True;Second;0;1;Second;2;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;RenderType=Opaque=RenderType;False;0;False;True;0;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;True;0;False;-1;True;True;1;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;0;True;2;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;407;-25.1603,35.6344;Float;False;True;-1;2;ASWUtilsOutlineGUI;0;11;.Aerthas/Arc System Works/Utils/Outline/Transparent v5.2.0;003dfa9c16768d048b74f75c088119d8;True;First;0;0;First;2;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;RenderType=Transparent=RenderType;Queue=Transparent=Queue=0;False;0;False;True;0;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;True;True;False;False;False;False;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;0;True;2;0;;0;0;Standard;0;0;2;True;True;False;;False;0
+Node;AmplifyShaderEditor.RangedFloatNode;411;-888.2119,-573.0334;Inherit;False;Property;_Reference;Reference;7;1;[IntRange];Create;True;0;0;0;True;0;False;0;0;0;255;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;412;-887.2119,-445.0335;Inherit;False;Property;_WriteMask;Write Mask;9;1;[IntRange];Create;True;0;0;0;True;0;False;255;255;0;255;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;418;-888.2119,-381.0335;Inherit;False;Property;_Comparison;Comparison;10;1;[Enum];Create;True;0;9;Default;0;Greater;1;Greater or Equal;2;Less;3;Less or Equal;4;Equal;5;Not Equal;6;Always;7;Never;8;1;UnityEngine.Rendering.CompareFunction;True;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;420;-888.2119,-509.0335;Inherit;False;Property;_ReadMask;Read Mask;8;1;[IntRange];Create;True;0;0;0;True;0;False;255;255;0;255;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;419;-504.2122,-493.0335;Inherit;False;Property;_ZTestMode;ZTest Mode;14;1;[Enum];Create;True;0;0;1;UnityEngine.Rendering.CompareFunction;True;0;False;4;4;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;416;-888.2119,-189.0334;Inherit;False;Property;_ZFailFront;ZFail Front;13;1;[Enum];Create;True;0;9;Default;0;Keep;1;Zero;2;Replace;3;IncrSat;4;DecrSat;5;Invert;6;IncrWrap;7;DecrWrap;8;1;UnityEngine.Rendering.StencilOp;True;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;417;-504.2122,-557.0334;Inherit;False;Property;_ZWriteMode;ZWrite Mode;15;1;[Enum];Create;True;0;2;Off;0;On;1;0;True;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;414;-504.2122,-429.0335;Inherit;False;Property;_Factor;Factor;16;0;Create;True;0;0;0;True;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;413;-504.2122,-365.0335;Inherit;False;Property;_Units;Units;17;0;Create;True;0;0;0;True;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;415;-888.2119,-253.0334;Inherit;False;Property;_FailFront;Fail Front;12;1;[Enum];Create;True;0;9;Default;0;Keep;1;Zero;2;Replace;3;IncrSat;4;DecrSat;5;Invert;6;IncrWrap;7;DecrWrap;8;1;UnityEngine.Rendering.StencilOp;True;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;407;-25.1603,35.6344;Float;False;True;-1;2;ASWUtilsOutlineGUI;0;11;.Aerthas/Arc System Works/Utils/Outline/Transparent v5.2.1;003dfa9c16768d048b74f75c088119d8;True;First;0;0;First;2;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;RenderType=Transparent=RenderType;Queue=Transparent=Queue=0;False;0;False;True;0;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;True;True;False;False;False;False;0;False;-1;False;False;False;False;False;False;True;True;True;255;True;411;255;True;420;255;True;412;7;True;418;1;True;421;1;True;415;1;True;416;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;True;1;True;417;True;3;True;419;True;True;0;True;414;0;True;413;True;0;True;2;0;;0;0;Standard;0;0;2;True;True;False;;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;408;-25.1603,165.6344;Float;False;False;-1;2;ASEMaterialInspector;0;11;New Amplify Shader;003dfa9c16768d048b74f75c088119d8;True;Second;0;1;Second;2;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;RenderType=Opaque=RenderType;False;0;False;True;0;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;True;0;False;-1;True;True;1;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;True;True;True;255;True;411;255;True;420;255;True;412;7;True;418;1;True;421;1;True;415;1;True;416;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;True;1;True;417;True;3;True;419;True;True;0;True;414;0;True;413;True;0;True;2;0;;0;0;Standard;0;False;0
 WireConnection;397;33;34;0
 WireConnection;397;47;41;0
 WireConnection;397;127;217;0
@@ -201,4 +265,4 @@ WireConnection;397;31;16;0
 WireConnection;408;0;397;0
 WireConnection;408;1;397;109
 ASEEND*/
-//CHKSM=C548144108B8075A7FE0462D94B059A8915B3066
+//CHKSM=C1F5A21A2E3238AFF4FF48E76A223D1DF51B0D04
