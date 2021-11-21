@@ -105,8 +105,10 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
   MaterialProperty _RimlightSize = null;
   MaterialProperty _SpecularSize = null;
   MaterialProperty _Shadow1Push = null;
+  MaterialProperty _Shadow1Smoothness = null;
   MaterialProperty _Shadow1VertexRThreshold = null;
   MaterialProperty _Shadow2Push = null;
+  MaterialProperty _Shadow2Smoothness = null;
   MaterialProperty _Shadow2VertexRThreshold = null;
   MaterialProperty _PermanentShadowThreshold = null;
 
@@ -509,6 +511,7 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
           if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Shadow 1", Color.yellow) ){
             ASWStyles.PropertyGroup( () => {
               me.ShaderProperty(_Shadow1Push, _Shadow1Push.displayName);
+              me.ShaderProperty(_Shadow1Smoothness, _Shadow1Smoothness.displayName);
               me.ShaderProperty(_Shadow1VertexRThreshold, _Shadow1VertexRThreshold.displayName);
             });
             ASWStyles.PropertyGroup( () => {
@@ -524,6 +527,7 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
           if ( ASWStyles.DoMediumFoldout(foldouts, mat, me, "Shadow 2", Color.yellow) ){
             ASWStyles.PropertyGroup( () => {
               me.ShaderProperty(_Shadow2Push, _Shadow2Push.displayName);
+              me.ShaderProperty(_Shadow2Smoothness, _Shadow2Smoothness.displayName);
               me.ShaderProperty(_Shadow2VertexRThreshold, _Shadow2VertexRThreshold.displayName);
             });
             ASWStyles.PropertyGroup( () => {
