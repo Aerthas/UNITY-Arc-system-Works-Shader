@@ -1,4 +1,4 @@
-# [DOWNLOAD FROM RELEASES HERE, NOT AS A ZIP](https://github.com/Aerthas/Aerthas-Unity-Shaders/releases)
+# [DOWNLOAD FROM RELEASES HERE, NOT AS A ZIP](https://github.com/Aerthas/UNITY-Arc-system-Works-Shader/releases)
 # Arc System Works Shader - Unity Edition
 ## If you are looking for my Blender Arc System Works shaders, they are found here:
 https://github.com/Aerthas/BLENDER-Arc-System-Works-Shader<br/>
