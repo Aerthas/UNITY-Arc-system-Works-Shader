@@ -19,7 +19,7 @@ public class ASWGuiltyGearStriveGUI : ShaderGUI
       public static GUIContent olmText = new GUIContent("OLM Texture", "[Character Indentifier]_OLM");
       public static GUIContent ilmText = new GUIContent("ILM Texture", "[Character Indentifier]_ILM");
       public static GUIContent detailText = new GUIContent("Detail Texture", "[Character Indentifier]_Detail");
-      public static GUIContent glowMaskText = new GUIContent("Glow Mask", "[Character Indentifier]_GlowMask. Used by few characters.");
+      public static GUIContent emissionText = new GUIContent("Emission Texture", "Whatever you make lmao");
   }
 
   static string game = "GGStrive_Logo";
@@ -44,6 +44,8 @@ public class ASWGuiltyGearStriveGUI : ShaderGUI
   MaterialProperty _SSS = null;
   MaterialProperty _OLM = null;
   MaterialProperty _ILM = null;
+  MaterialProperty _EmissionMask = null;
+  MaterialProperty _EmissionMaskIntensity = null;
   MaterialProperty _ILMColorSetting = null;
   MaterialProperty _ILMAlphaColor = null;
   MaterialProperty _ILMAlphaEmissionIntensity = null;
@@ -342,6 +344,12 @@ public class ASWGuiltyGearStriveGUI : ShaderGUI
           if(_EditorVersion.floatValue == 1){
             GUILayout.Space(-18);
             me.ShaderProperty(_DetailColorSetting," ");
+          }
+        });
+        ASWStyles.PropertyGroup( () => {
+          if(_EditorVersion.floatValue == 1){
+            me.TexturePropertySingleLine(Styles.emissionText, _EmissionMask);
+            me.ShaderProperty(_EmissionMaskIntensity, _EmissionMaskIntensity.displayName);
           }
         });
 

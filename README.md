@@ -4,20 +4,6 @@
 https://github.com/Aerthas/BLENDER-Arc-System-Works-Shader<br/>
 If you have any questions, or want to show off some renders, [feel free to join my discord](https://discord.gg/EkCSZg8).
 
-## Granblue Fantasy: Versus
-(Yes this is a render using my shader)<br/>
-![Percival Render](https://i.imgur.com/zRXvGlV.jpg)<br/><br/>
-![Zooey Render](https://i.imgur.com/eRlrYKg.png)<br/>
-![Zooey](Previews/Zooey.gif)<br/>
-
-## Guilty Gear Xrd
-![Sol Badguy 1](Previews/solbadguy.gif)<br/>
-![Sol Badguy 2](https://i.imgur.com/illkWYA.png)<br/>
-
-## Dragon Ball FighterZ
-![Goku](Previews/goku.gif)<br/>
-![Cell](Previews/Cell.gif)<br/>
-
 ## Custom models using the shader!
 ### Tanjiro - Created from scratch by [CrypticLight https://twitter.com/TheCrypticLight](https://twitter.com/TheCrypticLight)
 ![Tanjiro 1](https://i.imgur.com/X4uAOh4.png)<br/>
@@ -28,7 +14,8 @@ Confirmed games this shader will work with:
 * Dragon Ball: FighterZ
 * GUILTY GEAR Xrd REV 2
 * GUILTY GEAR Xrd -SIGN-
-* Granblue Fantasy Versus
+* GUILTY GEAR: STRIVE
+* DNF DUEL
 
 Unconfirmed games that there is a 99.999% chance it will work with:
 * Every other Arc System Works game that I just don't have

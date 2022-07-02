@@ -18,7 +18,7 @@ public class ASWFighterZGUI : ShaderGUI
       public static GUIContent sssText = new GUIContent("SSS Texture", "[Character Indentifier]_SSS");
       public static GUIContent ilmText = new GUIContent("ILM Texture", "[Character Indentifier]_ILM");
       public static GUIContent detailText = new GUIContent("Detail Texture", "[Character Indentifier]_Detail");
-      public static GUIContent glowMaskText = new GUIContent("Glow Mask", "[Character Indentifier]_GlowMask. Used by few characters.");
+      public static GUIContent emissionText = new GUIContent("Emission Texture", "Whatever you make lmao");
   }
 
   static string game = "DBFZ_Logo";
@@ -48,6 +48,8 @@ public class ASWFighterZGUI : ShaderGUI
   MaterialProperty _ILMAlphaEmissionIntensity = null;
   MaterialProperty _Detail = null;
   MaterialProperty _DetailColorSetting = null;
+  MaterialProperty _EmissionMask = null;
+  MaterialProperty _EmissionMaskIntensity = null;
   MaterialProperty _BodyLinesColor = null;
   MaterialProperty _BodyLinesEmissionToggle = null;
   MaterialProperty _BodyLinesEmissionIntensity = null;
@@ -343,9 +345,13 @@ public class ASWFighterZGUI : ShaderGUI
             GUILayout.Space(-18);
             me.ShaderProperty(_DetailColorSetting," ");
           }
-          if(_EditorVersion.floatValue == 1){
-          //GUILayout.Space(-18);
-          }
+          
+          ASWStyles.PropertyGroup( () => {
+            if(_EditorVersion.floatValue == 1){
+              me.TexturePropertySingleLine(Styles.emissionText, _EmissionMask);
+              me.ShaderProperty(_EmissionMaskIntensity, _EmissionMaskIntensity.displayName);
+            }
+          });
         });
 
         if ( _EnableColorReplacer.floatValue == 1){

@@ -17,7 +17,7 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
       public static GUIContent baseText = new GUIContent("Base Texture", "[Character Indentifier]_Base");
       public static GUIContent sssText = new GUIContent("SSS Texture", "[Character Indentifier]_SSS");
       public static GUIContent ilmText = new GUIContent("ILM Texture", "[Character Indentifier]_ILM");
-      public static GUIContent glowMaskText = new GUIContent("Glow Mask", "[Character Indentifier]_GlowMask. Used by few characters.");
+      public static GUIContent emissionText = new GUIContent("Emission Texture", "Whatever you make lmao");
   }
 
   static string game = "GGXrdR2_Logo";
@@ -41,6 +41,8 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
   MaterialProperty _Base = null;
   MaterialProperty _SSS = null;
   MaterialProperty _ILM = null;
+  MaterialProperty _EmissionMask = null;
+  MaterialProperty _EmissionMaskIntensity = null;
   MaterialProperty _ILMColorSetting = null;
   MaterialProperty _ILMAlphaColor = null;
   MaterialProperty _ILMAlphaEmissionIntensity = null;
@@ -326,6 +328,12 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
           }
           if(_EditorVersion.floatValue == 1){
           //GUILayout.Space(-18);
+          }
+        });
+        ASWStyles.PropertyGroup( () => {
+          if(_EditorVersion.floatValue == 1){
+            me.TexturePropertySingleLine(Styles.emissionText, _EmissionMask);
+            me.ShaderProperty(_EmissionMaskIntensity, _EmissionMaskIntensity.displayName);
           }
         });
 

@@ -142,6 +142,7 @@ public class ASWUtilsDecalGUI : ShaderGUI
 
   MaterialProperty _Enable = null;
   MaterialProperty _MainTex = null;
+  MaterialProperty _UVSet = null;
   //MaterialProperty _DiscolorationModifier = null;
 
   public override void OnGUI (MaterialEditor me, MaterialProperty[] props)
@@ -161,6 +162,7 @@ public class ASWUtilsDecalGUI : ShaderGUI
     {
       me.ShaderProperty(_Enable, _Enable.displayName);
       me.TexturePropertySingleLine(Styles.mainTex, _MainTex);
+      me.ShaderProperty(_UVSet, _UVSet.displayName);
       ASWStyles.PartingLine();
       me.RenderQueueField();
       //me.ShaderProperty(_DiscolorationModifier, _DiscolorationModifier.displayName);
