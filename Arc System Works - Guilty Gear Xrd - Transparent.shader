@@ -1,6 +1,6 @@
 // Made with Amplify Shader Editor
 // Available at the Unity Asset Store - http://u3d.as/y3X 
-Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1"
+Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.2"
 {
 	Properties
 	{
@@ -160,31 +160,30 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 			#include "UnityStandardBRDF.cginc"
 			#include "UnityShaderVariables.cginc"
 			#define ASE_NEEDS_VERT_NORMAL
-			#define ASE_NEEDS_FRAG_POSITION
 			#define ASE_NEEDS_FRAG_COLOR
 			#define ASE_SHADOWS 1
 
 			//This is a late directive
 			
+			uniform float _ZWriteMode;
+			uniform float _EnableCameraDistanceMult;
+			uniform float _ZTestMode;
+			uniform float _FailFront;
+			uniform float _OutlineThickness;
+			uniform float _ReadMask;
+			uniform float _Factor;
+			uniform float _EditorVersion;
+			uniform float _DepthOffset;
+			uniform float _WriteMask;
+			uniform float _ZFailFront;
 			uniform float _Reference;
 			uniform float4 _OutlineColor;
 			uniform float _OutlineColorIntensity;
-			uniform float _PassFront;
-			uniform float _ZFailFront;
 			uniform float _Comparison;
-			uniform float _OutlineEnableBaseColorMult;
+			uniform float _PassFront;
 			uniform float _EnableOutline;
 			uniform float _Units;
-			uniform float _WriteMask;
-			uniform float _ZWriteMode;
-			uniform float _DepthOffset;
-			uniform float _EditorVersion;
-			uniform float _Factor;
-			uniform float _OutlineThickness;
-			uniform float _FailFront;
-			uniform float _ZTestMode;
-			uniform float _EnableCameraDistanceMult;
-			uniform float _ReadMask;
+			uniform float _OutlineEnableBaseColorMult;
 			uniform float _EnableDebug;
 			uniform float _ILMColorSetting;
 			uniform float4 _ILMAlphaColor;
@@ -291,12 +290,12 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				float e = 1.0e-10;
 				return float3( abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
 			}
-			float3 ViewMatrix1393_g1471(  )
+			float3 ViewMatrix1418_g1477(  )
 			{
 				return UNITY_MATRIX_V[1];
 			}
 			
-			float3 ViewMatrix0394_g1471(  )
+			float3 ViewMatrix0417_g1477(  )
 			{
 				return UNITY_MATRIX_V[0];
 			}
@@ -320,7 +319,7 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				return mul( finalMatrix, original ) + center;
 			}
 			
-			float3 StereoCameraViewPosition30_g1469(  )
+			float3 StereoCameraViewPosition30_g1475(  )
 			{
 				#if UNITY_SINGLE_PASS_STEREO
 				float3 cameraPos = float3((unity_StereoWorldSpaceCameraPos[0]+ unity_StereoWorldSpaceCameraPos[1])*.5); 
@@ -330,7 +329,13 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				return cameraPos;
 			}
 			
-			float3 StereoCameraViewDirection32_g1469( float3 worldPos )
+			inline float3 ASESafeNormalize(float3 inVec)
+			{
+				float dp3 = max( 0.001f , dot( inVec , inVec ) );
+				return inVec* rsqrt( dp3);
+			}
+			
+			float3 StereoCameraViewDirection32_g1475( float3 worldPos )
 			{
 				#if UNITY_SINGLE_PASS_STEREO
 				float3 cameraPos = float3((unity_StereoWorldSpaceCameraPos[0]+ unity_StereoWorldSpaceCameraPos[1])*.5); 
@@ -411,102 +416,107 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				float2 uv_SSS = i.ase_texcoord1.xy * _SSS_ST.xy + _SSS_ST.zw;
 				float4 tex2DNode297 = tex2D( _SSS, uv_SSS );
 				float3 appendResult763 = (float3(tex2DNode297.r , tex2DNode297.g , tex2DNode297.b));
-				float temp_output_52_0_g1462 = _TotalReplacements;
-				float4 break8_g1467 = _Target5Color;
-				float4 break8_g1463 = _Target4Color;
-				float4 break8_g1465 = _Target3Color;
-				float4 break8_g1464 = _Target2Color;
-				float4 break8_g1466 = _Target1Color;
-				float3x3 temp_output_67_0_g1462 = float3x3(appendResult762, appendResult763, float3( 0,0,0 ));
-				float4 temp_output_13_0_g1466 = float4( temp_output_67_0_g1462[0] , 0.0 );
-				float4 break6_g1466 = temp_output_13_0_g1466;
-				float4 appendResult3_g1466 = (float4(break8_g1466.r , break8_g1466.g , break8_g1466.b , break6_g1466.a));
-				float4 appendResult7_g1466 = (float4(break6_g1466.r , break6_g1466.g , break6_g1466.b , 1.0));
-				float smoothstepResult5_g1466 = smoothstep( 0.0 , _Source1Fuzziness , distance( appendResult7_g1466 , _Source1Color ));
-				float4 lerpResult4_g1466 = lerp( appendResult3_g1466 , temp_output_13_0_g1466 , smoothstepResult5_g1466);
-				float4 temp_output_106_0_g1462 = lerpResult4_g1466;
-				float4 temp_output_13_0_g1464 = temp_output_106_0_g1462;
-				float4 break6_g1464 = temp_output_13_0_g1464;
-				float4 appendResult3_g1464 = (float4(break8_g1464.r , break8_g1464.g , break8_g1464.b , break6_g1464.a));
-				float4 appendResult7_g1464 = (float4(break6_g1464.r , break6_g1464.g , break6_g1464.b , 1.0));
-				float smoothstepResult5_g1464 = smoothstep( 0.0 , _Source2Fuzziness , distance( appendResult7_g1464 , _Source2Color ));
-				float4 lerpResult4_g1464 = lerp( appendResult3_g1464 , temp_output_13_0_g1464 , smoothstepResult5_g1464);
-				float4 temp_output_102_0_g1462 = lerpResult4_g1464;
-				float4 temp_output_13_0_g1465 = temp_output_102_0_g1462;
-				float4 break6_g1465 = temp_output_13_0_g1465;
-				float4 appendResult3_g1465 = (float4(break8_g1465.r , break8_g1465.g , break8_g1465.b , break6_g1465.a));
-				float4 appendResult7_g1465 = (float4(break6_g1465.r , break6_g1465.g , break6_g1465.b , 1.0));
-				float smoothstepResult5_g1465 = smoothstep( 0.0 , _Source3Fuzziness , distance( appendResult7_g1465 , _Source3Color ));
-				float4 lerpResult4_g1465 = lerp( appendResult3_g1465 , temp_output_13_0_g1465 , smoothstepResult5_g1465);
-				float4 temp_output_104_0_g1462 = lerpResult4_g1465;
-				float4 temp_output_13_0_g1463 = temp_output_104_0_g1462;
-				float4 break6_g1463 = temp_output_13_0_g1463;
-				float4 appendResult3_g1463 = (float4(break8_g1463.r , break8_g1463.g , break8_g1463.b , break6_g1463.a));
-				float4 appendResult7_g1463 = (float4(break6_g1463.r , break6_g1463.g , break6_g1463.b , 1.0));
-				float smoothstepResult5_g1463 = smoothstep( 0.0 , _Source4Fuzziness , distance( appendResult7_g1463 , _Source4Color ));
-				float4 lerpResult4_g1463 = lerp( appendResult3_g1463 , temp_output_13_0_g1463 , smoothstepResult5_g1463);
-				float4 temp_output_105_0_g1462 = lerpResult4_g1463;
-				float4 temp_output_13_0_g1467 = temp_output_105_0_g1462;
-				float4 break6_g1467 = temp_output_13_0_g1467;
-				float4 appendResult3_g1467 = (float4(break8_g1467.r , break8_g1467.g , break8_g1467.b , break6_g1467.a));
-				float4 appendResult7_g1467 = (float4(break6_g1467.r , break6_g1467.g , break6_g1467.b , 1.0));
-				float smoothstepResult5_g1467 = smoothstep( 0.0 , _Source5Fuzziness , distance( appendResult7_g1467 , _Source5Color ));
-				float4 lerpResult4_g1467 = lerp( appendResult3_g1467 , temp_output_13_0_g1467 , smoothstepResult5_g1467);
-				float4 temp_output_15_0_g1466 = float4( temp_output_67_0_g1462[1] , 0.0 );
-				float3 hsvTorgb25_g1466 = RGBToHSV( temp_output_15_0_g1466.rgb );
-				float3 hsvTorgb26_g1466 = HSVToRGB( float3(( _SSSHueShift1 + hsvTorgb25_g1466.x ),hsvTorgb25_g1466.y,hsvTorgb25_g1466.z) );
-				float4 appendResult18_g1466 = (float4(hsvTorgb26_g1466 , temp_output_15_0_g1466.a));
-				float4 lerpResult19_g1466 = lerp( appendResult18_g1466 , temp_output_15_0_g1466 , smoothstepResult5_g1466);
-				float4 temp_output_15_0_g1464 = lerpResult19_g1466;
-				float3 hsvTorgb25_g1464 = RGBToHSV( temp_output_15_0_g1464.rgb );
-				float3 hsvTorgb26_g1464 = HSVToRGB( float3(( _SSSHueShift2 + hsvTorgb25_g1464.x ),hsvTorgb25_g1464.y,hsvTorgb25_g1464.z) );
-				float4 appendResult18_g1464 = (float4(hsvTorgb26_g1464 , temp_output_15_0_g1464.a));
-				float4 lerpResult19_g1464 = lerp( appendResult18_g1464 , temp_output_15_0_g1464 , smoothstepResult5_g1464);
-				float4 temp_output_15_0_g1465 = lerpResult19_g1464;
-				float3 hsvTorgb25_g1465 = RGBToHSV( temp_output_15_0_g1465.rgb );
-				float3 hsvTorgb26_g1465 = HSVToRGB( float3(( _SSSHueShift3 + hsvTorgb25_g1465.x ),hsvTorgb25_g1465.y,hsvTorgb25_g1465.z) );
-				float4 appendResult18_g1465 = (float4(hsvTorgb26_g1465 , temp_output_15_0_g1465.a));
-				float4 lerpResult19_g1465 = lerp( appendResult18_g1465 , temp_output_15_0_g1465 , smoothstepResult5_g1465);
-				float4 temp_output_15_0_g1463 = lerpResult19_g1465;
-				float3 hsvTorgb25_g1463 = RGBToHSV( temp_output_15_0_g1463.rgb );
-				float3 hsvTorgb26_g1463 = HSVToRGB( float3(( _SSSHueShift4 + hsvTorgb25_g1463.x ),hsvTorgb25_g1463.y,hsvTorgb25_g1463.z) );
-				float4 appendResult18_g1463 = (float4(hsvTorgb26_g1463 , temp_output_15_0_g1463.a));
-				float4 lerpResult19_g1463 = lerp( appendResult18_g1463 , temp_output_15_0_g1463 , smoothstepResult5_g1463);
-				float4 temp_output_15_0_g1467 = lerpResult19_g1463;
-				float3 hsvTorgb25_g1467 = RGBToHSV( temp_output_15_0_g1467.rgb );
-				float3 hsvTorgb26_g1467 = HSVToRGB( float3(( _SSSHueShift5 + hsvTorgb25_g1467.x ),hsvTorgb25_g1467.y,hsvTorgb25_g1467.z) );
-				float4 appendResult18_g1467 = (float4(hsvTorgb26_g1467 , temp_output_15_0_g1467.a));
-				float4 lerpResult19_g1467 = lerp( appendResult18_g1467 , temp_output_15_0_g1467 , smoothstepResult5_g1467);
-				float3x3 temp_output_993_0 = ( _EnableColorReplacer == 0.0 ? float3x3(appendResult762, appendResult763, float3( 0,0,0 )) : float3x3(( temp_output_52_0_g1462 == 5.0 ? lerpResult4_g1467 : ( temp_output_52_0_g1462 == 4.0 ? temp_output_105_0_g1462 : ( temp_output_52_0_g1462 == 3.0 ? temp_output_104_0_g1462 : ( temp_output_52_0_g1462 == 2.0 ? temp_output_102_0_g1462 : ( temp_output_52_0_g1462 == 1.0 ? temp_output_106_0_g1462 : float4( temp_output_67_0_g1462[0] , 0.0 ) ) ) ) ) ).rgb, lerpResult19_g1467.rgb, float3( 0,0,0 )) );
+				float temp_output_52_0_g1469 = _TotalReplacements;
+				float4 break8_g1474 = _Target5Color;
+				float4 break8_g1470 = _Target4Color;
+				float4 break8_g1472 = _Target3Color;
+				float4 break8_g1471 = _Target2Color;
+				float4 break8_g1473 = _Target1Color;
+				float3x3 temp_output_67_0_g1469 = float3x3(appendResult762, appendResult763, float3( 0,0,0 ));
+				float4 temp_output_13_0_g1473 = float4( temp_output_67_0_g1469[0] , 0.0 );
+				float4 break6_g1473 = temp_output_13_0_g1473;
+				float4 appendResult3_g1473 = (float4(break8_g1473.r , break8_g1473.g , break8_g1473.b , break6_g1473.a));
+				float4 appendResult7_g1473 = (float4(break6_g1473.r , break6_g1473.g , break6_g1473.b , 1.0));
+				float smoothstepResult5_g1473 = smoothstep( 0.0 , _Source1Fuzziness , distance( appendResult7_g1473 , _Source1Color ));
+				float4 lerpResult4_g1473 = lerp( appendResult3_g1473 , temp_output_13_0_g1473 , smoothstepResult5_g1473);
+				float4 temp_output_106_0_g1469 = lerpResult4_g1473;
+				float4 temp_output_13_0_g1471 = temp_output_106_0_g1469;
+				float4 break6_g1471 = temp_output_13_0_g1471;
+				float4 appendResult3_g1471 = (float4(break8_g1471.r , break8_g1471.g , break8_g1471.b , break6_g1471.a));
+				float4 appendResult7_g1471 = (float4(break6_g1471.r , break6_g1471.g , break6_g1471.b , 1.0));
+				float smoothstepResult5_g1471 = smoothstep( 0.0 , _Source2Fuzziness , distance( appendResult7_g1471 , _Source2Color ));
+				float4 lerpResult4_g1471 = lerp( appendResult3_g1471 , temp_output_13_0_g1471 , smoothstepResult5_g1471);
+				float4 temp_output_102_0_g1469 = lerpResult4_g1471;
+				float4 temp_output_13_0_g1472 = temp_output_102_0_g1469;
+				float4 break6_g1472 = temp_output_13_0_g1472;
+				float4 appendResult3_g1472 = (float4(break8_g1472.r , break8_g1472.g , break8_g1472.b , break6_g1472.a));
+				float4 appendResult7_g1472 = (float4(break6_g1472.r , break6_g1472.g , break6_g1472.b , 1.0));
+				float smoothstepResult5_g1472 = smoothstep( 0.0 , _Source3Fuzziness , distance( appendResult7_g1472 , _Source3Color ));
+				float4 lerpResult4_g1472 = lerp( appendResult3_g1472 , temp_output_13_0_g1472 , smoothstepResult5_g1472);
+				float4 temp_output_104_0_g1469 = lerpResult4_g1472;
+				float4 temp_output_13_0_g1470 = temp_output_104_0_g1469;
+				float4 break6_g1470 = temp_output_13_0_g1470;
+				float4 appendResult3_g1470 = (float4(break8_g1470.r , break8_g1470.g , break8_g1470.b , break6_g1470.a));
+				float4 appendResult7_g1470 = (float4(break6_g1470.r , break6_g1470.g , break6_g1470.b , 1.0));
+				float smoothstepResult5_g1470 = smoothstep( 0.0 , _Source4Fuzziness , distance( appendResult7_g1470 , _Source4Color ));
+				float4 lerpResult4_g1470 = lerp( appendResult3_g1470 , temp_output_13_0_g1470 , smoothstepResult5_g1470);
+				float4 temp_output_105_0_g1469 = lerpResult4_g1470;
+				float4 temp_output_13_0_g1474 = temp_output_105_0_g1469;
+				float4 break6_g1474 = temp_output_13_0_g1474;
+				float4 appendResult3_g1474 = (float4(break8_g1474.r , break8_g1474.g , break8_g1474.b , break6_g1474.a));
+				float4 appendResult7_g1474 = (float4(break6_g1474.r , break6_g1474.g , break6_g1474.b , 1.0));
+				float smoothstepResult5_g1474 = smoothstep( 0.0 , _Source5Fuzziness , distance( appendResult7_g1474 , _Source5Color ));
+				float4 lerpResult4_g1474 = lerp( appendResult3_g1474 , temp_output_13_0_g1474 , smoothstepResult5_g1474);
+				float4 temp_output_15_0_g1473 = float4( temp_output_67_0_g1469[1] , 0.0 );
+				float3 hsvTorgb25_g1473 = RGBToHSV( temp_output_15_0_g1473.rgb );
+				float3 hsvTorgb26_g1473 = HSVToRGB( float3(( _SSSHueShift1 + hsvTorgb25_g1473.x ),hsvTorgb25_g1473.y,hsvTorgb25_g1473.z) );
+				float4 appendResult18_g1473 = (float4(hsvTorgb26_g1473 , temp_output_15_0_g1473.a));
+				float4 lerpResult19_g1473 = lerp( appendResult18_g1473 , temp_output_15_0_g1473 , smoothstepResult5_g1473);
+				float4 temp_output_15_0_g1471 = lerpResult19_g1473;
+				float3 hsvTorgb25_g1471 = RGBToHSV( temp_output_15_0_g1471.rgb );
+				float3 hsvTorgb26_g1471 = HSVToRGB( float3(( _SSSHueShift2 + hsvTorgb25_g1471.x ),hsvTorgb25_g1471.y,hsvTorgb25_g1471.z) );
+				float4 appendResult18_g1471 = (float4(hsvTorgb26_g1471 , temp_output_15_0_g1471.a));
+				float4 lerpResult19_g1471 = lerp( appendResult18_g1471 , temp_output_15_0_g1471 , smoothstepResult5_g1471);
+				float4 temp_output_15_0_g1472 = lerpResult19_g1471;
+				float3 hsvTorgb25_g1472 = RGBToHSV( temp_output_15_0_g1472.rgb );
+				float3 hsvTorgb26_g1472 = HSVToRGB( float3(( _SSSHueShift3 + hsvTorgb25_g1472.x ),hsvTorgb25_g1472.y,hsvTorgb25_g1472.z) );
+				float4 appendResult18_g1472 = (float4(hsvTorgb26_g1472 , temp_output_15_0_g1472.a));
+				float4 lerpResult19_g1472 = lerp( appendResult18_g1472 , temp_output_15_0_g1472 , smoothstepResult5_g1472);
+				float4 temp_output_15_0_g1470 = lerpResult19_g1472;
+				float3 hsvTorgb25_g1470 = RGBToHSV( temp_output_15_0_g1470.rgb );
+				float3 hsvTorgb26_g1470 = HSVToRGB( float3(( _SSSHueShift4 + hsvTorgb25_g1470.x ),hsvTorgb25_g1470.y,hsvTorgb25_g1470.z) );
+				float4 appendResult18_g1470 = (float4(hsvTorgb26_g1470 , temp_output_15_0_g1470.a));
+				float4 lerpResult19_g1470 = lerp( appendResult18_g1470 , temp_output_15_0_g1470 , smoothstepResult5_g1470);
+				float4 temp_output_15_0_g1474 = lerpResult19_g1470;
+				float3 hsvTorgb25_g1474 = RGBToHSV( temp_output_15_0_g1474.rgb );
+				float3 hsvTorgb26_g1474 = HSVToRGB( float3(( _SSSHueShift5 + hsvTorgb25_g1474.x ),hsvTorgb25_g1474.y,hsvTorgb25_g1474.z) );
+				float4 appendResult18_g1474 = (float4(hsvTorgb26_g1474 , temp_output_15_0_g1474.a));
+				float4 lerpResult19_g1474 = lerp( appendResult18_g1474 , temp_output_15_0_g1474 , smoothstepResult5_g1474);
+				float3x3 temp_output_993_0 = ( _EnableColorReplacer == 0.0 ? float3x3(appendResult762, appendResult763, float3( 0,0,0 )) : float3x3(( temp_output_52_0_g1469 == 5.0 ? lerpResult4_g1474 : ( temp_output_52_0_g1469 == 4.0 ? temp_output_105_0_g1469 : ( temp_output_52_0_g1469 == 3.0 ? temp_output_104_0_g1469 : ( temp_output_52_0_g1469 == 2.0 ? temp_output_102_0_g1469 : ( temp_output_52_0_g1469 == 1.0 ? temp_output_106_0_g1469 : float4( temp_output_67_0_g1469[0] , 0.0 ) ) ) ) ) ).rgb, lerpResult19_g1474.rgb, float3( 0,0,0 )) );
 				float ILMA357 = tex2DNode274.a;
 				float4 lerpResult1010 = lerp( ILMAColor1005 , float4( temp_output_993_0[0] , 0.0 ) , ILMA357);
 				float4 Base339 = ( ILMColorSetting1007 == 1.0 ? lerpResult1010 : float4( ( ILMA357 * temp_output_993_0[0] ) , 0.0 ) );
-				float4 Base12_g1477 = Base339;
+				float4 Base12_g1483 = Base339;
 				float ILMB576 = break292.z;
 				float3 ase_worldNormal = i.ase_texcoord2.xyz;
 				float3 normalizedWorldNormal = normalize( ase_worldNormal );
 				float LightDirectionSetting561 = _LightDirectionSetting;
 				float FallbackLightDirection563 = _FallbackLightDirection;
-				float3 localViewMatrix1393_g1471 = ViewMatrix1393_g1471();
-				float3 normalizeResult396_g1471 = normalize( localViewMatrix1393_g1471 );
-				float temp_output_395_0_g1471 = radians( -_ViewDirOffsetYaw );
-				float3 localViewMatrix0394_g1471 = ViewMatrix0394_g1471();
-				float3 normalizeResult399_g1471 = normalize( localViewMatrix0394_g1471 );
-				float3 rotatedValue400_g1471 = RotateAroundAxis( float3( 0,0,0 ), normalizeResult399_g1471, normalizeResult396_g1471, temp_output_395_0_g1471 );
+				float3 localViewMatrix1418_g1477 = ViewMatrix1418_g1477();
+				float3 normalizeResult422_g1477 = normalize( localViewMatrix1418_g1477 );
+				int localIsInMirror411_g1477 = ( unity_CameraProjection[2][0] != 0.f || unity_CameraProjection[2][1] != 0.f );
+				float temp_output_297_0_g1477 = _ViewDirOffsetYaw;
+				float temp_output_424_0_g1477 = radians( ( (float)localIsInMirror411_g1477 == 0.0 ? -temp_output_297_0_g1477 : temp_output_297_0_g1477 ) );
+				float3 localViewMatrix0417_g1477 = ViewMatrix0417_g1477();
+				float3 normalizeResult425_g1477 = normalize( localViewMatrix0417_g1477 );
+				float3 rotatedValue428_g1477 = RotateAroundAxis( float3( 0,0,0 ), normalizeResult425_g1477, normalizeResult422_g1477, temp_output_424_0_g1477 );
+				float3 normalizeResult429_g1477 = normalize( rotatedValue428_g1477 );
+				int localIsInMirror423_g1477 = ( unity_CameraProjection[2][0] != 0.f || unity_CameraProjection[2][1] != 0.f );
+				float temp_output_296_0_g1477 = _ViewDirOffsetPitch;
+				float3 localStereoCameraViewPosition30_g1475 = StereoCameraViewPosition30_g1475();
 				float3 ase_worldPos = i.ase_texcoord3.xyz;
-				float3 temp_output_408_0_g1471 = ( ase_worldPos - i.ase_texcoord4.xyz );
-				float3 localStereoCameraViewPosition30_g1469 = StereoCameraViewPosition30_g1469();
-				float3 rotatedValue401_g1471 = RotateAroundAxis( temp_output_408_0_g1471, localStereoCameraViewPosition30_g1469, normalizeResult396_g1471, temp_output_395_0_g1471 );
-				float3 rotatedValue403_g1471 = RotateAroundAxis( temp_output_408_0_g1471, rotatedValue401_g1471, rotatedValue400_g1471, radians( _ViewDirOffsetPitch ) );
-				float3 normalizeResult38_g1469 = normalize( ( rotatedValue403_g1471 - temp_output_408_0_g1471 ) );
-				float3 appendResult15_g1470 = (float3(( cos( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) * sin( ( ( _FakeLightDirY / 180.0 ) * UNITY_PI ) ) * -1.0 ) , sin( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) , ( cos( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) * cos( ( ( _FakeLightDirY / 180.0 ) * UNITY_PI ) ) * -1.0 )));
-				float3 normalizeResult2_g1470 = normalize( appendResult15_g1470 );
-				float3 normalizeResult26_g1469 = normalize( normalizeResult2_g1470 );
-				float3 ifLocalVar3_g1469 = 0;
+				float3 rotatedValue431_g1477 = RotateAroundAxis( float3( 0,0,0 ), ( localStereoCameraViewPosition30_g1475 - ( ase_worldPos - i.ase_texcoord4.xyz ) ), normalizeResult422_g1477, temp_output_424_0_g1477 );
+				float3 rotatedValue432_g1477 = RotateAroundAxis( float3( 0,0,0 ), rotatedValue431_g1477, normalizeResult429_g1477, radians( ( (float)localIsInMirror423_g1477 == 0.0 ? temp_output_296_0_g1477 : -temp_output_296_0_g1477 ) ) );
+				float3 normalizeResult433_g1477 = ASESafeNormalize( rotatedValue432_g1477 );
+				float3 normalizeResult38_g1475 = normalize( normalizeResult433_g1477 );
+				float3 appendResult15_g1476 = (float3(( cos( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) * sin( ( ( _FakeLightDirY / 180.0 ) * UNITY_PI ) ) * -1.0 ) , sin( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) , ( cos( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) * cos( ( ( _FakeLightDirY / 180.0 ) * UNITY_PI ) ) * -1.0 )));
+				float3 normalizeResult2_g1476 = normalize( appendResult15_g1476 );
+				float3 normalizeResult26_g1475 = normalize( normalizeResult2_g1476 );
+				float3 ifLocalVar3_g1475 = 0;
 				if( FallbackLightDirection563 > 0.0 )
-				ifLocalVar3_g1469 = normalizeResult38_g1469;
+				ifLocalVar3_g1475 = normalizeResult38_g1475;
 				else if( FallbackLightDirection563 == 0.0 )
-				ifLocalVar3_g1469 = normalizeResult26_g1469;
+				ifLocalVar3_g1475 = normalizeResult26_g1475;
 				float3 worldSpaceLightDir = Unity_SafeNormalize(UnityWorldSpaceLightDir(ase_worldPos));
 				#if defined(LIGHTMAP_ON) && ( UNITY_VERSION < 560 || ( defined(LIGHTMAP_SHADOW_MIXING) && !defined(SHADOWS_SHADOWMASK) && defined(SHADOWS_SCREEN) ) )//aselc
 				float4 ase_lightColor = 0;
@@ -523,142 +533,142 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				#endif
 				float4 break10_g1468 = staticSwitch9_g1468;
 				float IsThereWorldLight450 = break10_g1468.r;
-				float3 ifLocalVar8_g1469 = 0;
+				float3 ifLocalVar8_g1475 = 0;
 				if( IsThereWorldLight450 > 0.0 )
-				ifLocalVar8_g1469 = worldSpaceLightDir;
+				ifLocalVar8_g1475 = worldSpaceLightDir;
 				else if( IsThereWorldLight450 == 0.0 )
-				ifLocalVar8_g1469 = ifLocalVar3_g1469;
-				float3 ifLocalVar9_g1469 = 0;
+				ifLocalVar8_g1475 = ifLocalVar3_g1475;
+				float3 ifLocalVar9_g1475 = 0;
 				if( LightDirectionSetting561 > 0.0 )
-				ifLocalVar9_g1469 = ifLocalVar3_g1469;
+				ifLocalVar9_g1475 = ifLocalVar3_g1475;
 				else if( LightDirectionSetting561 == 0.0 )
-				ifLocalVar9_g1469 = ifLocalVar8_g1469;
-				float3 normalizeResult48_g1469 = normalize( ifLocalVar9_g1469 );
-				float3 worldPos32_g1469 = ase_worldPos;
-				float3 localStereoCameraViewDirection32_g1469 = StereoCameraViewDirection32_g1469( worldPos32_g1469 );
-				float3 normalizeResult51_g1469 = normalize( ( normalizeResult48_g1469 + localStereoCameraViewDirection32_g1469 ) );
-				float dotResult50_g1469 = dot( normalizedWorldNormal , normalizeResult51_g1469 );
-				float blendOpSrc34_g1472 = ILMB576;
-				float blendOpDest34_g1472 = dotResult50_g1469;
-				float clampResult87_g1473 = clamp( ( ( saturate( ( 1.0 - ( ( 1.0 - blendOpDest34_g1472) / max( blendOpSrc34_g1472, 0.00001) ) ) )) > ( 1.0 - _SpecularSize ) ? 1.0 : 0.0 ) , 0.0 , 1.0 );
-				float4 temp_cast_28 = (clampResult87_g1473).xxxx;
-				float4 blendOpSrc30_g1477 = Base12_g1477;
-				float4 blendOpDest30_g1477 = temp_cast_28;
-				float4 lerpBlendMode30_g1477 = lerp(blendOpDest30_g1477,min( blendOpSrc30_g1477 , blendOpDest30_g1477 ),0.9);
-				float3 desaturateInitialColor9_g1480 = ( ( ILMR573 * ( saturate( lerpBlendMode30_g1477 )) ) * float4( 1,1,1,0 ) * _SpecularIntensity * _SpecularTint ).rgb;
-				float desaturateDot9_g1480 = dot( desaturateInitialColor9_g1480, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1480 = lerp( desaturateInitialColor9_g1480, desaturateDot9_g1480.xxx, ( 1.0 - _SpecularSaturation ) );
-				float4 temp_output_95_0_g1477 = ( float4( desaturateVar9_g1480 , 0.0 ) + Base12_g1477 );
+				ifLocalVar9_g1475 = ifLocalVar8_g1475;
+				float3 normalizeResult48_g1475 = normalize( ifLocalVar9_g1475 );
+				float3 worldPos32_g1475 = ase_worldPos;
+				float3 localStereoCameraViewDirection32_g1475 = StereoCameraViewDirection32_g1475( worldPos32_g1475 );
+				float3 normalizeResult51_g1475 = normalize( ( normalizeResult48_g1475 + localStereoCameraViewDirection32_g1475 ) );
+				float dotResult50_g1475 = dot( normalizedWorldNormal , normalizeResult51_g1475 );
+				float blendOpSrc34_g1478 = ILMB576;
+				float blendOpDest34_g1478 = dotResult50_g1475;
+				float clampResult87_g1479 = clamp( ( ( saturate( ( 1.0 - ( ( 1.0 - blendOpDest34_g1478) / max( blendOpSrc34_g1478, 0.00001) ) ) )) > ( 1.0 - _SpecularSize ) ? 1.0 : 0.0 ) , 0.0 , 1.0 );
+				float4 temp_cast_30 = (clampResult87_g1479).xxxx;
+				float4 blendOpSrc30_g1483 = Base12_g1483;
+				float4 blendOpDest30_g1483 = temp_cast_30;
+				float4 lerpBlendMode30_g1483 = lerp(blendOpDest30_g1483,min( blendOpSrc30_g1483 , blendOpDest30_g1483 ),0.9);
+				float3 desaturateInitialColor9_g1486 = ( ( ILMR573 * ( saturate( lerpBlendMode30_g1483 )) ) * float4( 1,1,1,0 ) * _SpecularIntensity * _SpecularTint ).rgb;
+				float desaturateDot9_g1486 = dot( desaturateInitialColor9_g1486, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1486 = lerp( desaturateInitialColor9_g1486, desaturateDot9_g1486.xxx, ( 1.0 - _SpecularSaturation ) );
+				float4 temp_output_95_0_g1483 = ( float4( desaturateVar9_g1486 , 0.0 ) + Base12_g1483 );
 				float4 LightColor779 = _LightColor;
-				float3 desaturateInitialColor9_g1478 = ( temp_output_95_0_g1477 * LightColor779 * _BaseIntensity * _BaseTint ).rgb;
-				float desaturateDot9_g1478 = dot( desaturateInitialColor9_g1478, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1478 = lerp( desaturateInitialColor9_g1478, desaturateDot9_g1478.xxx, ( 1.0 - _BaseSaturation ) );
+				float3 desaturateInitialColor9_g1484 = ( temp_output_95_0_g1483 * LightColor779 * _BaseIntensity * _BaseTint ).rgb;
+				float desaturateDot9_g1484 = dot( desaturateInitialColor9_g1484, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1484 = lerp( desaturateInitialColor9_g1484, desaturateDot9_g1484.xxx, ( 1.0 - _BaseSaturation ) );
 				float4 AmbientColor780 = _AmbientColor;
 				float3 SSS578 = temp_output_993_0[1];
-				float4 SSS14_g1477 = float4( SSS578 , 0.0 );
-				float4 temp_output_97_0_g1477 = ( temp_output_95_0_g1477 * SSS14_g1477 );
-				float3 desaturateInitialColor9_g1481 = ( temp_output_97_0_g1477 * float4( 1,1,1,0 ) * _Shadow1Intensity * _Shadow1Tint ).rgb;
-				float desaturateDot9_g1481 = dot( desaturateInitialColor9_g1481, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1481 = lerp( desaturateInitialColor9_g1481, desaturateDot9_g1481.xxx, ( 1.0 - _Shadow1Saturation ) );
-				float4 blendOpSrc51_g1477 = float4( 0,0,0,0 );
-				float4 blendOpDest51_g1477 = temp_output_97_0_g1477;
-				float4 lerpBlendMode51_g1477 = lerp(blendOpDest51_g1477,2.0f*blendOpDest51_g1477*blendOpSrc51_g1477 + blendOpDest51_g1477*blendOpDest51_g1477*(1.0f - 2.0f*blendOpSrc51_g1477),0.5);
-				float3 desaturateInitialColor9_g1479 = ( ( saturate( lerpBlendMode51_g1477 )) * float4( 1,1,1,0 ) * _Shadow2Intensity * _Shadow2Tint ).rgb;
-				float desaturateDot9_g1479 = dot( desaturateInitialColor9_g1479, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1479 = lerp( desaturateInitialColor9_g1479, desaturateDot9_g1479.xxx, ( 1.0 - _Shadow2Saturation ) );
-				float temp_output_126_0_g1473 = pow( i.ase_color.r , 2.2 );
-				float VertexR33_g1473 = temp_output_126_0_g1473;
-				float dotResult46_g1469 = dot( ifLocalVar9_g1469 , normalizedWorldNormal );
-				float temp_output_36_0_g1472 = ( ( dotResult46_g1469 + _GlobalLightPush ) * i.ase_color.r );
+				float4 SSS14_g1483 = float4( SSS578 , 0.0 );
+				float4 temp_output_97_0_g1483 = ( temp_output_95_0_g1483 * SSS14_g1483 );
+				float3 desaturateInitialColor9_g1487 = ( temp_output_97_0_g1483 * float4( 1,1,1,0 ) * _Shadow1Intensity * _Shadow1Tint ).rgb;
+				float desaturateDot9_g1487 = dot( desaturateInitialColor9_g1487, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1487 = lerp( desaturateInitialColor9_g1487, desaturateDot9_g1487.xxx, ( 1.0 - _Shadow1Saturation ) );
+				float4 blendOpSrc51_g1483 = float4( 0,0,0,0 );
+				float4 blendOpDest51_g1483 = temp_output_97_0_g1483;
+				float4 lerpBlendMode51_g1483 = lerp(blendOpDest51_g1483,2.0f*blendOpDest51_g1483*blendOpSrc51_g1483 + blendOpDest51_g1483*blendOpDest51_g1483*(1.0f - 2.0f*blendOpSrc51_g1483),0.5);
+				float3 desaturateInitialColor9_g1485 = ( ( saturate( lerpBlendMode51_g1483 )) * float4( 1,1,1,0 ) * _Shadow2Intensity * _Shadow2Tint ).rgb;
+				float desaturateDot9_g1485 = dot( desaturateInitialColor9_g1485, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1485 = lerp( desaturateInitialColor9_g1485, desaturateDot9_g1485.xxx, ( 1.0 - _Shadow2Saturation ) );
+				float temp_output_126_0_g1479 = pow( i.ase_color.r , 2.2 );
+				float VertexR33_g1479 = temp_output_126_0_g1479;
+				float dotResult46_g1475 = dot( ifLocalVar9_g1475 , normalizedWorldNormal );
+				float temp_output_36_0_g1478 = ( ( dotResult46_g1475 + _GlobalLightPush ) * i.ase_color.r );
 				float ILMG574 = break292.y;
-				float temp_output_1_0_g1472 = ILMG574;
-				float temp_output_1057_0 = ( temp_output_36_0_g1472 * temp_output_1_0_g1472 );
-				float NdL20_g1473 = temp_output_1057_0;
-				float temp_output_2_0_g1474 = NdL20_g1473;
-				float temp_output_3_0_g1474 = -_Shadow1Smoothness;
-				float temp_output_9_0_g1473 = _Shadow1Push;
-				float temp_output_11_0_g1473 = _Shadow2Push;
-				float clampResult15_g1473 = clamp( temp_output_9_0_g1473 , temp_output_11_0_g1473 , temp_output_9_0_g1473 );
-				float RealShadow1Push16_g1473 = clampResult15_g1473;
-				float temp_output_1_0_g1474 = RealShadow1Push16_g1473;
-				float smoothstepResult6_g1474 = smoothstep( ( ( temp_output_2_0_g1474 / 1.0 ) + temp_output_3_0_g1474 ) , temp_output_2_0_g1474 , temp_output_1_0_g1474);
-				float lerpResult7_g1474 = lerp( smoothstepResult6_g1474 , ( temp_output_1_0_g1474 >= temp_output_2_0_g1474 ? 1.0 : 0.0 ) , ( 0.0 == temp_output_3_0_g1474 ? 1.0 : 0.0 ));
-				float clampResult17_g1473 = clamp( temp_output_11_0_g1473 , temp_output_11_0_g1473 , temp_output_9_0_g1473 );
-				float RealShadow2Push18_g1473 = clampResult17_g1473;
-				float temp_output_2_0_g1475 = NdL20_g1473;
-				float temp_output_3_0_g1475 = -_Shadow2Smoothness;
-				float temp_output_1_0_g1475 = RealShadow2Push18_g1473;
-				float smoothstepResult6_g1475 = smoothstep( ( ( temp_output_2_0_g1475 / 1.0 ) + temp_output_3_0_g1475 ) , temp_output_2_0_g1475 , temp_output_1_0_g1475);
-				float lerpResult7_g1475 = lerp( smoothstepResult6_g1475 , ( temp_output_1_0_g1475 >= temp_output_2_0_g1475 ? 1.0 : 0.0 ) , ( 0.0 == temp_output_3_0_g1475 ? 1.0 : 0.0 ));
-				float temp_output_42_0_g1473 = max( max( ( 1.0 - ( VertexR33_g1473 > _Shadow2VertexRThreshold ? 1.0 : 0.0 ) ) , lerpResult7_g1475 ) , ( ILMG574 < _PermanentShadowThreshold ? 1.0 : 0.0 ) );
-				float temp_output_43_0_g1473 = ( max( ( 1.0 - ( VertexR33_g1473 > _Shadow1VertexRThreshold ? 1.0 : 0.0 ) ) , min( lerpResult7_g1474 , ( RealShadow1Push16_g1473 >= RealShadow2Push18_g1473 ? 1.0 : 0.0 ) ) ) - temp_output_42_0_g1473 );
-				float3 lerpResult100_g1477 = lerp( desaturateVar9_g1481 , desaturateVar9_g1479 , ( 1.0 - temp_output_43_0_g1473 ));
-				float clampResult90_g1473 = clamp( ( 1.0 - ( temp_output_43_0_g1473 + temp_output_42_0_g1473 ) ) , 0.0 , 1.0 );
-				float temp_output_39_0_g1477 = clampResult90_g1473;
-				float4 lerpResult101_g1477 = lerp( float4( desaturateVar9_g1478 , 0.0 ) , ( AmbientColor780 * float4( lerpResult100_g1477 , 0.0 ) ) , ( 1.0 - temp_output_39_0_g1477 ));
-				float EnableRimlight82_g1473 = _EnableRimlight;
-				float dotResult31_g1469 = dot( normalizedWorldNormal , localStereoCameraViewDirection32_g1469 );
+				float temp_output_1_0_g1478 = ILMG574;
+				float temp_output_1057_0 = ( temp_output_36_0_g1478 * temp_output_1_0_g1478 );
+				float NdL20_g1479 = temp_output_1057_0;
+				float temp_output_2_0_g1480 = NdL20_g1479;
+				float temp_output_3_0_g1480 = -_Shadow1Smoothness;
+				float temp_output_9_0_g1479 = _Shadow1Push;
+				float temp_output_11_0_g1479 = _Shadow2Push;
+				float clampResult15_g1479 = clamp( temp_output_9_0_g1479 , temp_output_11_0_g1479 , temp_output_9_0_g1479 );
+				float RealShadow1Push16_g1479 = clampResult15_g1479;
+				float temp_output_1_0_g1480 = RealShadow1Push16_g1479;
+				float smoothstepResult6_g1480 = smoothstep( ( ( temp_output_2_0_g1480 / 1.0 ) + temp_output_3_0_g1480 ) , temp_output_2_0_g1480 , temp_output_1_0_g1480);
+				float lerpResult7_g1480 = lerp( smoothstepResult6_g1480 , ( temp_output_1_0_g1480 >= temp_output_2_0_g1480 ? 1.0 : 0.0 ) , ( 0.0 == temp_output_3_0_g1480 ? 1.0 : 0.0 ));
+				float clampResult17_g1479 = clamp( temp_output_11_0_g1479 , temp_output_11_0_g1479 , temp_output_9_0_g1479 );
+				float RealShadow2Push18_g1479 = clampResult17_g1479;
+				float temp_output_2_0_g1481 = NdL20_g1479;
+				float temp_output_3_0_g1481 = -_Shadow2Smoothness;
+				float temp_output_1_0_g1481 = RealShadow2Push18_g1479;
+				float smoothstepResult6_g1481 = smoothstep( ( ( temp_output_2_0_g1481 / 1.0 ) + temp_output_3_0_g1481 ) , temp_output_2_0_g1481 , temp_output_1_0_g1481);
+				float lerpResult7_g1481 = lerp( smoothstepResult6_g1481 , ( temp_output_1_0_g1481 >= temp_output_2_0_g1481 ? 1.0 : 0.0 ) , ( 0.0 == temp_output_3_0_g1481 ? 1.0 : 0.0 ));
+				float temp_output_42_0_g1479 = max( max( ( 1.0 - ( VertexR33_g1479 > _Shadow2VertexRThreshold ? 1.0 : 0.0 ) ) , lerpResult7_g1481 ) , ( ILMG574 < _PermanentShadowThreshold ? 1.0 : 0.0 ) );
+				float temp_output_43_0_g1479 = ( max( ( 1.0 - ( VertexR33_g1479 > _Shadow1VertexRThreshold ? 1.0 : 0.0 ) ) , min( lerpResult7_g1480 , ( RealShadow1Push16_g1479 >= RealShadow2Push18_g1479 ? 1.0 : 0.0 ) ) ) - temp_output_42_0_g1479 );
+				float3 lerpResult100_g1483 = lerp( desaturateVar9_g1487 , desaturateVar9_g1485 , ( 1.0 - temp_output_43_0_g1479 ));
+				float clampResult90_g1479 = clamp( ( 1.0 - ( temp_output_43_0_g1479 + temp_output_42_0_g1479 ) ) , 0.0 , 1.0 );
+				float temp_output_39_0_g1483 = clampResult90_g1479;
+				float4 lerpResult101_g1483 = lerp( float4( desaturateVar9_g1484 , 0.0 ) , ( AmbientColor780 * float4( lerpResult100_g1483 , 0.0 ) ) , ( 1.0 - temp_output_39_0_g1483 ));
+				float EnableRimlight82_g1479 = _EnableRimlight;
+				float dotResult31_g1475 = dot( normalizedWorldNormal , localStereoCameraViewDirection32_g1475 );
 				float SSSA581 = tex2DNode297.a;
 				float BaseA580 = tex2DNode296.a;
-				float blendOpSrc15_g1472 = SSSA581;
-				float blendOpDest15_g1472 = BaseA580;
-				float NdV48_g1473 = ( ( 1.0 - ( dotResult31_g1469 + ( 1.0 - _RimlightSize ) ) ) * ( 1.0 - ( saturate( abs( blendOpSrc15_g1472 - blendOpDest15_g1472 ) )) ) );
-				float clampResult91_g1473 = clamp( temp_output_42_0_g1473 , 0.0 , 1.0 );
-				float clampResult88_g1473 = clamp( ( ceil( ( ( NdV48_g1473 > 0.1 ? 1.0 : 0.0 ) * BaseA580 ) ) - clampResult91_g1473 ) , 0.0 , 1.0 );
-				float temp_output_94_0_g1473 = ( EnableRimlight82_g1473 == 1.0 ? clampResult88_g1473 : 0.0 );
-				float3 desaturateInitialColor9_g1482 = ( ( Base12_g1477 * temp_output_94_0_g1473 ) * float4( 1,1,1,0 ) * _RimlightIntensity * _RimlightTint ).rgb;
-				float desaturateDot9_g1482 = dot( desaturateInitialColor9_g1482, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1482 = lerp( desaturateInitialColor9_g1482, desaturateDot9_g1482.xxx, ( 1.0 - _RimlightSaturation ) );
-				float4 ColorOut1025 = ( lerpResult101_g1477 + float4( desaturateVar9_g1482 , 0.0 ) );
+				float blendOpSrc15_g1478 = SSSA581;
+				float blendOpDest15_g1478 = BaseA580;
+				float NdV48_g1479 = ( ( 1.0 - ( dotResult31_g1475 + ( 1.0 - _RimlightSize ) ) ) * ( 1.0 - ( saturate( abs( blendOpSrc15_g1478 - blendOpDest15_g1478 ) )) ) );
+				float clampResult91_g1479 = clamp( temp_output_42_0_g1479 , 0.0 , 1.0 );
+				float clampResult88_g1479 = clamp( ( ceil( ( ( NdV48_g1479 > 0.1 ? 1.0 : 0.0 ) * BaseA580 ) ) - clampResult91_g1479 ) , 0.0 , 1.0 );
+				float temp_output_94_0_g1479 = ( EnableRimlight82_g1479 == 1.0 ? clampResult88_g1479 : 0.0 );
+				float3 desaturateInitialColor9_g1488 = ( ( Base12_g1483 * temp_output_94_0_g1479 ) * float4( 1,1,1,0 ) * _RimlightIntensity * _RimlightTint ).rgb;
+				float desaturateDot9_g1488 = dot( desaturateInitialColor9_g1488, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1488 = lerp( desaturateInitialColor9_g1488, desaturateDot9_g1488.xxx, ( 1.0 - _RimlightSaturation ) );
+				float4 ColorOut1025 = ( lerpResult101_g1483 + float4( desaturateVar9_g1488 , 0.0 ) );
 				float4 lerpResult1021 = lerp( ILMAColor1005 , ColorOut1025 , ILMA357);
 				float LightColorSetting872 = _LightColorSetting;
-				float ifLocalVar13_g1483 = 0;
+				float ifLocalVar13_g1489 = 0;
 				if( LightColorSetting872 == 1.0 )
-				ifLocalVar13_g1483 = 0.0;
+				ifLocalVar13_g1489 = 0.0;
 				else if( LightColorSetting872 < 1.0 )
-				ifLocalVar13_g1483 = IsThereWorldLight450;
+				ifLocalVar13_g1489 = IsThereWorldLight450;
 				UNITY_LIGHT_ATTENUATION(ase_atten, i, ase_worldPos)
-				float4 temp_cast_41 = (_MinimumGlobalLightIntensity).xxxx;
-				float4 temp_cast_42 = (5.0).xxxx;
-				float4 clampResult18_g1483 = clamp( ase_lightColor , temp_cast_41 , temp_cast_42 );
-				float4 temp_output_11_0_g1483 = ( ase_atten * clampResult18_g1483 );
-				float4 temp_output_8_0_g1483 = ( _FakeGlobalLightColor * _FakeGlobalLightIntensity );
-				float4 ifLocalVar3_g1483 = 0;
-				if( ifLocalVar13_g1483 > 0.0 )
-				ifLocalVar3_g1483 = temp_output_11_0_g1483;
-				else if( ifLocalVar13_g1483 == 0.0 )
-				ifLocalVar3_g1483 = temp_output_8_0_g1483;
+				float4 temp_cast_43 = (_MinimumGlobalLightIntensity).xxxx;
+				float4 temp_cast_44 = (5.0).xxxx;
+				float4 clampResult18_g1489 = clamp( ase_lightColor , temp_cast_43 , temp_cast_44 );
+				float4 temp_output_11_0_g1489 = ( ase_atten * clampResult18_g1489 );
+				float4 temp_output_8_0_g1489 = ( _FakeGlobalLightColor * _FakeGlobalLightIntensity );
+				float4 ifLocalVar3_g1489 = 0;
+				if( ifLocalVar13_g1489 > 0.0 )
+				ifLocalVar3_g1489 = temp_output_11_0_g1489;
+				else if( ifLocalVar13_g1489 == 0.0 )
+				ifLocalVar3_g1489 = temp_output_8_0_g1489;
 				#ifdef UNITY_PASS_FORWARDADD
-				float4 staticSwitch9_g1483 = max( float4( 0,0,0,0 ) , temp_output_11_0_g1483 );
+				float4 staticSwitch9_g1489 = max( float4( 0,0,0,0 ) , temp_output_11_0_g1489 );
 				#else
-				float4 staticSwitch9_g1483 = ifLocalVar3_g1483;
+				float4 staticSwitch9_g1489 = ifLocalVar3_g1489;
 				#endif
-				float4 GlobalLightColor944 = staticSwitch9_g1483;
+				float4 GlobalLightColor944 = staticSwitch9_g1489;
 				float2 uv_EmissionMask = i.ase_texcoord1.xy * _EmissionMask_ST.xy + _EmissionMask_ST.zw;
-				float EmissionRampMask920 = max( ( ( ( temp_output_94_0_g1473 * _RimlightEmissiveToggle ) * _RimlightEmissionIntensity ) + ( ( clampResult87_g1473 * _SpecularEmissiveToggle ) * _SpecularEmissionIntensity ) + ( ( clampResult90_g1473 * _BaseEmissiveToggle ) * _BaseEmissionIntensity ) + ( ( temp_output_43_0_g1473 * _Shadow1EmissiveToggle ) * _Shadow1EmissionIntensity ) + ( ( clampResult91_g1473 * _Shadow2EmissiveToggle ) * _Shadow2EmissionIntensity ) + ( ( 1.0 - ILMA357 ) * ( _ILMAlphaEmissionIntensity * _ILMAlphaLinesEmissionToggle ) ) ) , ( tex2D( _EmissionMask, uv_EmissionMask ).r * _EmissionMaskIntensity ) );
-				float4 temp_cast_44 = (EmissionRampMask920).xxxx;
-				float4 ifLocalVar17_g1483 = 0;
-				if( ifLocalVar13_g1483 > 0.0 )
-				ifLocalVar17_g1483 = clampResult18_g1483;
-				else if( ifLocalVar13_g1483 == 0.0 )
-				ifLocalVar17_g1483 = temp_output_8_0_g1483;
+				float EmissionRampMask920 = max( ( ( ( temp_output_94_0_g1479 * _RimlightEmissiveToggle ) * _RimlightEmissionIntensity ) + ( ( clampResult87_g1479 * _SpecularEmissiveToggle ) * _SpecularEmissionIntensity ) + ( ( clampResult90_g1479 * _BaseEmissiveToggle ) * _BaseEmissionIntensity ) + ( ( temp_output_43_0_g1479 * _Shadow1EmissiveToggle ) * _Shadow1EmissionIntensity ) + ( ( clampResult91_g1479 * _Shadow2EmissiveToggle ) * _Shadow2EmissionIntensity ) + ( ( 1.0 - ILMA357 ) * ( _ILMAlphaEmissionIntensity * _ILMAlphaLinesEmissionToggle ) ) ) , ( tex2D( _EmissionMask, uv_EmissionMask ).r * _EmissionMaskIntensity ) );
+				float4 temp_cast_46 = (EmissionRampMask920).xxxx;
+				float4 ifLocalVar17_g1489 = 0;
+				if( ifLocalVar13_g1489 > 0.0 )
+				ifLocalVar17_g1489 = clampResult18_g1489;
+				else if( ifLocalVar13_g1489 == 0.0 )
+				ifLocalVar17_g1489 = temp_output_8_0_g1489;
 				#ifdef UNITY_PASS_FORWARDADD
-				float4 staticSwitch30_g1483 = float4( 0,0,0,0 );
+				float4 staticSwitch30_g1489 = float4( 0,0,0,0 );
 				#else
-				float4 staticSwitch30_g1483 = max( temp_cast_44 , ifLocalVar17_g1483 );
+				float4 staticSwitch30_g1489 = max( temp_cast_46 , ifLocalVar17_g1489 );
 				#endif
-				float4 EmissionLightColor947 = staticSwitch30_g1483;
+				float4 EmissionLightColor947 = staticSwitch30_g1489;
 				float4 lerpResult1062 = lerp( ( ( ILMColorSetting1007 == 2.0 ? lerpResult1021 : ColorOut1025 ) * GlobalLightColor944 ) , ( _EmissionIntensity * ColorOut1025 * EmissionLightColor947 ) , EmissionRampMask920);
-				float temp_output_48_0_g1484 = _DebugGroup;
-				float temp_output_47_0_g1484 = _VertexChannel;
-				float4 temp_output_59_0_g1484 = _DebugColor;
-				float temp_output_50_0_g1484 = _ILMChannel;
+				float temp_output_48_0_g1490 = _DebugGroup;
+				float temp_output_47_0_g1490 = _VertexChannel;
+				float4 temp_output_59_0_g1490 = _DebugColor;
+				float temp_output_50_0_g1490 = _ILMChannel;
 				float3 ILM988 = linearToGamma277;
 				float4 appendResult1031 = (float4(ILM988 , ILMA357));
-				float4 temp_output_54_0_g1484 = appendResult1031;
-				float4 break7_g1484 = temp_output_54_0_g1484;
-				float temp_output_57_0_g1484 = 0.0;
-				float4 Debug987 = ( temp_output_48_0_g1484 == 0.0 ? ( temp_output_47_0_g1484 == 0.0 ? i.ase_color : ( temp_output_47_0_g1484 == 1.0 ? ( i.ase_color.r * temp_output_59_0_g1484 ) : ( temp_output_47_0_g1484 == 2.0 ? ( i.ase_color.g * temp_output_59_0_g1484 ) : ( temp_output_47_0_g1484 == 3.0 ? ( i.ase_color.b * temp_output_59_0_g1484 ) : ( temp_output_47_0_g1484 == 4.0 ? ( i.ase_color.a * temp_output_59_0_g1484 ) : float4( 0,0,0,0 ) ) ) ) ) ) : ( temp_output_48_0_g1484 == 1.0 ? ( temp_output_50_0_g1484 == 0.0 ? temp_output_54_0_g1484 : ( temp_output_50_0_g1484 == 1.0 ? ( break7_g1484.r * temp_output_59_0_g1484 ) : ( temp_output_50_0_g1484 == 2.0 ? ( break7_g1484.g * temp_output_59_0_g1484 ) : ( temp_output_50_0_g1484 == 3.0 ? ( break7_g1484.b * temp_output_59_0_g1484 ) : ( temp_output_50_0_g1484 == 4.0 ? ( break7_g1484.a * temp_output_59_0_g1484 ) : float4( 0,0,0,0 ) ) ) ) ) ) : ( temp_output_48_0_g1484 == 2.0 ? ( temp_output_57_0_g1484 == 0.0 ? ( BaseA580 * temp_output_59_0_g1484 ) : ( temp_output_57_0_g1484 == 1.0 ? ( 0.0 * temp_output_59_0_g1484 ) : float4( 0,0,0,0 ) ) ) : float4( 0,0,0,0 ) ) ) );
+				float4 temp_output_54_0_g1490 = appendResult1031;
+				float4 break7_g1490 = temp_output_54_0_g1490;
+				float temp_output_57_0_g1490 = 0.0;
+				float4 Debug987 = ( temp_output_48_0_g1490 == 0.0 ? ( temp_output_47_0_g1490 == 0.0 ? i.ase_color : ( temp_output_47_0_g1490 == 1.0 ? ( i.ase_color.r * temp_output_59_0_g1490 ) : ( temp_output_47_0_g1490 == 2.0 ? ( i.ase_color.g * temp_output_59_0_g1490 ) : ( temp_output_47_0_g1490 == 3.0 ? ( i.ase_color.b * temp_output_59_0_g1490 ) : ( temp_output_47_0_g1490 == 4.0 ? ( i.ase_color.a * temp_output_59_0_g1490 ) : float4( 0,0,0,0 ) ) ) ) ) ) : ( temp_output_48_0_g1490 == 1.0 ? ( temp_output_50_0_g1490 == 0.0 ? temp_output_54_0_g1490 : ( temp_output_50_0_g1490 == 1.0 ? ( break7_g1490.r * temp_output_59_0_g1490 ) : ( temp_output_50_0_g1490 == 2.0 ? ( break7_g1490.g * temp_output_59_0_g1490 ) : ( temp_output_50_0_g1490 == 3.0 ? ( break7_g1490.b * temp_output_59_0_g1490 ) : ( temp_output_50_0_g1490 == 4.0 ? ( break7_g1490.a * temp_output_59_0_g1490 ) : float4( 0,0,0,0 ) ) ) ) ) ) : ( temp_output_48_0_g1490 == 2.0 ? ( temp_output_57_0_g1490 == 0.0 ? ( BaseA580 * temp_output_59_0_g1490 ) : ( temp_output_57_0_g1490 == 1.0 ? ( 0.0 * temp_output_59_0_g1490 ) : float4( 0,0,0,0 ) ) ) : float4( 0,0,0,0 ) ) ) );
 				
 
 				outColor = ( _EnableDebug == 0.0 ? lerpResult1062 : Debug987 ).rgb;
@@ -687,31 +697,30 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 			#include "UnityStandardBRDF.cginc"
 			#include "UnityShaderVariables.cginc"
 			#define ASE_NEEDS_VERT_NORMAL
-			#define ASE_NEEDS_FRAG_POSITION
 			#define ASE_NEEDS_FRAG_COLOR
 			#define ASE_SHADOWS 1
 
 			//This is a late directive
 			
+			uniform float _ZWriteMode;
+			uniform float _EnableCameraDistanceMult;
+			uniform float _ZTestMode;
+			uniform float _FailFront;
+			uniform float _OutlineThickness;
+			uniform float _ReadMask;
+			uniform float _Factor;
+			uniform float _EditorVersion;
+			uniform float _DepthOffset;
+			uniform float _WriteMask;
+			uniform float _ZFailFront;
 			uniform float _Reference;
 			uniform float4 _OutlineColor;
 			uniform float _OutlineColorIntensity;
-			uniform float _PassFront;
-			uniform float _ZFailFront;
 			uniform float _Comparison;
-			uniform float _OutlineEnableBaseColorMult;
+			uniform float _PassFront;
 			uniform float _EnableOutline;
 			uniform float _Units;
-			uniform float _WriteMask;
-			uniform float _ZWriteMode;
-			uniform float _DepthOffset;
-			uniform float _EditorVersion;
-			uniform float _Factor;
-			uniform float _OutlineThickness;
-			uniform float _FailFront;
-			uniform float _ZTestMode;
-			uniform float _EnableCameraDistanceMult;
-			uniform float _ReadMask;
+			uniform float _OutlineEnableBaseColorMult;
 			uniform float _EnableDebug;
 			uniform float _ILMColorSetting;
 			uniform float4 _ILMAlphaColor;
@@ -818,12 +827,12 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				float e = 1.0e-10;
 				return float3( abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
 			}
-			float3 ViewMatrix1393_g1471(  )
+			float3 ViewMatrix1418_g1477(  )
 			{
 				return UNITY_MATRIX_V[1];
 			}
 			
-			float3 ViewMatrix0394_g1471(  )
+			float3 ViewMatrix0417_g1477(  )
 			{
 				return UNITY_MATRIX_V[0];
 			}
@@ -847,7 +856,7 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				return mul( finalMatrix, original ) + center;
 			}
 			
-			float3 StereoCameraViewPosition30_g1469(  )
+			float3 StereoCameraViewPosition30_g1475(  )
 			{
 				#if UNITY_SINGLE_PASS_STEREO
 				float3 cameraPos = float3((unity_StereoWorldSpaceCameraPos[0]+ unity_StereoWorldSpaceCameraPos[1])*.5); 
@@ -857,7 +866,13 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				return cameraPos;
 			}
 			
-			float3 StereoCameraViewDirection32_g1469( float3 worldPos )
+			inline float3 ASESafeNormalize(float3 inVec)
+			{
+				float dp3 = max( 0.001f , dot( inVec , inVec ) );
+				return inVec* rsqrt( dp3);
+			}
+			
+			float3 StereoCameraViewDirection32_g1475( float3 worldPos )
 			{
 				#if UNITY_SINGLE_PASS_STEREO
 				float3 cameraPos = float3((unity_StereoWorldSpaceCameraPos[0]+ unity_StereoWorldSpaceCameraPos[1])*.5); 
@@ -945,102 +960,107 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				float2 uv_SSS = i.ase_texcoord1.xy * _SSS_ST.xy + _SSS_ST.zw;
 				float4 tex2DNode297 = tex2D( _SSS, uv_SSS );
 				float3 appendResult763 = (float3(tex2DNode297.r , tex2DNode297.g , tex2DNode297.b));
-				float temp_output_52_0_g1462 = _TotalReplacements;
-				float4 break8_g1467 = _Target5Color;
-				float4 break8_g1463 = _Target4Color;
-				float4 break8_g1465 = _Target3Color;
-				float4 break8_g1464 = _Target2Color;
-				float4 break8_g1466 = _Target1Color;
-				float3x3 temp_output_67_0_g1462 = float3x3(appendResult762, appendResult763, float3( 0,0,0 ));
-				float4 temp_output_13_0_g1466 = float4( temp_output_67_0_g1462[0] , 0.0 );
-				float4 break6_g1466 = temp_output_13_0_g1466;
-				float4 appendResult3_g1466 = (float4(break8_g1466.r , break8_g1466.g , break8_g1466.b , break6_g1466.a));
-				float4 appendResult7_g1466 = (float4(break6_g1466.r , break6_g1466.g , break6_g1466.b , 1.0));
-				float smoothstepResult5_g1466 = smoothstep( 0.0 , _Source1Fuzziness , distance( appendResult7_g1466 , _Source1Color ));
-				float4 lerpResult4_g1466 = lerp( appendResult3_g1466 , temp_output_13_0_g1466 , smoothstepResult5_g1466);
-				float4 temp_output_106_0_g1462 = lerpResult4_g1466;
-				float4 temp_output_13_0_g1464 = temp_output_106_0_g1462;
-				float4 break6_g1464 = temp_output_13_0_g1464;
-				float4 appendResult3_g1464 = (float4(break8_g1464.r , break8_g1464.g , break8_g1464.b , break6_g1464.a));
-				float4 appendResult7_g1464 = (float4(break6_g1464.r , break6_g1464.g , break6_g1464.b , 1.0));
-				float smoothstepResult5_g1464 = smoothstep( 0.0 , _Source2Fuzziness , distance( appendResult7_g1464 , _Source2Color ));
-				float4 lerpResult4_g1464 = lerp( appendResult3_g1464 , temp_output_13_0_g1464 , smoothstepResult5_g1464);
-				float4 temp_output_102_0_g1462 = lerpResult4_g1464;
-				float4 temp_output_13_0_g1465 = temp_output_102_0_g1462;
-				float4 break6_g1465 = temp_output_13_0_g1465;
-				float4 appendResult3_g1465 = (float4(break8_g1465.r , break8_g1465.g , break8_g1465.b , break6_g1465.a));
-				float4 appendResult7_g1465 = (float4(break6_g1465.r , break6_g1465.g , break6_g1465.b , 1.0));
-				float smoothstepResult5_g1465 = smoothstep( 0.0 , _Source3Fuzziness , distance( appendResult7_g1465 , _Source3Color ));
-				float4 lerpResult4_g1465 = lerp( appendResult3_g1465 , temp_output_13_0_g1465 , smoothstepResult5_g1465);
-				float4 temp_output_104_0_g1462 = lerpResult4_g1465;
-				float4 temp_output_13_0_g1463 = temp_output_104_0_g1462;
-				float4 break6_g1463 = temp_output_13_0_g1463;
-				float4 appendResult3_g1463 = (float4(break8_g1463.r , break8_g1463.g , break8_g1463.b , break6_g1463.a));
-				float4 appendResult7_g1463 = (float4(break6_g1463.r , break6_g1463.g , break6_g1463.b , 1.0));
-				float smoothstepResult5_g1463 = smoothstep( 0.0 , _Source4Fuzziness , distance( appendResult7_g1463 , _Source4Color ));
-				float4 lerpResult4_g1463 = lerp( appendResult3_g1463 , temp_output_13_0_g1463 , smoothstepResult5_g1463);
-				float4 temp_output_105_0_g1462 = lerpResult4_g1463;
-				float4 temp_output_13_0_g1467 = temp_output_105_0_g1462;
-				float4 break6_g1467 = temp_output_13_0_g1467;
-				float4 appendResult3_g1467 = (float4(break8_g1467.r , break8_g1467.g , break8_g1467.b , break6_g1467.a));
-				float4 appendResult7_g1467 = (float4(break6_g1467.r , break6_g1467.g , break6_g1467.b , 1.0));
-				float smoothstepResult5_g1467 = smoothstep( 0.0 , _Source5Fuzziness , distance( appendResult7_g1467 , _Source5Color ));
-				float4 lerpResult4_g1467 = lerp( appendResult3_g1467 , temp_output_13_0_g1467 , smoothstepResult5_g1467);
-				float4 temp_output_15_0_g1466 = float4( temp_output_67_0_g1462[1] , 0.0 );
-				float3 hsvTorgb25_g1466 = RGBToHSV( temp_output_15_0_g1466.rgb );
-				float3 hsvTorgb26_g1466 = HSVToRGB( float3(( _SSSHueShift1 + hsvTorgb25_g1466.x ),hsvTorgb25_g1466.y,hsvTorgb25_g1466.z) );
-				float4 appendResult18_g1466 = (float4(hsvTorgb26_g1466 , temp_output_15_0_g1466.a));
-				float4 lerpResult19_g1466 = lerp( appendResult18_g1466 , temp_output_15_0_g1466 , smoothstepResult5_g1466);
-				float4 temp_output_15_0_g1464 = lerpResult19_g1466;
-				float3 hsvTorgb25_g1464 = RGBToHSV( temp_output_15_0_g1464.rgb );
-				float3 hsvTorgb26_g1464 = HSVToRGB( float3(( _SSSHueShift2 + hsvTorgb25_g1464.x ),hsvTorgb25_g1464.y,hsvTorgb25_g1464.z) );
-				float4 appendResult18_g1464 = (float4(hsvTorgb26_g1464 , temp_output_15_0_g1464.a));
-				float4 lerpResult19_g1464 = lerp( appendResult18_g1464 , temp_output_15_0_g1464 , smoothstepResult5_g1464);
-				float4 temp_output_15_0_g1465 = lerpResult19_g1464;
-				float3 hsvTorgb25_g1465 = RGBToHSV( temp_output_15_0_g1465.rgb );
-				float3 hsvTorgb26_g1465 = HSVToRGB( float3(( _SSSHueShift3 + hsvTorgb25_g1465.x ),hsvTorgb25_g1465.y,hsvTorgb25_g1465.z) );
-				float4 appendResult18_g1465 = (float4(hsvTorgb26_g1465 , temp_output_15_0_g1465.a));
-				float4 lerpResult19_g1465 = lerp( appendResult18_g1465 , temp_output_15_0_g1465 , smoothstepResult5_g1465);
-				float4 temp_output_15_0_g1463 = lerpResult19_g1465;
-				float3 hsvTorgb25_g1463 = RGBToHSV( temp_output_15_0_g1463.rgb );
-				float3 hsvTorgb26_g1463 = HSVToRGB( float3(( _SSSHueShift4 + hsvTorgb25_g1463.x ),hsvTorgb25_g1463.y,hsvTorgb25_g1463.z) );
-				float4 appendResult18_g1463 = (float4(hsvTorgb26_g1463 , temp_output_15_0_g1463.a));
-				float4 lerpResult19_g1463 = lerp( appendResult18_g1463 , temp_output_15_0_g1463 , smoothstepResult5_g1463);
-				float4 temp_output_15_0_g1467 = lerpResult19_g1463;
-				float3 hsvTorgb25_g1467 = RGBToHSV( temp_output_15_0_g1467.rgb );
-				float3 hsvTorgb26_g1467 = HSVToRGB( float3(( _SSSHueShift5 + hsvTorgb25_g1467.x ),hsvTorgb25_g1467.y,hsvTorgb25_g1467.z) );
-				float4 appendResult18_g1467 = (float4(hsvTorgb26_g1467 , temp_output_15_0_g1467.a));
-				float4 lerpResult19_g1467 = lerp( appendResult18_g1467 , temp_output_15_0_g1467 , smoothstepResult5_g1467);
-				float3x3 temp_output_993_0 = ( _EnableColorReplacer == 0.0 ? float3x3(appendResult762, appendResult763, float3( 0,0,0 )) : float3x3(( temp_output_52_0_g1462 == 5.0 ? lerpResult4_g1467 : ( temp_output_52_0_g1462 == 4.0 ? temp_output_105_0_g1462 : ( temp_output_52_0_g1462 == 3.0 ? temp_output_104_0_g1462 : ( temp_output_52_0_g1462 == 2.0 ? temp_output_102_0_g1462 : ( temp_output_52_0_g1462 == 1.0 ? temp_output_106_0_g1462 : float4( temp_output_67_0_g1462[0] , 0.0 ) ) ) ) ) ).rgb, lerpResult19_g1467.rgb, float3( 0,0,0 )) );
+				float temp_output_52_0_g1469 = _TotalReplacements;
+				float4 break8_g1474 = _Target5Color;
+				float4 break8_g1470 = _Target4Color;
+				float4 break8_g1472 = _Target3Color;
+				float4 break8_g1471 = _Target2Color;
+				float4 break8_g1473 = _Target1Color;
+				float3x3 temp_output_67_0_g1469 = float3x3(appendResult762, appendResult763, float3( 0,0,0 ));
+				float4 temp_output_13_0_g1473 = float4( temp_output_67_0_g1469[0] , 0.0 );
+				float4 break6_g1473 = temp_output_13_0_g1473;
+				float4 appendResult3_g1473 = (float4(break8_g1473.r , break8_g1473.g , break8_g1473.b , break6_g1473.a));
+				float4 appendResult7_g1473 = (float4(break6_g1473.r , break6_g1473.g , break6_g1473.b , 1.0));
+				float smoothstepResult5_g1473 = smoothstep( 0.0 , _Source1Fuzziness , distance( appendResult7_g1473 , _Source1Color ));
+				float4 lerpResult4_g1473 = lerp( appendResult3_g1473 , temp_output_13_0_g1473 , smoothstepResult5_g1473);
+				float4 temp_output_106_0_g1469 = lerpResult4_g1473;
+				float4 temp_output_13_0_g1471 = temp_output_106_0_g1469;
+				float4 break6_g1471 = temp_output_13_0_g1471;
+				float4 appendResult3_g1471 = (float4(break8_g1471.r , break8_g1471.g , break8_g1471.b , break6_g1471.a));
+				float4 appendResult7_g1471 = (float4(break6_g1471.r , break6_g1471.g , break6_g1471.b , 1.0));
+				float smoothstepResult5_g1471 = smoothstep( 0.0 , _Source2Fuzziness , distance( appendResult7_g1471 , _Source2Color ));
+				float4 lerpResult4_g1471 = lerp( appendResult3_g1471 , temp_output_13_0_g1471 , smoothstepResult5_g1471);
+				float4 temp_output_102_0_g1469 = lerpResult4_g1471;
+				float4 temp_output_13_0_g1472 = temp_output_102_0_g1469;
+				float4 break6_g1472 = temp_output_13_0_g1472;
+				float4 appendResult3_g1472 = (float4(break8_g1472.r , break8_g1472.g , break8_g1472.b , break6_g1472.a));
+				float4 appendResult7_g1472 = (float4(break6_g1472.r , break6_g1472.g , break6_g1472.b , 1.0));
+				float smoothstepResult5_g1472 = smoothstep( 0.0 , _Source3Fuzziness , distance( appendResult7_g1472 , _Source3Color ));
+				float4 lerpResult4_g1472 = lerp( appendResult3_g1472 , temp_output_13_0_g1472 , smoothstepResult5_g1472);
+				float4 temp_output_104_0_g1469 = lerpResult4_g1472;
+				float4 temp_output_13_0_g1470 = temp_output_104_0_g1469;
+				float4 break6_g1470 = temp_output_13_0_g1470;
+				float4 appendResult3_g1470 = (float4(break8_g1470.r , break8_g1470.g , break8_g1470.b , break6_g1470.a));
+				float4 appendResult7_g1470 = (float4(break6_g1470.r , break6_g1470.g , break6_g1470.b , 1.0));
+				float smoothstepResult5_g1470 = smoothstep( 0.0 , _Source4Fuzziness , distance( appendResult7_g1470 , _Source4Color ));
+				float4 lerpResult4_g1470 = lerp( appendResult3_g1470 , temp_output_13_0_g1470 , smoothstepResult5_g1470);
+				float4 temp_output_105_0_g1469 = lerpResult4_g1470;
+				float4 temp_output_13_0_g1474 = temp_output_105_0_g1469;
+				float4 break6_g1474 = temp_output_13_0_g1474;
+				float4 appendResult3_g1474 = (float4(break8_g1474.r , break8_g1474.g , break8_g1474.b , break6_g1474.a));
+				float4 appendResult7_g1474 = (float4(break6_g1474.r , break6_g1474.g , break6_g1474.b , 1.0));
+				float smoothstepResult5_g1474 = smoothstep( 0.0 , _Source5Fuzziness , distance( appendResult7_g1474 , _Source5Color ));
+				float4 lerpResult4_g1474 = lerp( appendResult3_g1474 , temp_output_13_0_g1474 , smoothstepResult5_g1474);
+				float4 temp_output_15_0_g1473 = float4( temp_output_67_0_g1469[1] , 0.0 );
+				float3 hsvTorgb25_g1473 = RGBToHSV( temp_output_15_0_g1473.rgb );
+				float3 hsvTorgb26_g1473 = HSVToRGB( float3(( _SSSHueShift1 + hsvTorgb25_g1473.x ),hsvTorgb25_g1473.y,hsvTorgb25_g1473.z) );
+				float4 appendResult18_g1473 = (float4(hsvTorgb26_g1473 , temp_output_15_0_g1473.a));
+				float4 lerpResult19_g1473 = lerp( appendResult18_g1473 , temp_output_15_0_g1473 , smoothstepResult5_g1473);
+				float4 temp_output_15_0_g1471 = lerpResult19_g1473;
+				float3 hsvTorgb25_g1471 = RGBToHSV( temp_output_15_0_g1471.rgb );
+				float3 hsvTorgb26_g1471 = HSVToRGB( float3(( _SSSHueShift2 + hsvTorgb25_g1471.x ),hsvTorgb25_g1471.y,hsvTorgb25_g1471.z) );
+				float4 appendResult18_g1471 = (float4(hsvTorgb26_g1471 , temp_output_15_0_g1471.a));
+				float4 lerpResult19_g1471 = lerp( appendResult18_g1471 , temp_output_15_0_g1471 , smoothstepResult5_g1471);
+				float4 temp_output_15_0_g1472 = lerpResult19_g1471;
+				float3 hsvTorgb25_g1472 = RGBToHSV( temp_output_15_0_g1472.rgb );
+				float3 hsvTorgb26_g1472 = HSVToRGB( float3(( _SSSHueShift3 + hsvTorgb25_g1472.x ),hsvTorgb25_g1472.y,hsvTorgb25_g1472.z) );
+				float4 appendResult18_g1472 = (float4(hsvTorgb26_g1472 , temp_output_15_0_g1472.a));
+				float4 lerpResult19_g1472 = lerp( appendResult18_g1472 , temp_output_15_0_g1472 , smoothstepResult5_g1472);
+				float4 temp_output_15_0_g1470 = lerpResult19_g1472;
+				float3 hsvTorgb25_g1470 = RGBToHSV( temp_output_15_0_g1470.rgb );
+				float3 hsvTorgb26_g1470 = HSVToRGB( float3(( _SSSHueShift4 + hsvTorgb25_g1470.x ),hsvTorgb25_g1470.y,hsvTorgb25_g1470.z) );
+				float4 appendResult18_g1470 = (float4(hsvTorgb26_g1470 , temp_output_15_0_g1470.a));
+				float4 lerpResult19_g1470 = lerp( appendResult18_g1470 , temp_output_15_0_g1470 , smoothstepResult5_g1470);
+				float4 temp_output_15_0_g1474 = lerpResult19_g1470;
+				float3 hsvTorgb25_g1474 = RGBToHSV( temp_output_15_0_g1474.rgb );
+				float3 hsvTorgb26_g1474 = HSVToRGB( float3(( _SSSHueShift5 + hsvTorgb25_g1474.x ),hsvTorgb25_g1474.y,hsvTorgb25_g1474.z) );
+				float4 appendResult18_g1474 = (float4(hsvTorgb26_g1474 , temp_output_15_0_g1474.a));
+				float4 lerpResult19_g1474 = lerp( appendResult18_g1474 , temp_output_15_0_g1474 , smoothstepResult5_g1474);
+				float3x3 temp_output_993_0 = ( _EnableColorReplacer == 0.0 ? float3x3(appendResult762, appendResult763, float3( 0,0,0 )) : float3x3(( temp_output_52_0_g1469 == 5.0 ? lerpResult4_g1474 : ( temp_output_52_0_g1469 == 4.0 ? temp_output_105_0_g1469 : ( temp_output_52_0_g1469 == 3.0 ? temp_output_104_0_g1469 : ( temp_output_52_0_g1469 == 2.0 ? temp_output_102_0_g1469 : ( temp_output_52_0_g1469 == 1.0 ? temp_output_106_0_g1469 : float4( temp_output_67_0_g1469[0] , 0.0 ) ) ) ) ) ).rgb, lerpResult19_g1474.rgb, float3( 0,0,0 )) );
 				float ILMA357 = tex2DNode274.a;
 				float4 lerpResult1010 = lerp( ILMAColor1005 , float4( temp_output_993_0[0] , 0.0 ) , ILMA357);
 				float4 Base339 = ( ILMColorSetting1007 == 1.0 ? lerpResult1010 : float4( ( ILMA357 * temp_output_993_0[0] ) , 0.0 ) );
-				float4 Base12_g1477 = Base339;
+				float4 Base12_g1483 = Base339;
 				float ILMB576 = break292.z;
 				float3 ase_worldNormal = i.ase_texcoord2.xyz;
 				float3 normalizedWorldNormal = normalize( ase_worldNormal );
 				float LightDirectionSetting561 = _LightDirectionSetting;
 				float FallbackLightDirection563 = _FallbackLightDirection;
-				float3 localViewMatrix1393_g1471 = ViewMatrix1393_g1471();
-				float3 normalizeResult396_g1471 = normalize( localViewMatrix1393_g1471 );
-				float temp_output_395_0_g1471 = radians( -_ViewDirOffsetYaw );
-				float3 localViewMatrix0394_g1471 = ViewMatrix0394_g1471();
-				float3 normalizeResult399_g1471 = normalize( localViewMatrix0394_g1471 );
-				float3 rotatedValue400_g1471 = RotateAroundAxis( float3( 0,0,0 ), normalizeResult399_g1471, normalizeResult396_g1471, temp_output_395_0_g1471 );
+				float3 localViewMatrix1418_g1477 = ViewMatrix1418_g1477();
+				float3 normalizeResult422_g1477 = normalize( localViewMatrix1418_g1477 );
+				int localIsInMirror411_g1477 = ( unity_CameraProjection[2][0] != 0.f || unity_CameraProjection[2][1] != 0.f );
+				float temp_output_297_0_g1477 = _ViewDirOffsetYaw;
+				float temp_output_424_0_g1477 = radians( ( (float)localIsInMirror411_g1477 == 0.0 ? -temp_output_297_0_g1477 : temp_output_297_0_g1477 ) );
+				float3 localViewMatrix0417_g1477 = ViewMatrix0417_g1477();
+				float3 normalizeResult425_g1477 = normalize( localViewMatrix0417_g1477 );
+				float3 rotatedValue428_g1477 = RotateAroundAxis( float3( 0,0,0 ), normalizeResult425_g1477, normalizeResult422_g1477, temp_output_424_0_g1477 );
+				float3 normalizeResult429_g1477 = normalize( rotatedValue428_g1477 );
+				int localIsInMirror423_g1477 = ( unity_CameraProjection[2][0] != 0.f || unity_CameraProjection[2][1] != 0.f );
+				float temp_output_296_0_g1477 = _ViewDirOffsetPitch;
+				float3 localStereoCameraViewPosition30_g1475 = StereoCameraViewPosition30_g1475();
 				float3 ase_worldPos = i.ase_texcoord3.xyz;
-				float3 temp_output_408_0_g1471 = ( ase_worldPos - i.ase_texcoord4.xyz );
-				float3 localStereoCameraViewPosition30_g1469 = StereoCameraViewPosition30_g1469();
-				float3 rotatedValue401_g1471 = RotateAroundAxis( temp_output_408_0_g1471, localStereoCameraViewPosition30_g1469, normalizeResult396_g1471, temp_output_395_0_g1471 );
-				float3 rotatedValue403_g1471 = RotateAroundAxis( temp_output_408_0_g1471, rotatedValue401_g1471, rotatedValue400_g1471, radians( _ViewDirOffsetPitch ) );
-				float3 normalizeResult38_g1469 = normalize( ( rotatedValue403_g1471 - temp_output_408_0_g1471 ) );
-				float3 appendResult15_g1470 = (float3(( cos( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) * sin( ( ( _FakeLightDirY / 180.0 ) * UNITY_PI ) ) * -1.0 ) , sin( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) , ( cos( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) * cos( ( ( _FakeLightDirY / 180.0 ) * UNITY_PI ) ) * -1.0 )));
-				float3 normalizeResult2_g1470 = normalize( appendResult15_g1470 );
-				float3 normalizeResult26_g1469 = normalize( normalizeResult2_g1470 );
-				float3 ifLocalVar3_g1469 = 0;
+				float3 rotatedValue431_g1477 = RotateAroundAxis( float3( 0,0,0 ), ( localStereoCameraViewPosition30_g1475 - ( ase_worldPos - i.ase_texcoord4.xyz ) ), normalizeResult422_g1477, temp_output_424_0_g1477 );
+				float3 rotatedValue432_g1477 = RotateAroundAxis( float3( 0,0,0 ), rotatedValue431_g1477, normalizeResult429_g1477, radians( ( (float)localIsInMirror423_g1477 == 0.0 ? temp_output_296_0_g1477 : -temp_output_296_0_g1477 ) ) );
+				float3 normalizeResult433_g1477 = ASESafeNormalize( rotatedValue432_g1477 );
+				float3 normalizeResult38_g1475 = normalize( normalizeResult433_g1477 );
+				float3 appendResult15_g1476 = (float3(( cos( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) * sin( ( ( _FakeLightDirY / 180.0 ) * UNITY_PI ) ) * -1.0 ) , sin( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) , ( cos( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) * cos( ( ( _FakeLightDirY / 180.0 ) * UNITY_PI ) ) * -1.0 )));
+				float3 normalizeResult2_g1476 = normalize( appendResult15_g1476 );
+				float3 normalizeResult26_g1475 = normalize( normalizeResult2_g1476 );
+				float3 ifLocalVar3_g1475 = 0;
 				if( FallbackLightDirection563 > 0.0 )
-				ifLocalVar3_g1469 = normalizeResult38_g1469;
+				ifLocalVar3_g1475 = normalizeResult38_g1475;
 				else if( FallbackLightDirection563 == 0.0 )
-				ifLocalVar3_g1469 = normalizeResult26_g1469;
+				ifLocalVar3_g1475 = normalizeResult26_g1475;
 				float3 worldSpaceLightDir = Unity_SafeNormalize(UnityWorldSpaceLightDir(ase_worldPos));
 				#if defined(LIGHTMAP_ON) && ( UNITY_VERSION < 560 || ( defined(LIGHTMAP_SHADOW_MIXING) && !defined(SHADOWS_SHADOWMASK) && defined(SHADOWS_SCREEN) ) )//aselc
 				float4 ase_lightColor = 0;
@@ -1057,142 +1077,142 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				#endif
 				float4 break10_g1468 = staticSwitch9_g1468;
 				float IsThereWorldLight450 = break10_g1468.r;
-				float3 ifLocalVar8_g1469 = 0;
+				float3 ifLocalVar8_g1475 = 0;
 				if( IsThereWorldLight450 > 0.0 )
-				ifLocalVar8_g1469 = worldSpaceLightDir;
+				ifLocalVar8_g1475 = worldSpaceLightDir;
 				else if( IsThereWorldLight450 == 0.0 )
-				ifLocalVar8_g1469 = ifLocalVar3_g1469;
-				float3 ifLocalVar9_g1469 = 0;
+				ifLocalVar8_g1475 = ifLocalVar3_g1475;
+				float3 ifLocalVar9_g1475 = 0;
 				if( LightDirectionSetting561 > 0.0 )
-				ifLocalVar9_g1469 = ifLocalVar3_g1469;
+				ifLocalVar9_g1475 = ifLocalVar3_g1475;
 				else if( LightDirectionSetting561 == 0.0 )
-				ifLocalVar9_g1469 = ifLocalVar8_g1469;
-				float3 normalizeResult48_g1469 = normalize( ifLocalVar9_g1469 );
-				float3 worldPos32_g1469 = ase_worldPos;
-				float3 localStereoCameraViewDirection32_g1469 = StereoCameraViewDirection32_g1469( worldPos32_g1469 );
-				float3 normalizeResult51_g1469 = normalize( ( normalizeResult48_g1469 + localStereoCameraViewDirection32_g1469 ) );
-				float dotResult50_g1469 = dot( normalizedWorldNormal , normalizeResult51_g1469 );
-				float blendOpSrc34_g1472 = ILMB576;
-				float blendOpDest34_g1472 = dotResult50_g1469;
-				float clampResult87_g1473 = clamp( ( ( saturate( ( 1.0 - ( ( 1.0 - blendOpDest34_g1472) / max( blendOpSrc34_g1472, 0.00001) ) ) )) > ( 1.0 - _SpecularSize ) ? 1.0 : 0.0 ) , 0.0 , 1.0 );
-				float4 temp_cast_28 = (clampResult87_g1473).xxxx;
-				float4 blendOpSrc30_g1477 = Base12_g1477;
-				float4 blendOpDest30_g1477 = temp_cast_28;
-				float4 lerpBlendMode30_g1477 = lerp(blendOpDest30_g1477,min( blendOpSrc30_g1477 , blendOpDest30_g1477 ),0.9);
-				float3 desaturateInitialColor9_g1480 = ( ( ILMR573 * ( saturate( lerpBlendMode30_g1477 )) ) * float4( 1,1,1,0 ) * _SpecularIntensity * _SpecularTint ).rgb;
-				float desaturateDot9_g1480 = dot( desaturateInitialColor9_g1480, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1480 = lerp( desaturateInitialColor9_g1480, desaturateDot9_g1480.xxx, ( 1.0 - _SpecularSaturation ) );
-				float4 temp_output_95_0_g1477 = ( float4( desaturateVar9_g1480 , 0.0 ) + Base12_g1477 );
+				ifLocalVar9_g1475 = ifLocalVar8_g1475;
+				float3 normalizeResult48_g1475 = normalize( ifLocalVar9_g1475 );
+				float3 worldPos32_g1475 = ase_worldPos;
+				float3 localStereoCameraViewDirection32_g1475 = StereoCameraViewDirection32_g1475( worldPos32_g1475 );
+				float3 normalizeResult51_g1475 = normalize( ( normalizeResult48_g1475 + localStereoCameraViewDirection32_g1475 ) );
+				float dotResult50_g1475 = dot( normalizedWorldNormal , normalizeResult51_g1475 );
+				float blendOpSrc34_g1478 = ILMB576;
+				float blendOpDest34_g1478 = dotResult50_g1475;
+				float clampResult87_g1479 = clamp( ( ( saturate( ( 1.0 - ( ( 1.0 - blendOpDest34_g1478) / max( blendOpSrc34_g1478, 0.00001) ) ) )) > ( 1.0 - _SpecularSize ) ? 1.0 : 0.0 ) , 0.0 , 1.0 );
+				float4 temp_cast_30 = (clampResult87_g1479).xxxx;
+				float4 blendOpSrc30_g1483 = Base12_g1483;
+				float4 blendOpDest30_g1483 = temp_cast_30;
+				float4 lerpBlendMode30_g1483 = lerp(blendOpDest30_g1483,min( blendOpSrc30_g1483 , blendOpDest30_g1483 ),0.9);
+				float3 desaturateInitialColor9_g1486 = ( ( ILMR573 * ( saturate( lerpBlendMode30_g1483 )) ) * float4( 1,1,1,0 ) * _SpecularIntensity * _SpecularTint ).rgb;
+				float desaturateDot9_g1486 = dot( desaturateInitialColor9_g1486, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1486 = lerp( desaturateInitialColor9_g1486, desaturateDot9_g1486.xxx, ( 1.0 - _SpecularSaturation ) );
+				float4 temp_output_95_0_g1483 = ( float4( desaturateVar9_g1486 , 0.0 ) + Base12_g1483 );
 				float4 LightColor779 = _LightColor;
-				float3 desaturateInitialColor9_g1478 = ( temp_output_95_0_g1477 * LightColor779 * _BaseIntensity * _BaseTint ).rgb;
-				float desaturateDot9_g1478 = dot( desaturateInitialColor9_g1478, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1478 = lerp( desaturateInitialColor9_g1478, desaturateDot9_g1478.xxx, ( 1.0 - _BaseSaturation ) );
+				float3 desaturateInitialColor9_g1484 = ( temp_output_95_0_g1483 * LightColor779 * _BaseIntensity * _BaseTint ).rgb;
+				float desaturateDot9_g1484 = dot( desaturateInitialColor9_g1484, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1484 = lerp( desaturateInitialColor9_g1484, desaturateDot9_g1484.xxx, ( 1.0 - _BaseSaturation ) );
 				float4 AmbientColor780 = _AmbientColor;
 				float3 SSS578 = temp_output_993_0[1];
-				float4 SSS14_g1477 = float4( SSS578 , 0.0 );
-				float4 temp_output_97_0_g1477 = ( temp_output_95_0_g1477 * SSS14_g1477 );
-				float3 desaturateInitialColor9_g1481 = ( temp_output_97_0_g1477 * float4( 1,1,1,0 ) * _Shadow1Intensity * _Shadow1Tint ).rgb;
-				float desaturateDot9_g1481 = dot( desaturateInitialColor9_g1481, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1481 = lerp( desaturateInitialColor9_g1481, desaturateDot9_g1481.xxx, ( 1.0 - _Shadow1Saturation ) );
-				float4 blendOpSrc51_g1477 = float4( 0,0,0,0 );
-				float4 blendOpDest51_g1477 = temp_output_97_0_g1477;
-				float4 lerpBlendMode51_g1477 = lerp(blendOpDest51_g1477,2.0f*blendOpDest51_g1477*blendOpSrc51_g1477 + blendOpDest51_g1477*blendOpDest51_g1477*(1.0f - 2.0f*blendOpSrc51_g1477),0.5);
-				float3 desaturateInitialColor9_g1479 = ( ( saturate( lerpBlendMode51_g1477 )) * float4( 1,1,1,0 ) * _Shadow2Intensity * _Shadow2Tint ).rgb;
-				float desaturateDot9_g1479 = dot( desaturateInitialColor9_g1479, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1479 = lerp( desaturateInitialColor9_g1479, desaturateDot9_g1479.xxx, ( 1.0 - _Shadow2Saturation ) );
-				float temp_output_126_0_g1473 = pow( i.ase_color.r , 2.2 );
-				float VertexR33_g1473 = temp_output_126_0_g1473;
-				float dotResult46_g1469 = dot( ifLocalVar9_g1469 , normalizedWorldNormal );
-				float temp_output_36_0_g1472 = ( ( dotResult46_g1469 + _GlobalLightPush ) * i.ase_color.r );
+				float4 SSS14_g1483 = float4( SSS578 , 0.0 );
+				float4 temp_output_97_0_g1483 = ( temp_output_95_0_g1483 * SSS14_g1483 );
+				float3 desaturateInitialColor9_g1487 = ( temp_output_97_0_g1483 * float4( 1,1,1,0 ) * _Shadow1Intensity * _Shadow1Tint ).rgb;
+				float desaturateDot9_g1487 = dot( desaturateInitialColor9_g1487, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1487 = lerp( desaturateInitialColor9_g1487, desaturateDot9_g1487.xxx, ( 1.0 - _Shadow1Saturation ) );
+				float4 blendOpSrc51_g1483 = float4( 0,0,0,0 );
+				float4 blendOpDest51_g1483 = temp_output_97_0_g1483;
+				float4 lerpBlendMode51_g1483 = lerp(blendOpDest51_g1483,2.0f*blendOpDest51_g1483*blendOpSrc51_g1483 + blendOpDest51_g1483*blendOpDest51_g1483*(1.0f - 2.0f*blendOpSrc51_g1483),0.5);
+				float3 desaturateInitialColor9_g1485 = ( ( saturate( lerpBlendMode51_g1483 )) * float4( 1,1,1,0 ) * _Shadow2Intensity * _Shadow2Tint ).rgb;
+				float desaturateDot9_g1485 = dot( desaturateInitialColor9_g1485, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1485 = lerp( desaturateInitialColor9_g1485, desaturateDot9_g1485.xxx, ( 1.0 - _Shadow2Saturation ) );
+				float temp_output_126_0_g1479 = pow( i.ase_color.r , 2.2 );
+				float VertexR33_g1479 = temp_output_126_0_g1479;
+				float dotResult46_g1475 = dot( ifLocalVar9_g1475 , normalizedWorldNormal );
+				float temp_output_36_0_g1478 = ( ( dotResult46_g1475 + _GlobalLightPush ) * i.ase_color.r );
 				float ILMG574 = break292.y;
-				float temp_output_1_0_g1472 = ILMG574;
-				float temp_output_1057_0 = ( temp_output_36_0_g1472 * temp_output_1_0_g1472 );
-				float NdL20_g1473 = temp_output_1057_0;
-				float temp_output_2_0_g1474 = NdL20_g1473;
-				float temp_output_3_0_g1474 = -_Shadow1Smoothness;
-				float temp_output_9_0_g1473 = _Shadow1Push;
-				float temp_output_11_0_g1473 = _Shadow2Push;
-				float clampResult15_g1473 = clamp( temp_output_9_0_g1473 , temp_output_11_0_g1473 , temp_output_9_0_g1473 );
-				float RealShadow1Push16_g1473 = clampResult15_g1473;
-				float temp_output_1_0_g1474 = RealShadow1Push16_g1473;
-				float smoothstepResult6_g1474 = smoothstep( ( ( temp_output_2_0_g1474 / 1.0 ) + temp_output_3_0_g1474 ) , temp_output_2_0_g1474 , temp_output_1_0_g1474);
-				float lerpResult7_g1474 = lerp( smoothstepResult6_g1474 , ( temp_output_1_0_g1474 >= temp_output_2_0_g1474 ? 1.0 : 0.0 ) , ( 0.0 == temp_output_3_0_g1474 ? 1.0 : 0.0 ));
-				float clampResult17_g1473 = clamp( temp_output_11_0_g1473 , temp_output_11_0_g1473 , temp_output_9_0_g1473 );
-				float RealShadow2Push18_g1473 = clampResult17_g1473;
-				float temp_output_2_0_g1475 = NdL20_g1473;
-				float temp_output_3_0_g1475 = -_Shadow2Smoothness;
-				float temp_output_1_0_g1475 = RealShadow2Push18_g1473;
-				float smoothstepResult6_g1475 = smoothstep( ( ( temp_output_2_0_g1475 / 1.0 ) + temp_output_3_0_g1475 ) , temp_output_2_0_g1475 , temp_output_1_0_g1475);
-				float lerpResult7_g1475 = lerp( smoothstepResult6_g1475 , ( temp_output_1_0_g1475 >= temp_output_2_0_g1475 ? 1.0 : 0.0 ) , ( 0.0 == temp_output_3_0_g1475 ? 1.0 : 0.0 ));
-				float temp_output_42_0_g1473 = max( max( ( 1.0 - ( VertexR33_g1473 > _Shadow2VertexRThreshold ? 1.0 : 0.0 ) ) , lerpResult7_g1475 ) , ( ILMG574 < _PermanentShadowThreshold ? 1.0 : 0.0 ) );
-				float temp_output_43_0_g1473 = ( max( ( 1.0 - ( VertexR33_g1473 > _Shadow1VertexRThreshold ? 1.0 : 0.0 ) ) , min( lerpResult7_g1474 , ( RealShadow1Push16_g1473 >= RealShadow2Push18_g1473 ? 1.0 : 0.0 ) ) ) - temp_output_42_0_g1473 );
-				float3 lerpResult100_g1477 = lerp( desaturateVar9_g1481 , desaturateVar9_g1479 , ( 1.0 - temp_output_43_0_g1473 ));
-				float clampResult90_g1473 = clamp( ( 1.0 - ( temp_output_43_0_g1473 + temp_output_42_0_g1473 ) ) , 0.0 , 1.0 );
-				float temp_output_39_0_g1477 = clampResult90_g1473;
-				float4 lerpResult101_g1477 = lerp( float4( desaturateVar9_g1478 , 0.0 ) , ( AmbientColor780 * float4( lerpResult100_g1477 , 0.0 ) ) , ( 1.0 - temp_output_39_0_g1477 ));
-				float EnableRimlight82_g1473 = _EnableRimlight;
-				float dotResult31_g1469 = dot( normalizedWorldNormal , localStereoCameraViewDirection32_g1469 );
+				float temp_output_1_0_g1478 = ILMG574;
+				float temp_output_1057_0 = ( temp_output_36_0_g1478 * temp_output_1_0_g1478 );
+				float NdL20_g1479 = temp_output_1057_0;
+				float temp_output_2_0_g1480 = NdL20_g1479;
+				float temp_output_3_0_g1480 = -_Shadow1Smoothness;
+				float temp_output_9_0_g1479 = _Shadow1Push;
+				float temp_output_11_0_g1479 = _Shadow2Push;
+				float clampResult15_g1479 = clamp( temp_output_9_0_g1479 , temp_output_11_0_g1479 , temp_output_9_0_g1479 );
+				float RealShadow1Push16_g1479 = clampResult15_g1479;
+				float temp_output_1_0_g1480 = RealShadow1Push16_g1479;
+				float smoothstepResult6_g1480 = smoothstep( ( ( temp_output_2_0_g1480 / 1.0 ) + temp_output_3_0_g1480 ) , temp_output_2_0_g1480 , temp_output_1_0_g1480);
+				float lerpResult7_g1480 = lerp( smoothstepResult6_g1480 , ( temp_output_1_0_g1480 >= temp_output_2_0_g1480 ? 1.0 : 0.0 ) , ( 0.0 == temp_output_3_0_g1480 ? 1.0 : 0.0 ));
+				float clampResult17_g1479 = clamp( temp_output_11_0_g1479 , temp_output_11_0_g1479 , temp_output_9_0_g1479 );
+				float RealShadow2Push18_g1479 = clampResult17_g1479;
+				float temp_output_2_0_g1481 = NdL20_g1479;
+				float temp_output_3_0_g1481 = -_Shadow2Smoothness;
+				float temp_output_1_0_g1481 = RealShadow2Push18_g1479;
+				float smoothstepResult6_g1481 = smoothstep( ( ( temp_output_2_0_g1481 / 1.0 ) + temp_output_3_0_g1481 ) , temp_output_2_0_g1481 , temp_output_1_0_g1481);
+				float lerpResult7_g1481 = lerp( smoothstepResult6_g1481 , ( temp_output_1_0_g1481 >= temp_output_2_0_g1481 ? 1.0 : 0.0 ) , ( 0.0 == temp_output_3_0_g1481 ? 1.0 : 0.0 ));
+				float temp_output_42_0_g1479 = max( max( ( 1.0 - ( VertexR33_g1479 > _Shadow2VertexRThreshold ? 1.0 : 0.0 ) ) , lerpResult7_g1481 ) , ( ILMG574 < _PermanentShadowThreshold ? 1.0 : 0.0 ) );
+				float temp_output_43_0_g1479 = ( max( ( 1.0 - ( VertexR33_g1479 > _Shadow1VertexRThreshold ? 1.0 : 0.0 ) ) , min( lerpResult7_g1480 , ( RealShadow1Push16_g1479 >= RealShadow2Push18_g1479 ? 1.0 : 0.0 ) ) ) - temp_output_42_0_g1479 );
+				float3 lerpResult100_g1483 = lerp( desaturateVar9_g1487 , desaturateVar9_g1485 , ( 1.0 - temp_output_43_0_g1479 ));
+				float clampResult90_g1479 = clamp( ( 1.0 - ( temp_output_43_0_g1479 + temp_output_42_0_g1479 ) ) , 0.0 , 1.0 );
+				float temp_output_39_0_g1483 = clampResult90_g1479;
+				float4 lerpResult101_g1483 = lerp( float4( desaturateVar9_g1484 , 0.0 ) , ( AmbientColor780 * float4( lerpResult100_g1483 , 0.0 ) ) , ( 1.0 - temp_output_39_0_g1483 ));
+				float EnableRimlight82_g1479 = _EnableRimlight;
+				float dotResult31_g1475 = dot( normalizedWorldNormal , localStereoCameraViewDirection32_g1475 );
 				float SSSA581 = tex2DNode297.a;
 				float BaseA580 = tex2DNode296.a;
-				float blendOpSrc15_g1472 = SSSA581;
-				float blendOpDest15_g1472 = BaseA580;
-				float NdV48_g1473 = ( ( 1.0 - ( dotResult31_g1469 + ( 1.0 - _RimlightSize ) ) ) * ( 1.0 - ( saturate( abs( blendOpSrc15_g1472 - blendOpDest15_g1472 ) )) ) );
-				float clampResult91_g1473 = clamp( temp_output_42_0_g1473 , 0.0 , 1.0 );
-				float clampResult88_g1473 = clamp( ( ceil( ( ( NdV48_g1473 > 0.1 ? 1.0 : 0.0 ) * BaseA580 ) ) - clampResult91_g1473 ) , 0.0 , 1.0 );
-				float temp_output_94_0_g1473 = ( EnableRimlight82_g1473 == 1.0 ? clampResult88_g1473 : 0.0 );
-				float3 desaturateInitialColor9_g1482 = ( ( Base12_g1477 * temp_output_94_0_g1473 ) * float4( 1,1,1,0 ) * _RimlightIntensity * _RimlightTint ).rgb;
-				float desaturateDot9_g1482 = dot( desaturateInitialColor9_g1482, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1482 = lerp( desaturateInitialColor9_g1482, desaturateDot9_g1482.xxx, ( 1.0 - _RimlightSaturation ) );
-				float4 ColorOut1025 = ( lerpResult101_g1477 + float4( desaturateVar9_g1482 , 0.0 ) );
+				float blendOpSrc15_g1478 = SSSA581;
+				float blendOpDest15_g1478 = BaseA580;
+				float NdV48_g1479 = ( ( 1.0 - ( dotResult31_g1475 + ( 1.0 - _RimlightSize ) ) ) * ( 1.0 - ( saturate( abs( blendOpSrc15_g1478 - blendOpDest15_g1478 ) )) ) );
+				float clampResult91_g1479 = clamp( temp_output_42_0_g1479 , 0.0 , 1.0 );
+				float clampResult88_g1479 = clamp( ( ceil( ( ( NdV48_g1479 > 0.1 ? 1.0 : 0.0 ) * BaseA580 ) ) - clampResult91_g1479 ) , 0.0 , 1.0 );
+				float temp_output_94_0_g1479 = ( EnableRimlight82_g1479 == 1.0 ? clampResult88_g1479 : 0.0 );
+				float3 desaturateInitialColor9_g1488 = ( ( Base12_g1483 * temp_output_94_0_g1479 ) * float4( 1,1,1,0 ) * _RimlightIntensity * _RimlightTint ).rgb;
+				float desaturateDot9_g1488 = dot( desaturateInitialColor9_g1488, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1488 = lerp( desaturateInitialColor9_g1488, desaturateDot9_g1488.xxx, ( 1.0 - _RimlightSaturation ) );
+				float4 ColorOut1025 = ( lerpResult101_g1483 + float4( desaturateVar9_g1488 , 0.0 ) );
 				float4 lerpResult1021 = lerp( ILMAColor1005 , ColorOut1025 , ILMA357);
 				float LightColorSetting872 = _LightColorSetting;
-				float ifLocalVar13_g1483 = 0;
+				float ifLocalVar13_g1489 = 0;
 				if( LightColorSetting872 == 1.0 )
-				ifLocalVar13_g1483 = 0.0;
+				ifLocalVar13_g1489 = 0.0;
 				else if( LightColorSetting872 < 1.0 )
-				ifLocalVar13_g1483 = IsThereWorldLight450;
+				ifLocalVar13_g1489 = IsThereWorldLight450;
 				UNITY_LIGHT_ATTENUATION(ase_atten, i, ase_worldPos)
-				float4 temp_cast_41 = (_MinimumGlobalLightIntensity).xxxx;
-				float4 temp_cast_42 = (5.0).xxxx;
-				float4 clampResult18_g1483 = clamp( ase_lightColor , temp_cast_41 , temp_cast_42 );
-				float4 temp_output_11_0_g1483 = ( ase_atten * clampResult18_g1483 );
-				float4 temp_output_8_0_g1483 = ( _FakeGlobalLightColor * _FakeGlobalLightIntensity );
-				float4 ifLocalVar3_g1483 = 0;
-				if( ifLocalVar13_g1483 > 0.0 )
-				ifLocalVar3_g1483 = temp_output_11_0_g1483;
-				else if( ifLocalVar13_g1483 == 0.0 )
-				ifLocalVar3_g1483 = temp_output_8_0_g1483;
+				float4 temp_cast_43 = (_MinimumGlobalLightIntensity).xxxx;
+				float4 temp_cast_44 = (5.0).xxxx;
+				float4 clampResult18_g1489 = clamp( ase_lightColor , temp_cast_43 , temp_cast_44 );
+				float4 temp_output_11_0_g1489 = ( ase_atten * clampResult18_g1489 );
+				float4 temp_output_8_0_g1489 = ( _FakeGlobalLightColor * _FakeGlobalLightIntensity );
+				float4 ifLocalVar3_g1489 = 0;
+				if( ifLocalVar13_g1489 > 0.0 )
+				ifLocalVar3_g1489 = temp_output_11_0_g1489;
+				else if( ifLocalVar13_g1489 == 0.0 )
+				ifLocalVar3_g1489 = temp_output_8_0_g1489;
 				#ifdef UNITY_PASS_FORWARDADD
-				float4 staticSwitch9_g1483 = max( float4( 0,0,0,0 ) , temp_output_11_0_g1483 );
+				float4 staticSwitch9_g1489 = max( float4( 0,0,0,0 ) , temp_output_11_0_g1489 );
 				#else
-				float4 staticSwitch9_g1483 = ifLocalVar3_g1483;
+				float4 staticSwitch9_g1489 = ifLocalVar3_g1489;
 				#endif
-				float4 GlobalLightColor944 = staticSwitch9_g1483;
+				float4 GlobalLightColor944 = staticSwitch9_g1489;
 				float2 uv_EmissionMask = i.ase_texcoord1.xy * _EmissionMask_ST.xy + _EmissionMask_ST.zw;
-				float EmissionRampMask920 = max( ( ( ( temp_output_94_0_g1473 * _RimlightEmissiveToggle ) * _RimlightEmissionIntensity ) + ( ( clampResult87_g1473 * _SpecularEmissiveToggle ) * _SpecularEmissionIntensity ) + ( ( clampResult90_g1473 * _BaseEmissiveToggle ) * _BaseEmissionIntensity ) + ( ( temp_output_43_0_g1473 * _Shadow1EmissiveToggle ) * _Shadow1EmissionIntensity ) + ( ( clampResult91_g1473 * _Shadow2EmissiveToggle ) * _Shadow2EmissionIntensity ) + ( ( 1.0 - ILMA357 ) * ( _ILMAlphaEmissionIntensity * _ILMAlphaLinesEmissionToggle ) ) ) , ( tex2D( _EmissionMask, uv_EmissionMask ).r * _EmissionMaskIntensity ) );
-				float4 temp_cast_44 = (EmissionRampMask920).xxxx;
-				float4 ifLocalVar17_g1483 = 0;
-				if( ifLocalVar13_g1483 > 0.0 )
-				ifLocalVar17_g1483 = clampResult18_g1483;
-				else if( ifLocalVar13_g1483 == 0.0 )
-				ifLocalVar17_g1483 = temp_output_8_0_g1483;
+				float EmissionRampMask920 = max( ( ( ( temp_output_94_0_g1479 * _RimlightEmissiveToggle ) * _RimlightEmissionIntensity ) + ( ( clampResult87_g1479 * _SpecularEmissiveToggle ) * _SpecularEmissionIntensity ) + ( ( clampResult90_g1479 * _BaseEmissiveToggle ) * _BaseEmissionIntensity ) + ( ( temp_output_43_0_g1479 * _Shadow1EmissiveToggle ) * _Shadow1EmissionIntensity ) + ( ( clampResult91_g1479 * _Shadow2EmissiveToggle ) * _Shadow2EmissionIntensity ) + ( ( 1.0 - ILMA357 ) * ( _ILMAlphaEmissionIntensity * _ILMAlphaLinesEmissionToggle ) ) ) , ( tex2D( _EmissionMask, uv_EmissionMask ).r * _EmissionMaskIntensity ) );
+				float4 temp_cast_46 = (EmissionRampMask920).xxxx;
+				float4 ifLocalVar17_g1489 = 0;
+				if( ifLocalVar13_g1489 > 0.0 )
+				ifLocalVar17_g1489 = clampResult18_g1489;
+				else if( ifLocalVar13_g1489 == 0.0 )
+				ifLocalVar17_g1489 = temp_output_8_0_g1489;
 				#ifdef UNITY_PASS_FORWARDADD
-				float4 staticSwitch30_g1483 = float4( 0,0,0,0 );
+				float4 staticSwitch30_g1489 = float4( 0,0,0,0 );
 				#else
-				float4 staticSwitch30_g1483 = max( temp_cast_44 , ifLocalVar17_g1483 );
+				float4 staticSwitch30_g1489 = max( temp_cast_46 , ifLocalVar17_g1489 );
 				#endif
-				float4 EmissionLightColor947 = staticSwitch30_g1483;
+				float4 EmissionLightColor947 = staticSwitch30_g1489;
 				float4 lerpResult1062 = lerp( ( ( ILMColorSetting1007 == 2.0 ? lerpResult1021 : ColorOut1025 ) * GlobalLightColor944 ) , ( _EmissionIntensity * ColorOut1025 * EmissionLightColor947 ) , EmissionRampMask920);
-				float temp_output_48_0_g1484 = _DebugGroup;
-				float temp_output_47_0_g1484 = _VertexChannel;
-				float4 temp_output_59_0_g1484 = _DebugColor;
-				float temp_output_50_0_g1484 = _ILMChannel;
+				float temp_output_48_0_g1490 = _DebugGroup;
+				float temp_output_47_0_g1490 = _VertexChannel;
+				float4 temp_output_59_0_g1490 = _DebugColor;
+				float temp_output_50_0_g1490 = _ILMChannel;
 				float3 ILM988 = linearToGamma277;
 				float4 appendResult1031 = (float4(ILM988 , ILMA357));
-				float4 temp_output_54_0_g1484 = appendResult1031;
-				float4 break7_g1484 = temp_output_54_0_g1484;
-				float temp_output_57_0_g1484 = 0.0;
-				float4 Debug987 = ( temp_output_48_0_g1484 == 0.0 ? ( temp_output_47_0_g1484 == 0.0 ? i.ase_color : ( temp_output_47_0_g1484 == 1.0 ? ( i.ase_color.r * temp_output_59_0_g1484 ) : ( temp_output_47_0_g1484 == 2.0 ? ( i.ase_color.g * temp_output_59_0_g1484 ) : ( temp_output_47_0_g1484 == 3.0 ? ( i.ase_color.b * temp_output_59_0_g1484 ) : ( temp_output_47_0_g1484 == 4.0 ? ( i.ase_color.a * temp_output_59_0_g1484 ) : float4( 0,0,0,0 ) ) ) ) ) ) : ( temp_output_48_0_g1484 == 1.0 ? ( temp_output_50_0_g1484 == 0.0 ? temp_output_54_0_g1484 : ( temp_output_50_0_g1484 == 1.0 ? ( break7_g1484.r * temp_output_59_0_g1484 ) : ( temp_output_50_0_g1484 == 2.0 ? ( break7_g1484.g * temp_output_59_0_g1484 ) : ( temp_output_50_0_g1484 == 3.0 ? ( break7_g1484.b * temp_output_59_0_g1484 ) : ( temp_output_50_0_g1484 == 4.0 ? ( break7_g1484.a * temp_output_59_0_g1484 ) : float4( 0,0,0,0 ) ) ) ) ) ) : ( temp_output_48_0_g1484 == 2.0 ? ( temp_output_57_0_g1484 == 0.0 ? ( BaseA580 * temp_output_59_0_g1484 ) : ( temp_output_57_0_g1484 == 1.0 ? ( 0.0 * temp_output_59_0_g1484 ) : float4( 0,0,0,0 ) ) ) : float4( 0,0,0,0 ) ) ) );
+				float4 temp_output_54_0_g1490 = appendResult1031;
+				float4 break7_g1490 = temp_output_54_0_g1490;
+				float temp_output_57_0_g1490 = 0.0;
+				float4 Debug987 = ( temp_output_48_0_g1490 == 0.0 ? ( temp_output_47_0_g1490 == 0.0 ? i.ase_color : ( temp_output_47_0_g1490 == 1.0 ? ( i.ase_color.r * temp_output_59_0_g1490 ) : ( temp_output_47_0_g1490 == 2.0 ? ( i.ase_color.g * temp_output_59_0_g1490 ) : ( temp_output_47_0_g1490 == 3.0 ? ( i.ase_color.b * temp_output_59_0_g1490 ) : ( temp_output_47_0_g1490 == 4.0 ? ( i.ase_color.a * temp_output_59_0_g1490 ) : float4( 0,0,0,0 ) ) ) ) ) ) : ( temp_output_48_0_g1490 == 1.0 ? ( temp_output_50_0_g1490 == 0.0 ? temp_output_54_0_g1490 : ( temp_output_50_0_g1490 == 1.0 ? ( break7_g1490.r * temp_output_59_0_g1490 ) : ( temp_output_50_0_g1490 == 2.0 ? ( break7_g1490.g * temp_output_59_0_g1490 ) : ( temp_output_50_0_g1490 == 3.0 ? ( break7_g1490.b * temp_output_59_0_g1490 ) : ( temp_output_50_0_g1490 == 4.0 ? ( break7_g1490.a * temp_output_59_0_g1490 ) : float4( 0,0,0,0 ) ) ) ) ) ) : ( temp_output_48_0_g1490 == 2.0 ? ( temp_output_57_0_g1490 == 0.0 ? ( BaseA580 * temp_output_59_0_g1490 ) : ( temp_output_57_0_g1490 == 1.0 ? ( 0.0 * temp_output_59_0_g1490 ) : float4( 0,0,0,0 ) ) ) : float4( 0,0,0,0 ) ) ) );
 				
 
 				outColor = ( _EnableDebug == 0.0 ? lerpResult1062 : Debug987 ).rgb;
@@ -1222,31 +1242,30 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 			#include "UnityStandardBRDF.cginc"
 			#include "UnityShaderVariables.cginc"
 			#define ASE_NEEDS_VERT_NORMAL
-			#define ASE_NEEDS_FRAG_POSITION
 			#define ASE_NEEDS_FRAG_COLOR
 			#define ASE_SHADOWS 1
 
 			//This is a late directive
 			
+			uniform float _ZWriteMode;
+			uniform float _EnableCameraDistanceMult;
+			uniform float _ZTestMode;
+			uniform float _FailFront;
+			uniform float _OutlineThickness;
+			uniform float _ReadMask;
+			uniform float _Factor;
+			uniform float _EditorVersion;
+			uniform float _DepthOffset;
+			uniform float _WriteMask;
+			uniform float _ZFailFront;
 			uniform float _Reference;
 			uniform float4 _OutlineColor;
 			uniform float _OutlineColorIntensity;
-			uniform float _PassFront;
-			uniform float _ZFailFront;
 			uniform float _Comparison;
-			uniform float _OutlineEnableBaseColorMult;
+			uniform float _PassFront;
 			uniform float _EnableOutline;
 			uniform float _Units;
-			uniform float _WriteMask;
-			uniform float _ZWriteMode;
-			uniform float _DepthOffset;
-			uniform float _EditorVersion;
-			uniform float _Factor;
-			uniform float _OutlineThickness;
-			uniform float _FailFront;
-			uniform float _ZTestMode;
-			uniform float _EnableCameraDistanceMult;
-			uniform float _ReadMask;
+			uniform float _OutlineEnableBaseColorMult;
 			uniform float _EnableDebug;
 			uniform float _ILMColorSetting;
 			uniform float4 _ILMAlphaColor;
@@ -1353,12 +1372,12 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				float e = 1.0e-10;
 				return float3( abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
 			}
-			float3 ViewMatrix1393_g1471(  )
+			float3 ViewMatrix1418_g1477(  )
 			{
 				return UNITY_MATRIX_V[1];
 			}
 			
-			float3 ViewMatrix0394_g1471(  )
+			float3 ViewMatrix0417_g1477(  )
 			{
 				return UNITY_MATRIX_V[0];
 			}
@@ -1382,7 +1401,7 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				return mul( finalMatrix, original ) + center;
 			}
 			
-			float3 StereoCameraViewPosition30_g1469(  )
+			float3 StereoCameraViewPosition30_g1475(  )
 			{
 				#if UNITY_SINGLE_PASS_STEREO
 				float3 cameraPos = float3((unity_StereoWorldSpaceCameraPos[0]+ unity_StereoWorldSpaceCameraPos[1])*.5); 
@@ -1392,7 +1411,13 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				return cameraPos;
 			}
 			
-			float3 StereoCameraViewDirection32_g1469( float3 worldPos )
+			inline float3 ASESafeNormalize(float3 inVec)
+			{
+				float dp3 = max( 0.001f , dot( inVec , inVec ) );
+				return inVec* rsqrt( dp3);
+			}
+			
+			float3 StereoCameraViewDirection32_g1475( float3 worldPos )
 			{
 				#if UNITY_SINGLE_PASS_STEREO
 				float3 cameraPos = float3((unity_StereoWorldSpaceCameraPos[0]+ unity_StereoWorldSpaceCameraPos[1])*.5); 
@@ -1474,102 +1499,107 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				float2 uv_SSS = i.ase_texcoord1.xy * _SSS_ST.xy + _SSS_ST.zw;
 				float4 tex2DNode297 = tex2D( _SSS, uv_SSS );
 				float3 appendResult763 = (float3(tex2DNode297.r , tex2DNode297.g , tex2DNode297.b));
-				float temp_output_52_0_g1462 = _TotalReplacements;
-				float4 break8_g1467 = _Target5Color;
-				float4 break8_g1463 = _Target4Color;
-				float4 break8_g1465 = _Target3Color;
-				float4 break8_g1464 = _Target2Color;
-				float4 break8_g1466 = _Target1Color;
-				float3x3 temp_output_67_0_g1462 = float3x3(appendResult762, appendResult763, float3( 0,0,0 ));
-				float4 temp_output_13_0_g1466 = float4( temp_output_67_0_g1462[0] , 0.0 );
-				float4 break6_g1466 = temp_output_13_0_g1466;
-				float4 appendResult3_g1466 = (float4(break8_g1466.r , break8_g1466.g , break8_g1466.b , break6_g1466.a));
-				float4 appendResult7_g1466 = (float4(break6_g1466.r , break6_g1466.g , break6_g1466.b , 1.0));
-				float smoothstepResult5_g1466 = smoothstep( 0.0 , _Source1Fuzziness , distance( appendResult7_g1466 , _Source1Color ));
-				float4 lerpResult4_g1466 = lerp( appendResult3_g1466 , temp_output_13_0_g1466 , smoothstepResult5_g1466);
-				float4 temp_output_106_0_g1462 = lerpResult4_g1466;
-				float4 temp_output_13_0_g1464 = temp_output_106_0_g1462;
-				float4 break6_g1464 = temp_output_13_0_g1464;
-				float4 appendResult3_g1464 = (float4(break8_g1464.r , break8_g1464.g , break8_g1464.b , break6_g1464.a));
-				float4 appendResult7_g1464 = (float4(break6_g1464.r , break6_g1464.g , break6_g1464.b , 1.0));
-				float smoothstepResult5_g1464 = smoothstep( 0.0 , _Source2Fuzziness , distance( appendResult7_g1464 , _Source2Color ));
-				float4 lerpResult4_g1464 = lerp( appendResult3_g1464 , temp_output_13_0_g1464 , smoothstepResult5_g1464);
-				float4 temp_output_102_0_g1462 = lerpResult4_g1464;
-				float4 temp_output_13_0_g1465 = temp_output_102_0_g1462;
-				float4 break6_g1465 = temp_output_13_0_g1465;
-				float4 appendResult3_g1465 = (float4(break8_g1465.r , break8_g1465.g , break8_g1465.b , break6_g1465.a));
-				float4 appendResult7_g1465 = (float4(break6_g1465.r , break6_g1465.g , break6_g1465.b , 1.0));
-				float smoothstepResult5_g1465 = smoothstep( 0.0 , _Source3Fuzziness , distance( appendResult7_g1465 , _Source3Color ));
-				float4 lerpResult4_g1465 = lerp( appendResult3_g1465 , temp_output_13_0_g1465 , smoothstepResult5_g1465);
-				float4 temp_output_104_0_g1462 = lerpResult4_g1465;
-				float4 temp_output_13_0_g1463 = temp_output_104_0_g1462;
-				float4 break6_g1463 = temp_output_13_0_g1463;
-				float4 appendResult3_g1463 = (float4(break8_g1463.r , break8_g1463.g , break8_g1463.b , break6_g1463.a));
-				float4 appendResult7_g1463 = (float4(break6_g1463.r , break6_g1463.g , break6_g1463.b , 1.0));
-				float smoothstepResult5_g1463 = smoothstep( 0.0 , _Source4Fuzziness , distance( appendResult7_g1463 , _Source4Color ));
-				float4 lerpResult4_g1463 = lerp( appendResult3_g1463 , temp_output_13_0_g1463 , smoothstepResult5_g1463);
-				float4 temp_output_105_0_g1462 = lerpResult4_g1463;
-				float4 temp_output_13_0_g1467 = temp_output_105_0_g1462;
-				float4 break6_g1467 = temp_output_13_0_g1467;
-				float4 appendResult3_g1467 = (float4(break8_g1467.r , break8_g1467.g , break8_g1467.b , break6_g1467.a));
-				float4 appendResult7_g1467 = (float4(break6_g1467.r , break6_g1467.g , break6_g1467.b , 1.0));
-				float smoothstepResult5_g1467 = smoothstep( 0.0 , _Source5Fuzziness , distance( appendResult7_g1467 , _Source5Color ));
-				float4 lerpResult4_g1467 = lerp( appendResult3_g1467 , temp_output_13_0_g1467 , smoothstepResult5_g1467);
-				float4 temp_output_15_0_g1466 = float4( temp_output_67_0_g1462[1] , 0.0 );
-				float3 hsvTorgb25_g1466 = RGBToHSV( temp_output_15_0_g1466.rgb );
-				float3 hsvTorgb26_g1466 = HSVToRGB( float3(( _SSSHueShift1 + hsvTorgb25_g1466.x ),hsvTorgb25_g1466.y,hsvTorgb25_g1466.z) );
-				float4 appendResult18_g1466 = (float4(hsvTorgb26_g1466 , temp_output_15_0_g1466.a));
-				float4 lerpResult19_g1466 = lerp( appendResult18_g1466 , temp_output_15_0_g1466 , smoothstepResult5_g1466);
-				float4 temp_output_15_0_g1464 = lerpResult19_g1466;
-				float3 hsvTorgb25_g1464 = RGBToHSV( temp_output_15_0_g1464.rgb );
-				float3 hsvTorgb26_g1464 = HSVToRGB( float3(( _SSSHueShift2 + hsvTorgb25_g1464.x ),hsvTorgb25_g1464.y,hsvTorgb25_g1464.z) );
-				float4 appendResult18_g1464 = (float4(hsvTorgb26_g1464 , temp_output_15_0_g1464.a));
-				float4 lerpResult19_g1464 = lerp( appendResult18_g1464 , temp_output_15_0_g1464 , smoothstepResult5_g1464);
-				float4 temp_output_15_0_g1465 = lerpResult19_g1464;
-				float3 hsvTorgb25_g1465 = RGBToHSV( temp_output_15_0_g1465.rgb );
-				float3 hsvTorgb26_g1465 = HSVToRGB( float3(( _SSSHueShift3 + hsvTorgb25_g1465.x ),hsvTorgb25_g1465.y,hsvTorgb25_g1465.z) );
-				float4 appendResult18_g1465 = (float4(hsvTorgb26_g1465 , temp_output_15_0_g1465.a));
-				float4 lerpResult19_g1465 = lerp( appendResult18_g1465 , temp_output_15_0_g1465 , smoothstepResult5_g1465);
-				float4 temp_output_15_0_g1463 = lerpResult19_g1465;
-				float3 hsvTorgb25_g1463 = RGBToHSV( temp_output_15_0_g1463.rgb );
-				float3 hsvTorgb26_g1463 = HSVToRGB( float3(( _SSSHueShift4 + hsvTorgb25_g1463.x ),hsvTorgb25_g1463.y,hsvTorgb25_g1463.z) );
-				float4 appendResult18_g1463 = (float4(hsvTorgb26_g1463 , temp_output_15_0_g1463.a));
-				float4 lerpResult19_g1463 = lerp( appendResult18_g1463 , temp_output_15_0_g1463 , smoothstepResult5_g1463);
-				float4 temp_output_15_0_g1467 = lerpResult19_g1463;
-				float3 hsvTorgb25_g1467 = RGBToHSV( temp_output_15_0_g1467.rgb );
-				float3 hsvTorgb26_g1467 = HSVToRGB( float3(( _SSSHueShift5 + hsvTorgb25_g1467.x ),hsvTorgb25_g1467.y,hsvTorgb25_g1467.z) );
-				float4 appendResult18_g1467 = (float4(hsvTorgb26_g1467 , temp_output_15_0_g1467.a));
-				float4 lerpResult19_g1467 = lerp( appendResult18_g1467 , temp_output_15_0_g1467 , smoothstepResult5_g1467);
-				float3x3 temp_output_993_0 = ( _EnableColorReplacer == 0.0 ? float3x3(appendResult762, appendResult763, float3( 0,0,0 )) : float3x3(( temp_output_52_0_g1462 == 5.0 ? lerpResult4_g1467 : ( temp_output_52_0_g1462 == 4.0 ? temp_output_105_0_g1462 : ( temp_output_52_0_g1462 == 3.0 ? temp_output_104_0_g1462 : ( temp_output_52_0_g1462 == 2.0 ? temp_output_102_0_g1462 : ( temp_output_52_0_g1462 == 1.0 ? temp_output_106_0_g1462 : float4( temp_output_67_0_g1462[0] , 0.0 ) ) ) ) ) ).rgb, lerpResult19_g1467.rgb, float3( 0,0,0 )) );
+				float temp_output_52_0_g1469 = _TotalReplacements;
+				float4 break8_g1474 = _Target5Color;
+				float4 break8_g1470 = _Target4Color;
+				float4 break8_g1472 = _Target3Color;
+				float4 break8_g1471 = _Target2Color;
+				float4 break8_g1473 = _Target1Color;
+				float3x3 temp_output_67_0_g1469 = float3x3(appendResult762, appendResult763, float3( 0,0,0 ));
+				float4 temp_output_13_0_g1473 = float4( temp_output_67_0_g1469[0] , 0.0 );
+				float4 break6_g1473 = temp_output_13_0_g1473;
+				float4 appendResult3_g1473 = (float4(break8_g1473.r , break8_g1473.g , break8_g1473.b , break6_g1473.a));
+				float4 appendResult7_g1473 = (float4(break6_g1473.r , break6_g1473.g , break6_g1473.b , 1.0));
+				float smoothstepResult5_g1473 = smoothstep( 0.0 , _Source1Fuzziness , distance( appendResult7_g1473 , _Source1Color ));
+				float4 lerpResult4_g1473 = lerp( appendResult3_g1473 , temp_output_13_0_g1473 , smoothstepResult5_g1473);
+				float4 temp_output_106_0_g1469 = lerpResult4_g1473;
+				float4 temp_output_13_0_g1471 = temp_output_106_0_g1469;
+				float4 break6_g1471 = temp_output_13_0_g1471;
+				float4 appendResult3_g1471 = (float4(break8_g1471.r , break8_g1471.g , break8_g1471.b , break6_g1471.a));
+				float4 appendResult7_g1471 = (float4(break6_g1471.r , break6_g1471.g , break6_g1471.b , 1.0));
+				float smoothstepResult5_g1471 = smoothstep( 0.0 , _Source2Fuzziness , distance( appendResult7_g1471 , _Source2Color ));
+				float4 lerpResult4_g1471 = lerp( appendResult3_g1471 , temp_output_13_0_g1471 , smoothstepResult5_g1471);
+				float4 temp_output_102_0_g1469 = lerpResult4_g1471;
+				float4 temp_output_13_0_g1472 = temp_output_102_0_g1469;
+				float4 break6_g1472 = temp_output_13_0_g1472;
+				float4 appendResult3_g1472 = (float4(break8_g1472.r , break8_g1472.g , break8_g1472.b , break6_g1472.a));
+				float4 appendResult7_g1472 = (float4(break6_g1472.r , break6_g1472.g , break6_g1472.b , 1.0));
+				float smoothstepResult5_g1472 = smoothstep( 0.0 , _Source3Fuzziness , distance( appendResult7_g1472 , _Source3Color ));
+				float4 lerpResult4_g1472 = lerp( appendResult3_g1472 , temp_output_13_0_g1472 , smoothstepResult5_g1472);
+				float4 temp_output_104_0_g1469 = lerpResult4_g1472;
+				float4 temp_output_13_0_g1470 = temp_output_104_0_g1469;
+				float4 break6_g1470 = temp_output_13_0_g1470;
+				float4 appendResult3_g1470 = (float4(break8_g1470.r , break8_g1470.g , break8_g1470.b , break6_g1470.a));
+				float4 appendResult7_g1470 = (float4(break6_g1470.r , break6_g1470.g , break6_g1470.b , 1.0));
+				float smoothstepResult5_g1470 = smoothstep( 0.0 , _Source4Fuzziness , distance( appendResult7_g1470 , _Source4Color ));
+				float4 lerpResult4_g1470 = lerp( appendResult3_g1470 , temp_output_13_0_g1470 , smoothstepResult5_g1470);
+				float4 temp_output_105_0_g1469 = lerpResult4_g1470;
+				float4 temp_output_13_0_g1474 = temp_output_105_0_g1469;
+				float4 break6_g1474 = temp_output_13_0_g1474;
+				float4 appendResult3_g1474 = (float4(break8_g1474.r , break8_g1474.g , break8_g1474.b , break6_g1474.a));
+				float4 appendResult7_g1474 = (float4(break6_g1474.r , break6_g1474.g , break6_g1474.b , 1.0));
+				float smoothstepResult5_g1474 = smoothstep( 0.0 , _Source5Fuzziness , distance( appendResult7_g1474 , _Source5Color ));
+				float4 lerpResult4_g1474 = lerp( appendResult3_g1474 , temp_output_13_0_g1474 , smoothstepResult5_g1474);
+				float4 temp_output_15_0_g1473 = float4( temp_output_67_0_g1469[1] , 0.0 );
+				float3 hsvTorgb25_g1473 = RGBToHSV( temp_output_15_0_g1473.rgb );
+				float3 hsvTorgb26_g1473 = HSVToRGB( float3(( _SSSHueShift1 + hsvTorgb25_g1473.x ),hsvTorgb25_g1473.y,hsvTorgb25_g1473.z) );
+				float4 appendResult18_g1473 = (float4(hsvTorgb26_g1473 , temp_output_15_0_g1473.a));
+				float4 lerpResult19_g1473 = lerp( appendResult18_g1473 , temp_output_15_0_g1473 , smoothstepResult5_g1473);
+				float4 temp_output_15_0_g1471 = lerpResult19_g1473;
+				float3 hsvTorgb25_g1471 = RGBToHSV( temp_output_15_0_g1471.rgb );
+				float3 hsvTorgb26_g1471 = HSVToRGB( float3(( _SSSHueShift2 + hsvTorgb25_g1471.x ),hsvTorgb25_g1471.y,hsvTorgb25_g1471.z) );
+				float4 appendResult18_g1471 = (float4(hsvTorgb26_g1471 , temp_output_15_0_g1471.a));
+				float4 lerpResult19_g1471 = lerp( appendResult18_g1471 , temp_output_15_0_g1471 , smoothstepResult5_g1471);
+				float4 temp_output_15_0_g1472 = lerpResult19_g1471;
+				float3 hsvTorgb25_g1472 = RGBToHSV( temp_output_15_0_g1472.rgb );
+				float3 hsvTorgb26_g1472 = HSVToRGB( float3(( _SSSHueShift3 + hsvTorgb25_g1472.x ),hsvTorgb25_g1472.y,hsvTorgb25_g1472.z) );
+				float4 appendResult18_g1472 = (float4(hsvTorgb26_g1472 , temp_output_15_0_g1472.a));
+				float4 lerpResult19_g1472 = lerp( appendResult18_g1472 , temp_output_15_0_g1472 , smoothstepResult5_g1472);
+				float4 temp_output_15_0_g1470 = lerpResult19_g1472;
+				float3 hsvTorgb25_g1470 = RGBToHSV( temp_output_15_0_g1470.rgb );
+				float3 hsvTorgb26_g1470 = HSVToRGB( float3(( _SSSHueShift4 + hsvTorgb25_g1470.x ),hsvTorgb25_g1470.y,hsvTorgb25_g1470.z) );
+				float4 appendResult18_g1470 = (float4(hsvTorgb26_g1470 , temp_output_15_0_g1470.a));
+				float4 lerpResult19_g1470 = lerp( appendResult18_g1470 , temp_output_15_0_g1470 , smoothstepResult5_g1470);
+				float4 temp_output_15_0_g1474 = lerpResult19_g1470;
+				float3 hsvTorgb25_g1474 = RGBToHSV( temp_output_15_0_g1474.rgb );
+				float3 hsvTorgb26_g1474 = HSVToRGB( float3(( _SSSHueShift5 + hsvTorgb25_g1474.x ),hsvTorgb25_g1474.y,hsvTorgb25_g1474.z) );
+				float4 appendResult18_g1474 = (float4(hsvTorgb26_g1474 , temp_output_15_0_g1474.a));
+				float4 lerpResult19_g1474 = lerp( appendResult18_g1474 , temp_output_15_0_g1474 , smoothstepResult5_g1474);
+				float3x3 temp_output_993_0 = ( _EnableColorReplacer == 0.0 ? float3x3(appendResult762, appendResult763, float3( 0,0,0 )) : float3x3(( temp_output_52_0_g1469 == 5.0 ? lerpResult4_g1474 : ( temp_output_52_0_g1469 == 4.0 ? temp_output_105_0_g1469 : ( temp_output_52_0_g1469 == 3.0 ? temp_output_104_0_g1469 : ( temp_output_52_0_g1469 == 2.0 ? temp_output_102_0_g1469 : ( temp_output_52_0_g1469 == 1.0 ? temp_output_106_0_g1469 : float4( temp_output_67_0_g1469[0] , 0.0 ) ) ) ) ) ).rgb, lerpResult19_g1474.rgb, float3( 0,0,0 )) );
 				float ILMA357 = tex2DNode274.a;
 				float4 lerpResult1010 = lerp( ILMAColor1005 , float4( temp_output_993_0[0] , 0.0 ) , ILMA357);
 				float4 Base339 = ( ILMColorSetting1007 == 1.0 ? lerpResult1010 : float4( ( ILMA357 * temp_output_993_0[0] ) , 0.0 ) );
-				float4 Base12_g1477 = Base339;
+				float4 Base12_g1483 = Base339;
 				float ILMB576 = break292.z;
 				float3 ase_worldNormal = i.ase_texcoord2.xyz;
 				float3 normalizedWorldNormal = normalize( ase_worldNormal );
 				float LightDirectionSetting561 = _LightDirectionSetting;
 				float FallbackLightDirection563 = _FallbackLightDirection;
-				float3 localViewMatrix1393_g1471 = ViewMatrix1393_g1471();
-				float3 normalizeResult396_g1471 = normalize( localViewMatrix1393_g1471 );
-				float temp_output_395_0_g1471 = radians( -_ViewDirOffsetYaw );
-				float3 localViewMatrix0394_g1471 = ViewMatrix0394_g1471();
-				float3 normalizeResult399_g1471 = normalize( localViewMatrix0394_g1471 );
-				float3 rotatedValue400_g1471 = RotateAroundAxis( float3( 0,0,0 ), normalizeResult399_g1471, normalizeResult396_g1471, temp_output_395_0_g1471 );
+				float3 localViewMatrix1418_g1477 = ViewMatrix1418_g1477();
+				float3 normalizeResult422_g1477 = normalize( localViewMatrix1418_g1477 );
+				int localIsInMirror411_g1477 = ( unity_CameraProjection[2][0] != 0.f || unity_CameraProjection[2][1] != 0.f );
+				float temp_output_297_0_g1477 = _ViewDirOffsetYaw;
+				float temp_output_424_0_g1477 = radians( ( (float)localIsInMirror411_g1477 == 0.0 ? -temp_output_297_0_g1477 : temp_output_297_0_g1477 ) );
+				float3 localViewMatrix0417_g1477 = ViewMatrix0417_g1477();
+				float3 normalizeResult425_g1477 = normalize( localViewMatrix0417_g1477 );
+				float3 rotatedValue428_g1477 = RotateAroundAxis( float3( 0,0,0 ), normalizeResult425_g1477, normalizeResult422_g1477, temp_output_424_0_g1477 );
+				float3 normalizeResult429_g1477 = normalize( rotatedValue428_g1477 );
+				int localIsInMirror423_g1477 = ( unity_CameraProjection[2][0] != 0.f || unity_CameraProjection[2][1] != 0.f );
+				float temp_output_296_0_g1477 = _ViewDirOffsetPitch;
+				float3 localStereoCameraViewPosition30_g1475 = StereoCameraViewPosition30_g1475();
 				float3 ase_worldPos = i.ase_texcoord3.xyz;
-				float3 temp_output_408_0_g1471 = ( ase_worldPos - i.ase_texcoord4.xyz );
-				float3 localStereoCameraViewPosition30_g1469 = StereoCameraViewPosition30_g1469();
-				float3 rotatedValue401_g1471 = RotateAroundAxis( temp_output_408_0_g1471, localStereoCameraViewPosition30_g1469, normalizeResult396_g1471, temp_output_395_0_g1471 );
-				float3 rotatedValue403_g1471 = RotateAroundAxis( temp_output_408_0_g1471, rotatedValue401_g1471, rotatedValue400_g1471, radians( _ViewDirOffsetPitch ) );
-				float3 normalizeResult38_g1469 = normalize( ( rotatedValue403_g1471 - temp_output_408_0_g1471 ) );
-				float3 appendResult15_g1470 = (float3(( cos( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) * sin( ( ( _FakeLightDirY / 180.0 ) * UNITY_PI ) ) * -1.0 ) , sin( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) , ( cos( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) * cos( ( ( _FakeLightDirY / 180.0 ) * UNITY_PI ) ) * -1.0 )));
-				float3 normalizeResult2_g1470 = normalize( appendResult15_g1470 );
-				float3 normalizeResult26_g1469 = normalize( normalizeResult2_g1470 );
-				float3 ifLocalVar3_g1469 = 0;
+				float3 rotatedValue431_g1477 = RotateAroundAxis( float3( 0,0,0 ), ( localStereoCameraViewPosition30_g1475 - ( ase_worldPos - i.ase_texcoord4.xyz ) ), normalizeResult422_g1477, temp_output_424_0_g1477 );
+				float3 rotatedValue432_g1477 = RotateAroundAxis( float3( 0,0,0 ), rotatedValue431_g1477, normalizeResult429_g1477, radians( ( (float)localIsInMirror423_g1477 == 0.0 ? temp_output_296_0_g1477 : -temp_output_296_0_g1477 ) ) );
+				float3 normalizeResult433_g1477 = ASESafeNormalize( rotatedValue432_g1477 );
+				float3 normalizeResult38_g1475 = normalize( normalizeResult433_g1477 );
+				float3 appendResult15_g1476 = (float3(( cos( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) * sin( ( ( _FakeLightDirY / 180.0 ) * UNITY_PI ) ) * -1.0 ) , sin( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) , ( cos( ( ( _FakeLightDirX / 180.0 ) * UNITY_PI ) ) * cos( ( ( _FakeLightDirY / 180.0 ) * UNITY_PI ) ) * -1.0 )));
+				float3 normalizeResult2_g1476 = normalize( appendResult15_g1476 );
+				float3 normalizeResult26_g1475 = normalize( normalizeResult2_g1476 );
+				float3 ifLocalVar3_g1475 = 0;
 				if( FallbackLightDirection563 > 0.0 )
-				ifLocalVar3_g1469 = normalizeResult38_g1469;
+				ifLocalVar3_g1475 = normalizeResult38_g1475;
 				else if( FallbackLightDirection563 == 0.0 )
-				ifLocalVar3_g1469 = normalizeResult26_g1469;
+				ifLocalVar3_g1475 = normalizeResult26_g1475;
 				float3 worldSpaceLightDir = Unity_SafeNormalize(UnityWorldSpaceLightDir(ase_worldPos));
 				#if defined(LIGHTMAP_ON) && ( UNITY_VERSION < 560 || ( defined(LIGHTMAP_SHADOW_MIXING) && !defined(SHADOWS_SHADOWMASK) && defined(SHADOWS_SCREEN) ) )//aselc
 				float4 ase_lightColor = 0;
@@ -1586,142 +1616,142 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 				#endif
 				float4 break10_g1468 = staticSwitch9_g1468;
 				float IsThereWorldLight450 = break10_g1468.r;
-				float3 ifLocalVar8_g1469 = 0;
+				float3 ifLocalVar8_g1475 = 0;
 				if( IsThereWorldLight450 > 0.0 )
-				ifLocalVar8_g1469 = worldSpaceLightDir;
+				ifLocalVar8_g1475 = worldSpaceLightDir;
 				else if( IsThereWorldLight450 == 0.0 )
-				ifLocalVar8_g1469 = ifLocalVar3_g1469;
-				float3 ifLocalVar9_g1469 = 0;
+				ifLocalVar8_g1475 = ifLocalVar3_g1475;
+				float3 ifLocalVar9_g1475 = 0;
 				if( LightDirectionSetting561 > 0.0 )
-				ifLocalVar9_g1469 = ifLocalVar3_g1469;
+				ifLocalVar9_g1475 = ifLocalVar3_g1475;
 				else if( LightDirectionSetting561 == 0.0 )
-				ifLocalVar9_g1469 = ifLocalVar8_g1469;
-				float3 normalizeResult48_g1469 = normalize( ifLocalVar9_g1469 );
-				float3 worldPos32_g1469 = ase_worldPos;
-				float3 localStereoCameraViewDirection32_g1469 = StereoCameraViewDirection32_g1469( worldPos32_g1469 );
-				float3 normalizeResult51_g1469 = normalize( ( normalizeResult48_g1469 + localStereoCameraViewDirection32_g1469 ) );
-				float dotResult50_g1469 = dot( normalizedWorldNormal , normalizeResult51_g1469 );
-				float blendOpSrc34_g1472 = ILMB576;
-				float blendOpDest34_g1472 = dotResult50_g1469;
-				float clampResult87_g1473 = clamp( ( ( saturate( ( 1.0 - ( ( 1.0 - blendOpDest34_g1472) / max( blendOpSrc34_g1472, 0.00001) ) ) )) > ( 1.0 - _SpecularSize ) ? 1.0 : 0.0 ) , 0.0 , 1.0 );
-				float4 temp_cast_28 = (clampResult87_g1473).xxxx;
-				float4 blendOpSrc30_g1477 = Base12_g1477;
-				float4 blendOpDest30_g1477 = temp_cast_28;
-				float4 lerpBlendMode30_g1477 = lerp(blendOpDest30_g1477,min( blendOpSrc30_g1477 , blendOpDest30_g1477 ),0.9);
-				float3 desaturateInitialColor9_g1480 = ( ( ILMR573 * ( saturate( lerpBlendMode30_g1477 )) ) * float4( 1,1,1,0 ) * _SpecularIntensity * _SpecularTint ).rgb;
-				float desaturateDot9_g1480 = dot( desaturateInitialColor9_g1480, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1480 = lerp( desaturateInitialColor9_g1480, desaturateDot9_g1480.xxx, ( 1.0 - _SpecularSaturation ) );
-				float4 temp_output_95_0_g1477 = ( float4( desaturateVar9_g1480 , 0.0 ) + Base12_g1477 );
+				ifLocalVar9_g1475 = ifLocalVar8_g1475;
+				float3 normalizeResult48_g1475 = normalize( ifLocalVar9_g1475 );
+				float3 worldPos32_g1475 = ase_worldPos;
+				float3 localStereoCameraViewDirection32_g1475 = StereoCameraViewDirection32_g1475( worldPos32_g1475 );
+				float3 normalizeResult51_g1475 = normalize( ( normalizeResult48_g1475 + localStereoCameraViewDirection32_g1475 ) );
+				float dotResult50_g1475 = dot( normalizedWorldNormal , normalizeResult51_g1475 );
+				float blendOpSrc34_g1478 = ILMB576;
+				float blendOpDest34_g1478 = dotResult50_g1475;
+				float clampResult87_g1479 = clamp( ( ( saturate( ( 1.0 - ( ( 1.0 - blendOpDest34_g1478) / max( blendOpSrc34_g1478, 0.00001) ) ) )) > ( 1.0 - _SpecularSize ) ? 1.0 : 0.0 ) , 0.0 , 1.0 );
+				float4 temp_cast_30 = (clampResult87_g1479).xxxx;
+				float4 blendOpSrc30_g1483 = Base12_g1483;
+				float4 blendOpDest30_g1483 = temp_cast_30;
+				float4 lerpBlendMode30_g1483 = lerp(blendOpDest30_g1483,min( blendOpSrc30_g1483 , blendOpDest30_g1483 ),0.9);
+				float3 desaturateInitialColor9_g1486 = ( ( ILMR573 * ( saturate( lerpBlendMode30_g1483 )) ) * float4( 1,1,1,0 ) * _SpecularIntensity * _SpecularTint ).rgb;
+				float desaturateDot9_g1486 = dot( desaturateInitialColor9_g1486, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1486 = lerp( desaturateInitialColor9_g1486, desaturateDot9_g1486.xxx, ( 1.0 - _SpecularSaturation ) );
+				float4 temp_output_95_0_g1483 = ( float4( desaturateVar9_g1486 , 0.0 ) + Base12_g1483 );
 				float4 LightColor779 = _LightColor;
-				float3 desaturateInitialColor9_g1478 = ( temp_output_95_0_g1477 * LightColor779 * _BaseIntensity * _BaseTint ).rgb;
-				float desaturateDot9_g1478 = dot( desaturateInitialColor9_g1478, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1478 = lerp( desaturateInitialColor9_g1478, desaturateDot9_g1478.xxx, ( 1.0 - _BaseSaturation ) );
+				float3 desaturateInitialColor9_g1484 = ( temp_output_95_0_g1483 * LightColor779 * _BaseIntensity * _BaseTint ).rgb;
+				float desaturateDot9_g1484 = dot( desaturateInitialColor9_g1484, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1484 = lerp( desaturateInitialColor9_g1484, desaturateDot9_g1484.xxx, ( 1.0 - _BaseSaturation ) );
 				float4 AmbientColor780 = _AmbientColor;
 				float3 SSS578 = temp_output_993_0[1];
-				float4 SSS14_g1477 = float4( SSS578 , 0.0 );
-				float4 temp_output_97_0_g1477 = ( temp_output_95_0_g1477 * SSS14_g1477 );
-				float3 desaturateInitialColor9_g1481 = ( temp_output_97_0_g1477 * float4( 1,1,1,0 ) * _Shadow1Intensity * _Shadow1Tint ).rgb;
-				float desaturateDot9_g1481 = dot( desaturateInitialColor9_g1481, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1481 = lerp( desaturateInitialColor9_g1481, desaturateDot9_g1481.xxx, ( 1.0 - _Shadow1Saturation ) );
-				float4 blendOpSrc51_g1477 = float4( 0,0,0,0 );
-				float4 blendOpDest51_g1477 = temp_output_97_0_g1477;
-				float4 lerpBlendMode51_g1477 = lerp(blendOpDest51_g1477,2.0f*blendOpDest51_g1477*blendOpSrc51_g1477 + blendOpDest51_g1477*blendOpDest51_g1477*(1.0f - 2.0f*blendOpSrc51_g1477),0.5);
-				float3 desaturateInitialColor9_g1479 = ( ( saturate( lerpBlendMode51_g1477 )) * float4( 1,1,1,0 ) * _Shadow2Intensity * _Shadow2Tint ).rgb;
-				float desaturateDot9_g1479 = dot( desaturateInitialColor9_g1479, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1479 = lerp( desaturateInitialColor9_g1479, desaturateDot9_g1479.xxx, ( 1.0 - _Shadow2Saturation ) );
-				float temp_output_126_0_g1473 = pow( i.ase_color.r , 2.2 );
-				float VertexR33_g1473 = temp_output_126_0_g1473;
-				float dotResult46_g1469 = dot( ifLocalVar9_g1469 , normalizedWorldNormal );
-				float temp_output_36_0_g1472 = ( ( dotResult46_g1469 + _GlobalLightPush ) * i.ase_color.r );
+				float4 SSS14_g1483 = float4( SSS578 , 0.0 );
+				float4 temp_output_97_0_g1483 = ( temp_output_95_0_g1483 * SSS14_g1483 );
+				float3 desaturateInitialColor9_g1487 = ( temp_output_97_0_g1483 * float4( 1,1,1,0 ) * _Shadow1Intensity * _Shadow1Tint ).rgb;
+				float desaturateDot9_g1487 = dot( desaturateInitialColor9_g1487, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1487 = lerp( desaturateInitialColor9_g1487, desaturateDot9_g1487.xxx, ( 1.0 - _Shadow1Saturation ) );
+				float4 blendOpSrc51_g1483 = float4( 0,0,0,0 );
+				float4 blendOpDest51_g1483 = temp_output_97_0_g1483;
+				float4 lerpBlendMode51_g1483 = lerp(blendOpDest51_g1483,2.0f*blendOpDest51_g1483*blendOpSrc51_g1483 + blendOpDest51_g1483*blendOpDest51_g1483*(1.0f - 2.0f*blendOpSrc51_g1483),0.5);
+				float3 desaturateInitialColor9_g1485 = ( ( saturate( lerpBlendMode51_g1483 )) * float4( 1,1,1,0 ) * _Shadow2Intensity * _Shadow2Tint ).rgb;
+				float desaturateDot9_g1485 = dot( desaturateInitialColor9_g1485, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1485 = lerp( desaturateInitialColor9_g1485, desaturateDot9_g1485.xxx, ( 1.0 - _Shadow2Saturation ) );
+				float temp_output_126_0_g1479 = pow( i.ase_color.r , 2.2 );
+				float VertexR33_g1479 = temp_output_126_0_g1479;
+				float dotResult46_g1475 = dot( ifLocalVar9_g1475 , normalizedWorldNormal );
+				float temp_output_36_0_g1478 = ( ( dotResult46_g1475 + _GlobalLightPush ) * i.ase_color.r );
 				float ILMG574 = break292.y;
-				float temp_output_1_0_g1472 = ILMG574;
-				float temp_output_1057_0 = ( temp_output_36_0_g1472 * temp_output_1_0_g1472 );
-				float NdL20_g1473 = temp_output_1057_0;
-				float temp_output_2_0_g1474 = NdL20_g1473;
-				float temp_output_3_0_g1474 = -_Shadow1Smoothness;
-				float temp_output_9_0_g1473 = _Shadow1Push;
-				float temp_output_11_0_g1473 = _Shadow2Push;
-				float clampResult15_g1473 = clamp( temp_output_9_0_g1473 , temp_output_11_0_g1473 , temp_output_9_0_g1473 );
-				float RealShadow1Push16_g1473 = clampResult15_g1473;
-				float temp_output_1_0_g1474 = RealShadow1Push16_g1473;
-				float smoothstepResult6_g1474 = smoothstep( ( ( temp_output_2_0_g1474 / 1.0 ) + temp_output_3_0_g1474 ) , temp_output_2_0_g1474 , temp_output_1_0_g1474);
-				float lerpResult7_g1474 = lerp( smoothstepResult6_g1474 , ( temp_output_1_0_g1474 >= temp_output_2_0_g1474 ? 1.0 : 0.0 ) , ( 0.0 == temp_output_3_0_g1474 ? 1.0 : 0.0 ));
-				float clampResult17_g1473 = clamp( temp_output_11_0_g1473 , temp_output_11_0_g1473 , temp_output_9_0_g1473 );
-				float RealShadow2Push18_g1473 = clampResult17_g1473;
-				float temp_output_2_0_g1475 = NdL20_g1473;
-				float temp_output_3_0_g1475 = -_Shadow2Smoothness;
-				float temp_output_1_0_g1475 = RealShadow2Push18_g1473;
-				float smoothstepResult6_g1475 = smoothstep( ( ( temp_output_2_0_g1475 / 1.0 ) + temp_output_3_0_g1475 ) , temp_output_2_0_g1475 , temp_output_1_0_g1475);
-				float lerpResult7_g1475 = lerp( smoothstepResult6_g1475 , ( temp_output_1_0_g1475 >= temp_output_2_0_g1475 ? 1.0 : 0.0 ) , ( 0.0 == temp_output_3_0_g1475 ? 1.0 : 0.0 ));
-				float temp_output_42_0_g1473 = max( max( ( 1.0 - ( VertexR33_g1473 > _Shadow2VertexRThreshold ? 1.0 : 0.0 ) ) , lerpResult7_g1475 ) , ( ILMG574 < _PermanentShadowThreshold ? 1.0 : 0.0 ) );
-				float temp_output_43_0_g1473 = ( max( ( 1.0 - ( VertexR33_g1473 > _Shadow1VertexRThreshold ? 1.0 : 0.0 ) ) , min( lerpResult7_g1474 , ( RealShadow1Push16_g1473 >= RealShadow2Push18_g1473 ? 1.0 : 0.0 ) ) ) - temp_output_42_0_g1473 );
-				float3 lerpResult100_g1477 = lerp( desaturateVar9_g1481 , desaturateVar9_g1479 , ( 1.0 - temp_output_43_0_g1473 ));
-				float clampResult90_g1473 = clamp( ( 1.0 - ( temp_output_43_0_g1473 + temp_output_42_0_g1473 ) ) , 0.0 , 1.0 );
-				float temp_output_39_0_g1477 = clampResult90_g1473;
-				float4 lerpResult101_g1477 = lerp( float4( desaturateVar9_g1478 , 0.0 ) , ( AmbientColor780 * float4( lerpResult100_g1477 , 0.0 ) ) , ( 1.0 - temp_output_39_0_g1477 ));
-				float EnableRimlight82_g1473 = _EnableRimlight;
-				float dotResult31_g1469 = dot( normalizedWorldNormal , localStereoCameraViewDirection32_g1469 );
+				float temp_output_1_0_g1478 = ILMG574;
+				float temp_output_1057_0 = ( temp_output_36_0_g1478 * temp_output_1_0_g1478 );
+				float NdL20_g1479 = temp_output_1057_0;
+				float temp_output_2_0_g1480 = NdL20_g1479;
+				float temp_output_3_0_g1480 = -_Shadow1Smoothness;
+				float temp_output_9_0_g1479 = _Shadow1Push;
+				float temp_output_11_0_g1479 = _Shadow2Push;
+				float clampResult15_g1479 = clamp( temp_output_9_0_g1479 , temp_output_11_0_g1479 , temp_output_9_0_g1479 );
+				float RealShadow1Push16_g1479 = clampResult15_g1479;
+				float temp_output_1_0_g1480 = RealShadow1Push16_g1479;
+				float smoothstepResult6_g1480 = smoothstep( ( ( temp_output_2_0_g1480 / 1.0 ) + temp_output_3_0_g1480 ) , temp_output_2_0_g1480 , temp_output_1_0_g1480);
+				float lerpResult7_g1480 = lerp( smoothstepResult6_g1480 , ( temp_output_1_0_g1480 >= temp_output_2_0_g1480 ? 1.0 : 0.0 ) , ( 0.0 == temp_output_3_0_g1480 ? 1.0 : 0.0 ));
+				float clampResult17_g1479 = clamp( temp_output_11_0_g1479 , temp_output_11_0_g1479 , temp_output_9_0_g1479 );
+				float RealShadow2Push18_g1479 = clampResult17_g1479;
+				float temp_output_2_0_g1481 = NdL20_g1479;
+				float temp_output_3_0_g1481 = -_Shadow2Smoothness;
+				float temp_output_1_0_g1481 = RealShadow2Push18_g1479;
+				float smoothstepResult6_g1481 = smoothstep( ( ( temp_output_2_0_g1481 / 1.0 ) + temp_output_3_0_g1481 ) , temp_output_2_0_g1481 , temp_output_1_0_g1481);
+				float lerpResult7_g1481 = lerp( smoothstepResult6_g1481 , ( temp_output_1_0_g1481 >= temp_output_2_0_g1481 ? 1.0 : 0.0 ) , ( 0.0 == temp_output_3_0_g1481 ? 1.0 : 0.0 ));
+				float temp_output_42_0_g1479 = max( max( ( 1.0 - ( VertexR33_g1479 > _Shadow2VertexRThreshold ? 1.0 : 0.0 ) ) , lerpResult7_g1481 ) , ( ILMG574 < _PermanentShadowThreshold ? 1.0 : 0.0 ) );
+				float temp_output_43_0_g1479 = ( max( ( 1.0 - ( VertexR33_g1479 > _Shadow1VertexRThreshold ? 1.0 : 0.0 ) ) , min( lerpResult7_g1480 , ( RealShadow1Push16_g1479 >= RealShadow2Push18_g1479 ? 1.0 : 0.0 ) ) ) - temp_output_42_0_g1479 );
+				float3 lerpResult100_g1483 = lerp( desaturateVar9_g1487 , desaturateVar9_g1485 , ( 1.0 - temp_output_43_0_g1479 ));
+				float clampResult90_g1479 = clamp( ( 1.0 - ( temp_output_43_0_g1479 + temp_output_42_0_g1479 ) ) , 0.0 , 1.0 );
+				float temp_output_39_0_g1483 = clampResult90_g1479;
+				float4 lerpResult101_g1483 = lerp( float4( desaturateVar9_g1484 , 0.0 ) , ( AmbientColor780 * float4( lerpResult100_g1483 , 0.0 ) ) , ( 1.0 - temp_output_39_0_g1483 ));
+				float EnableRimlight82_g1479 = _EnableRimlight;
+				float dotResult31_g1475 = dot( normalizedWorldNormal , localStereoCameraViewDirection32_g1475 );
 				float SSSA581 = tex2DNode297.a;
 				float BaseA580 = tex2DNode296.a;
-				float blendOpSrc15_g1472 = SSSA581;
-				float blendOpDest15_g1472 = BaseA580;
-				float NdV48_g1473 = ( ( 1.0 - ( dotResult31_g1469 + ( 1.0 - _RimlightSize ) ) ) * ( 1.0 - ( saturate( abs( blendOpSrc15_g1472 - blendOpDest15_g1472 ) )) ) );
-				float clampResult91_g1473 = clamp( temp_output_42_0_g1473 , 0.0 , 1.0 );
-				float clampResult88_g1473 = clamp( ( ceil( ( ( NdV48_g1473 > 0.1 ? 1.0 : 0.0 ) * BaseA580 ) ) - clampResult91_g1473 ) , 0.0 , 1.0 );
-				float temp_output_94_0_g1473 = ( EnableRimlight82_g1473 == 1.0 ? clampResult88_g1473 : 0.0 );
-				float3 desaturateInitialColor9_g1482 = ( ( Base12_g1477 * temp_output_94_0_g1473 ) * float4( 1,1,1,0 ) * _RimlightIntensity * _RimlightTint ).rgb;
-				float desaturateDot9_g1482 = dot( desaturateInitialColor9_g1482, float3( 0.299, 0.587, 0.114 ));
-				float3 desaturateVar9_g1482 = lerp( desaturateInitialColor9_g1482, desaturateDot9_g1482.xxx, ( 1.0 - _RimlightSaturation ) );
-				float4 ColorOut1025 = ( lerpResult101_g1477 + float4( desaturateVar9_g1482 , 0.0 ) );
+				float blendOpSrc15_g1478 = SSSA581;
+				float blendOpDest15_g1478 = BaseA580;
+				float NdV48_g1479 = ( ( 1.0 - ( dotResult31_g1475 + ( 1.0 - _RimlightSize ) ) ) * ( 1.0 - ( saturate( abs( blendOpSrc15_g1478 - blendOpDest15_g1478 ) )) ) );
+				float clampResult91_g1479 = clamp( temp_output_42_0_g1479 , 0.0 , 1.0 );
+				float clampResult88_g1479 = clamp( ( ceil( ( ( NdV48_g1479 > 0.1 ? 1.0 : 0.0 ) * BaseA580 ) ) - clampResult91_g1479 ) , 0.0 , 1.0 );
+				float temp_output_94_0_g1479 = ( EnableRimlight82_g1479 == 1.0 ? clampResult88_g1479 : 0.0 );
+				float3 desaturateInitialColor9_g1488 = ( ( Base12_g1483 * temp_output_94_0_g1479 ) * float4( 1,1,1,0 ) * _RimlightIntensity * _RimlightTint ).rgb;
+				float desaturateDot9_g1488 = dot( desaturateInitialColor9_g1488, float3( 0.299, 0.587, 0.114 ));
+				float3 desaturateVar9_g1488 = lerp( desaturateInitialColor9_g1488, desaturateDot9_g1488.xxx, ( 1.0 - _RimlightSaturation ) );
+				float4 ColorOut1025 = ( lerpResult101_g1483 + float4( desaturateVar9_g1488 , 0.0 ) );
 				float4 lerpResult1021 = lerp( ILMAColor1005 , ColorOut1025 , ILMA357);
 				float LightColorSetting872 = _LightColorSetting;
-				float ifLocalVar13_g1483 = 0;
+				float ifLocalVar13_g1489 = 0;
 				if( LightColorSetting872 == 1.0 )
-				ifLocalVar13_g1483 = 0.0;
+				ifLocalVar13_g1489 = 0.0;
 				else if( LightColorSetting872 < 1.0 )
-				ifLocalVar13_g1483 = IsThereWorldLight450;
+				ifLocalVar13_g1489 = IsThereWorldLight450;
 				UNITY_LIGHT_ATTENUATION(ase_atten, i, ase_worldPos)
-				float4 temp_cast_41 = (_MinimumGlobalLightIntensity).xxxx;
-				float4 temp_cast_42 = (5.0).xxxx;
-				float4 clampResult18_g1483 = clamp( ase_lightColor , temp_cast_41 , temp_cast_42 );
-				float4 temp_output_11_0_g1483 = ( ase_atten * clampResult18_g1483 );
-				float4 temp_output_8_0_g1483 = ( _FakeGlobalLightColor * _FakeGlobalLightIntensity );
-				float4 ifLocalVar3_g1483 = 0;
-				if( ifLocalVar13_g1483 > 0.0 )
-				ifLocalVar3_g1483 = temp_output_11_0_g1483;
-				else if( ifLocalVar13_g1483 == 0.0 )
-				ifLocalVar3_g1483 = temp_output_8_0_g1483;
+				float4 temp_cast_43 = (_MinimumGlobalLightIntensity).xxxx;
+				float4 temp_cast_44 = (5.0).xxxx;
+				float4 clampResult18_g1489 = clamp( ase_lightColor , temp_cast_43 , temp_cast_44 );
+				float4 temp_output_11_0_g1489 = ( ase_atten * clampResult18_g1489 );
+				float4 temp_output_8_0_g1489 = ( _FakeGlobalLightColor * _FakeGlobalLightIntensity );
+				float4 ifLocalVar3_g1489 = 0;
+				if( ifLocalVar13_g1489 > 0.0 )
+				ifLocalVar3_g1489 = temp_output_11_0_g1489;
+				else if( ifLocalVar13_g1489 == 0.0 )
+				ifLocalVar3_g1489 = temp_output_8_0_g1489;
 				#ifdef UNITY_PASS_FORWARDADD
-				float4 staticSwitch9_g1483 = max( float4( 0,0,0,0 ) , temp_output_11_0_g1483 );
+				float4 staticSwitch9_g1489 = max( float4( 0,0,0,0 ) , temp_output_11_0_g1489 );
 				#else
-				float4 staticSwitch9_g1483 = ifLocalVar3_g1483;
+				float4 staticSwitch9_g1489 = ifLocalVar3_g1489;
 				#endif
-				float4 GlobalLightColor944 = staticSwitch9_g1483;
+				float4 GlobalLightColor944 = staticSwitch9_g1489;
 				float2 uv_EmissionMask = i.ase_texcoord1.xy * _EmissionMask_ST.xy + _EmissionMask_ST.zw;
-				float EmissionRampMask920 = max( ( ( ( temp_output_94_0_g1473 * _RimlightEmissiveToggle ) * _RimlightEmissionIntensity ) + ( ( clampResult87_g1473 * _SpecularEmissiveToggle ) * _SpecularEmissionIntensity ) + ( ( clampResult90_g1473 * _BaseEmissiveToggle ) * _BaseEmissionIntensity ) + ( ( temp_output_43_0_g1473 * _Shadow1EmissiveToggle ) * _Shadow1EmissionIntensity ) + ( ( clampResult91_g1473 * _Shadow2EmissiveToggle ) * _Shadow2EmissionIntensity ) + ( ( 1.0 - ILMA357 ) * ( _ILMAlphaEmissionIntensity * _ILMAlphaLinesEmissionToggle ) ) ) , ( tex2D( _EmissionMask, uv_EmissionMask ).r * _EmissionMaskIntensity ) );
-				float4 temp_cast_44 = (EmissionRampMask920).xxxx;
-				float4 ifLocalVar17_g1483 = 0;
-				if( ifLocalVar13_g1483 > 0.0 )
-				ifLocalVar17_g1483 = clampResult18_g1483;
-				else if( ifLocalVar13_g1483 == 0.0 )
-				ifLocalVar17_g1483 = temp_output_8_0_g1483;
+				float EmissionRampMask920 = max( ( ( ( temp_output_94_0_g1479 * _RimlightEmissiveToggle ) * _RimlightEmissionIntensity ) + ( ( clampResult87_g1479 * _SpecularEmissiveToggle ) * _SpecularEmissionIntensity ) + ( ( clampResult90_g1479 * _BaseEmissiveToggle ) * _BaseEmissionIntensity ) + ( ( temp_output_43_0_g1479 * _Shadow1EmissiveToggle ) * _Shadow1EmissionIntensity ) + ( ( clampResult91_g1479 * _Shadow2EmissiveToggle ) * _Shadow2EmissionIntensity ) + ( ( 1.0 - ILMA357 ) * ( _ILMAlphaEmissionIntensity * _ILMAlphaLinesEmissionToggle ) ) ) , ( tex2D( _EmissionMask, uv_EmissionMask ).r * _EmissionMaskIntensity ) );
+				float4 temp_cast_46 = (EmissionRampMask920).xxxx;
+				float4 ifLocalVar17_g1489 = 0;
+				if( ifLocalVar13_g1489 > 0.0 )
+				ifLocalVar17_g1489 = clampResult18_g1489;
+				else if( ifLocalVar13_g1489 == 0.0 )
+				ifLocalVar17_g1489 = temp_output_8_0_g1489;
 				#ifdef UNITY_PASS_FORWARDADD
-				float4 staticSwitch30_g1483 = float4( 0,0,0,0 );
+				float4 staticSwitch30_g1489 = float4( 0,0,0,0 );
 				#else
-				float4 staticSwitch30_g1483 = max( temp_cast_44 , ifLocalVar17_g1483 );
+				float4 staticSwitch30_g1489 = max( temp_cast_46 , ifLocalVar17_g1489 );
 				#endif
-				float4 EmissionLightColor947 = staticSwitch30_g1483;
+				float4 EmissionLightColor947 = staticSwitch30_g1489;
 				float4 lerpResult1062 = lerp( ( ( ILMColorSetting1007 == 2.0 ? lerpResult1021 : ColorOut1025 ) * GlobalLightColor944 ) , ( _EmissionIntensity * ColorOut1025 * EmissionLightColor947 ) , EmissionRampMask920);
-				float temp_output_48_0_g1484 = _DebugGroup;
-				float temp_output_47_0_g1484 = _VertexChannel;
-				float4 temp_output_59_0_g1484 = _DebugColor;
-				float temp_output_50_0_g1484 = _ILMChannel;
+				float temp_output_48_0_g1490 = _DebugGroup;
+				float temp_output_47_0_g1490 = _VertexChannel;
+				float4 temp_output_59_0_g1490 = _DebugColor;
+				float temp_output_50_0_g1490 = _ILMChannel;
 				float3 ILM988 = linearToGamma277;
 				float4 appendResult1031 = (float4(ILM988 , ILMA357));
-				float4 temp_output_54_0_g1484 = appendResult1031;
-				float4 break7_g1484 = temp_output_54_0_g1484;
-				float temp_output_57_0_g1484 = 0.0;
-				float4 Debug987 = ( temp_output_48_0_g1484 == 0.0 ? ( temp_output_47_0_g1484 == 0.0 ? i.ase_color : ( temp_output_47_0_g1484 == 1.0 ? ( i.ase_color.r * temp_output_59_0_g1484 ) : ( temp_output_47_0_g1484 == 2.0 ? ( i.ase_color.g * temp_output_59_0_g1484 ) : ( temp_output_47_0_g1484 == 3.0 ? ( i.ase_color.b * temp_output_59_0_g1484 ) : ( temp_output_47_0_g1484 == 4.0 ? ( i.ase_color.a * temp_output_59_0_g1484 ) : float4( 0,0,0,0 ) ) ) ) ) ) : ( temp_output_48_0_g1484 == 1.0 ? ( temp_output_50_0_g1484 == 0.0 ? temp_output_54_0_g1484 : ( temp_output_50_0_g1484 == 1.0 ? ( break7_g1484.r * temp_output_59_0_g1484 ) : ( temp_output_50_0_g1484 == 2.0 ? ( break7_g1484.g * temp_output_59_0_g1484 ) : ( temp_output_50_0_g1484 == 3.0 ? ( break7_g1484.b * temp_output_59_0_g1484 ) : ( temp_output_50_0_g1484 == 4.0 ? ( break7_g1484.a * temp_output_59_0_g1484 ) : float4( 0,0,0,0 ) ) ) ) ) ) : ( temp_output_48_0_g1484 == 2.0 ? ( temp_output_57_0_g1484 == 0.0 ? ( BaseA580 * temp_output_59_0_g1484 ) : ( temp_output_57_0_g1484 == 1.0 ? ( 0.0 * temp_output_59_0_g1484 ) : float4( 0,0,0,0 ) ) ) : float4( 0,0,0,0 ) ) ) );
+				float4 temp_output_54_0_g1490 = appendResult1031;
+				float4 break7_g1490 = temp_output_54_0_g1490;
+				float temp_output_57_0_g1490 = 0.0;
+				float4 Debug987 = ( temp_output_48_0_g1490 == 0.0 ? ( temp_output_47_0_g1490 == 0.0 ? i.ase_color : ( temp_output_47_0_g1490 == 1.0 ? ( i.ase_color.r * temp_output_59_0_g1490 ) : ( temp_output_47_0_g1490 == 2.0 ? ( i.ase_color.g * temp_output_59_0_g1490 ) : ( temp_output_47_0_g1490 == 3.0 ? ( i.ase_color.b * temp_output_59_0_g1490 ) : ( temp_output_47_0_g1490 == 4.0 ? ( i.ase_color.a * temp_output_59_0_g1490 ) : float4( 0,0,0,0 ) ) ) ) ) ) : ( temp_output_48_0_g1490 == 1.0 ? ( temp_output_50_0_g1490 == 0.0 ? temp_output_54_0_g1490 : ( temp_output_50_0_g1490 == 1.0 ? ( break7_g1490.r * temp_output_59_0_g1490 ) : ( temp_output_50_0_g1490 == 2.0 ? ( break7_g1490.g * temp_output_59_0_g1490 ) : ( temp_output_50_0_g1490 == 3.0 ? ( break7_g1490.b * temp_output_59_0_g1490 ) : ( temp_output_50_0_g1490 == 4.0 ? ( break7_g1490.a * temp_output_59_0_g1490 ) : float4( 0,0,0,0 ) ) ) ) ) ) : ( temp_output_48_0_g1490 == 2.0 ? ( temp_output_57_0_g1490 == 0.0 ? ( BaseA580 * temp_output_59_0_g1490 ) : ( temp_output_57_0_g1490 == 1.0 ? ( 0.0 * temp_output_59_0_g1490 ) : float4( 0,0,0,0 ) ) ) : float4( 0,0,0,0 ) ) ) );
 				
 
 				outColor = ( _EnableDebug == 0.0 ? lerpResult1062 : Debug987 ).rgb;
@@ -1739,220 +1769,220 @@ Shader ".Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1
 }
 /*ASEBEGIN
 Version=18900
-2975;274;1355;932;-3581.174;-2986.967;1;True;True
+2793;227;2049;932;-3234.174;-2986.967;1;True;True
 Node;AmplifyShaderEditor.CommentaryNode;781;-2786.293,2702.811;Inherit;False;3560.719;2932.564;;55;988;573;339;578;1008;587;815;580;574;1012;555;581;1010;576;586;813;1007;1011;292;1006;1005;357;993;277;1004;764;992;280;827;585;854;849;848;825;828;857;851;829;853;824;826;823;822;855;821;852;846;856;850;847;274;762;763;296;297;Color Information;1,1,1,1;0;0
 Node;AmplifyShaderEditor.SamplerNode;297;-2678.854,3006.014;Inherit;True;Property;_SSS;SSS;2;0;Create;True;0;0;0;False;0;False;-1;None;961e7fd6475d1de488f2fa48ffcae419;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SamplerNode;296;-2723.293,2752.811;Inherit;True;Property;_Base;Base;1;0;Create;True;0;0;0;False;0;False;-1;None;08ce0b81a00631747a551c7aa5eca51a;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SamplerNode;274;-1490.404,2845.581;Inherit;True;Property;_ILM;ILM;3;0;Create;True;0;0;0;False;0;False;-1;None;f9ce7ab2674f9db438ec75f5d229f329;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.DynamicAppendNode;762;-2331.82,2777.283;Inherit;False;FLOAT3;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.DynamicAppendNode;763;-2332.82,3009.282;Inherit;False;FLOAT3;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.ColorNode;828;-2458.85,3962.56;Inherit;False;Property;_Target2Color;Target 2 Color;36;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;823;-2522.85,3450.56;Inherit;False;Property;_Source1Fuzziness;Source 1 Fuzziness;31;0;Create;True;0;0;0;False;0;False;0.01;0.01;0.01;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.DynamicAppendNode;280;-1167.917,2871.7;Inherit;False;FLOAT3;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.CommentaryNode;572;971.8275,2807.128;Inherit;False;703.0927;565.6688;;9;517;450;563;561;533;634;535;871;872;Light Settings;1,1,1,1;0;0
-Node;AmplifyShaderEditor.RangedFloatNode;854;-2522.85,5242.562;Inherit;False;Property;_Source5Fuzziness;Source 5 Fuzziness;47;0;Create;True;0;0;0;False;0;False;0.01;0.01;0.01;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.ColorNode;847;-2458.85,4186.562;Inherit;False;Property;_Source3Color;Source 3 Color;38;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.ColorNode;852;-2458.85,4858.562;Inherit;False;Property;_Target4Color;Target 4 Color;44;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.ColorNode;822;-2490.85,3290.56;Inherit;False;Property;_Source1Color;Source 1 Color;30;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.ColorNode;855;-2458.85,5082.562;Inherit;False;Property;_Source5Color;Source 5 Color;46;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;853;-2522.85,5018.562;Inherit;False;Property;_SSSHueShift4;SSS Hue Shift 4;45;0;Create;True;0;0;0;False;0;False;0;0;-1;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.ColorNode;856;-2458.85,5306.562;Inherit;False;Property;_Target5Color;Target 5 Color;48;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.ColorNode;848;-2458.85,4410.562;Inherit;False;Property;_Target3Color;Target 3 Color;40;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;827;-2522.85,3898.56;Inherit;False;Property;_Source2Fuzziness;Source 2 Fuzziness;35;0;Create;True;0;0;0;False;0;False;0.01;0.01;0.01;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.ColorNode;851;-2458.85,4634.562;Inherit;False;Property;_Source4Color;Source 4 Color;42;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.RangedFloatNode;849;-2522.85,4570.562;Inherit;False;Property;_SSSHueShift3;SSS Hue Shift 3;41;0;Create;True;0;0;0;False;0;False;0;0;-1;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.ColorNode;824;-2458.85,3514.56;Inherit;False;Property;_Target1Color;Target 1 Color;32;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.MatrixFromVectors;585;-2126.762,2904.759;Inherit;False;FLOAT3x3;True;4;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT3;0,0,0;False;1;FLOAT3x3;0
 Node;AmplifyShaderEditor.RangedFloatNode;825;-2522.85,3674.56;Inherit;False;Property;_SSSHueShift1;SSS Hue Shift 1;33;0;Create;True;0;0;0;False;0;False;0;0;-1;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;829;-2522.85,4122.562;Inherit;False;Property;_SSSHueShift2;SSS Hue Shift 2;37;0;Create;True;0;0;0;False;0;False;0;0;-1;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;821;-2516.85,3216.56;Inherit;False;Property;_TotalReplacements;Total Replacements;29;1;[IntRange];Create;True;0;0;0;False;0;False;1;1;1;5;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;846;-2522.85,4346.562;Inherit;False;Property;_Source3Fuzziness;Source 3 Fuzziness;39;0;Create;True;0;0;0;False;0;False;0.01;0.01;0.01;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.ColorNode;826;-2458.85,3738.56;Inherit;False;Property;_Source2Color;Source 2 Color;34;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;821;-2516.85,3216.56;Inherit;False;Property;_TotalReplacements;Total Replacements;29;1;[IntRange];Create;True;0;0;0;False;0;False;1;1;1;5;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;851;-2458.85,4634.562;Inherit;False;Property;_Source4Color;Source 4 Color;42;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.RangedFloatNode;857;-2522.85,5466.562;Inherit;False;Property;_SSSHueShift5;SSS Hue Shift 5;51;0;Create;True;0;0;0;False;0;False;0;0;-1;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;850;-2522.85,4794.562;Inherit;False;Property;_Source4Fuzziness;Source 4 Fuzziness;43;0;Create;True;0;0;0;False;0;False;0.01;0.01;0.01;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.ColorNode;1004;-1725.405,4958.093;Inherit;False;Property;_ILMAlphaColor;ILM Alpha Color;5;0;Create;True;0;0;0;False;0;False;1,0,0,0;1,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.FunctionNode;634;1049.433,2895.548;Inherit;False;Is There A Light;-1;;1468;65e24b0fdfa2e3146a301178490755c7;0;0;2;FLOAT;0;FLOAT;15
-Node;AmplifyShaderEditor.RangedFloatNode;533;1058.975,3071.652;Inherit;False;Property;_LightDirectionSetting;Light Direction Setting;14;1;[Enum];Create;True;0;2;Automatic RECOMMENDED;0;Forced Fake;1;0;False;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;992;-1768.7,3223.38;Inherit;False;Property;_EnableColorReplacer;Enable Color Replacer;28;1;[ToggleUI];Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.FunctionNode;764;-1857.64,3503.761;Inherit;False;Color Replacer;-1;;1462;3bf8a732171ac6840bcd0b4c21fcee62;0;22;67;FLOAT3x3;0,0,0,1,1,1,1,0,1;False;52;FLOAT;0;False;16;COLOR;0,0,0,1;False;17;FLOAT;0;False;13;COLOR;0,0,0,0;False;96;FLOAT;0;False;31;COLOR;0,0,0,1;False;32;FLOAT;0;False;30;COLOR;0,0,0,0;False;97;FLOAT;0;False;36;COLOR;0,0,0,1;False;38;FLOAT;0;False;37;COLOR;0,0,0,0;False;99;FLOAT;0;False;40;COLOR;0,0,0,1;False;42;FLOAT;0;False;41;COLOR;0,0,0,0;False;100;FLOAT;0;False;44;COLOR;0,0,0,1;False;46;FLOAT;0;False;45;COLOR;0,0,0,0;False;101;FLOAT;0;False;1;FLOAT3x3;0
-Node;AmplifyShaderEditor.LinearToGammaNode;277;-1024.21,2870.06;Inherit;False;0;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.RangedFloatNode;829;-2522.85,4122.562;Inherit;False;Property;_SSSHueShift2;SSS Hue Shift 2;37;0;Create;True;0;0;0;False;0;False;0;0;-1;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;827;-2522.85,3898.56;Inherit;False;Property;_Source2Fuzziness;Source 2 Fuzziness;35;0;Create;True;0;0;0;False;0;False;0.01;0.01;0.01;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;846;-2522.85,4346.562;Inherit;False;Property;_Source3Fuzziness;Source 3 Fuzziness;39;0;Create;True;0;0;0;False;0;False;0.01;0.01;0.01;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;856;-2458.85,5306.562;Inherit;False;Property;_Target5Color;Target 5 Color;48;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;853;-2522.85,5018.562;Inherit;False;Property;_SSSHueShift4;SSS Hue Shift 4;45;0;Create;True;0;0;0;False;0;False;0;0;-1;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;855;-2458.85,5082.562;Inherit;False;Property;_Source5Color;Source 5 Color;46;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.ColorNode;822;-2490.85,3290.56;Inherit;False;Property;_Source1Color;Source 1 Color;30;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.ColorNode;852;-2458.85,4858.562;Inherit;False;Property;_Target4Color;Target 4 Color;44;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.ColorNode;847;-2458.85,4186.562;Inherit;False;Property;_Source3Color;Source 3 Color;38;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;854;-2522.85,5242.562;Inherit;False;Property;_Source5Fuzziness;Source 5 Fuzziness;47;0;Create;True;0;0;0;False;0;False;0.01;0.01;0.01;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.CommentaryNode;572;971.8275,2807.128;Inherit;False;703.0927;565.6688;;9;517;450;563;561;533;634;535;871;872;Light Settings;1,1,1,1;0;0
+Node;AmplifyShaderEditor.DynamicAppendNode;280;-1167.917,2871.7;Inherit;False;FLOAT3;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.RangedFloatNode;823;-2522.85,3450.56;Inherit;False;Property;_Source1Fuzziness;Source 1 Fuzziness;31;0;Create;True;0;0;0;False;0;False;0.01;0.01;0.01;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;828;-2458.85,3962.56;Inherit;False;Property;_Target2Color;Target 2 Color;36;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.ColorNode;848;-2458.85,4410.562;Inherit;False;Property;_Target3Color;Target 3 Color;40;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.RangedFloatNode;535;1060.975,3242.652;Inherit;False;Property;_FallbackLightDirection;Fallback Light Direction;15;1;[Enum];Create;True;0;2;Fake Light Direction;0;View Direction;1;0;False;0;False;0;1;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.BreakToComponentsNode;292;-751.6676,2872.298;Inherit;False;FLOAT3;1;0;FLOAT3;0,0,0;False;16;FLOAT;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT;5;FLOAT;6;FLOAT;7;FLOAT;8;FLOAT;9;FLOAT;10;FLOAT;11;FLOAT;12;FLOAT;13;FLOAT;14;FLOAT;15
-Node;AmplifyShaderEditor.RegisterLocalVarNode;563;1316.975,3242.652;Inherit;False;FallbackLightDirection;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;1005;-1484.963,4957.933;Inherit;False;ILMAColor;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;450;1312.022,2857.128;Inherit;False;IsThereWorldLight;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;561;1314.975,3071.652;Inherit;False;LightDirectionSetting;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.CommentaryNode;558;922.4996,3449.375;Inherit;False;919.3984;663.7043;;8;637;562;564;472;434;471;435;525;Dot Creation;1,1,1,1;0;0
-Node;AmplifyShaderEditor.RangedFloatNode;1006;-1716.687,5143.85;Inherit;False;Property;_ILMColorSetting;ILM Color Setting;4;1;[Enum];Create;True;0;3;Default Black;0;Shadow Priority;1;ILM Priority;2;0;False;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.Compare;993;-1466.289,3435.024;Inherit;False;0;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT3x3;0,0,0,1,1,1,1,0,1;False;3;FLOAT3x3;0,0,0,1,1,1,1,0,1;False;1;FLOAT3x3;0
+Node;AmplifyShaderEditor.FunctionNode;764;-1857.64,3503.761;Inherit;False;Color Replacer;-1;;1469;3bf8a732171ac6840bcd0b4c21fcee62;0;22;67;FLOAT3x3;0,0,0,1,1,1,1,0,1;False;52;FLOAT;0;False;16;COLOR;0,0,0,1;False;17;FLOAT;0;False;13;COLOR;0,0,0,0;False;96;FLOAT;0;False;31;COLOR;0,0,0,1;False;32;FLOAT;0;False;30;COLOR;0,0,0,0;False;97;FLOAT;0;False;36;COLOR;0,0,0,1;False;38;FLOAT;0;False;37;COLOR;0,0,0,0;False;99;FLOAT;0;False;40;COLOR;0,0,0,1;False;42;FLOAT;0;False;41;COLOR;0,0,0,0;False;100;FLOAT;0;False;44;COLOR;0,0,0,1;False;46;FLOAT;0;False;45;COLOR;0,0,0,0;False;101;FLOAT;0;False;1;FLOAT3x3;0
+Node;AmplifyShaderEditor.RangedFloatNode;992;-1768.7,3223.38;Inherit;False;Property;_EnableColorReplacer;Enable Color Replacer;28;1;[ToggleUI];Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.LinearToGammaNode;277;-1024.21,2870.06;Inherit;False;0;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.FunctionNode;634;1049.433,2895.548;Inherit;False;Is There A Light;-1;;1468;65e24b0fdfa2e3146a301178490755c7;0;0;2;FLOAT;0;FLOAT;15
+Node;AmplifyShaderEditor.ColorNode;1004;-1725.405,4958.093;Inherit;False;Property;_ILMAlphaColor;ILM Alpha Color;5;0;Create;True;0;0;0;False;0;False;1,0,0,0;1,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;533;1058.975,3071.652;Inherit;False;Property;_LightDirectionSetting;Light Direction Setting;14;1;[Enum];Create;True;0;2;Automatic RECOMMENDED;0;Forced Fake;1;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;357;-1110.106,3006.807;Inherit;False;ILMA;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;434;1021.762,3769.256;Inherit;False;Property;_FakeLightDirX;Fake Light Dir X;8;0;Create;True;0;0;0;False;0;False;35;35;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.VectorFromMatrixNode;586;-1229.119,3467.486;Inherit;False;Row;0;1;0;FLOAT3x3;1,0,0,1,1,1,1,0,1;False;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RegisterLocalVarNode;580;-2393.363,2900.325;Inherit;False;BaseA;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;435;1021.762,3849.256;Inherit;False;Property;_FakeLightDirY;Fake Light Dir Y;9;0;Create;True;0;0;0;False;0;False;-135;-135;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;564;957.7625,3689.256;Inherit;False;563;FallbackLightDirection;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;574;-600.7415,2903.808;Inherit;False;ILMG;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;813;-1196.734,3364.463;Inherit;False;357;ILMA;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;562;957.7625,3609.256;Inherit;False;561;LightDirectionSetting;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;576;-600.7415,2983.808;Inherit;False;ILMB;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.Compare;993;-1466.289,3435.024;Inherit;False;0;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT3x3;0,0,0,1,1,1,1,0,1;False;3;FLOAT3x3;0,0,0,1,1,1,1,0,1;False;1;FLOAT3x3;0
+Node;AmplifyShaderEditor.CommentaryNode;558;922.4996,3449.375;Inherit;False;919.3984;663.7043;;8;637;562;564;472;434;471;435;525;Dot Creation;1,1,1,1;0;0
+Node;AmplifyShaderEditor.RegisterLocalVarNode;561;1314.975,3071.652;Inherit;False;LightDirectionSetting;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1006;-1716.687,5143.85;Inherit;False;Property;_ILMColorSetting;ILM Color Setting;4;1;[Enum];Create;True;0;3;Default Black;0;Shadow Priority;1;ILM Priority;2;0;False;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RegisterLocalVarNode;1005;-1484.963,4957.933;Inherit;False;ILMAColor;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.RegisterLocalVarNode;563;1316.975,3242.652;Inherit;False;FallbackLightDirection;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.BreakToComponentsNode;292;-751.6676,2872.298;Inherit;False;FLOAT3;1;0;FLOAT3;0,0,0;False;16;FLOAT;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT;5;FLOAT;6;FLOAT;7;FLOAT;8;FLOAT;9;FLOAT;10;FLOAT;11;FLOAT;12;FLOAT;13;FLOAT;14;FLOAT;15
+Node;AmplifyShaderEditor.RegisterLocalVarNode;450;1312.022,2857.128;Inherit;False;IsThereWorldLight;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;1007;-1491.218,5140.88;Inherit;False;ILMColorSetting;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;472;941.7625,4009.256;Inherit;False;Property;_ViewDirOffsetYaw;View Dir Offset Yaw;11;0;Create;True;0;0;0;False;0;False;0;0;-90;90;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;471;941.7625,3929.256;Inherit;False;Property;_ViewDirOffsetPitch;View Dir Offset Pitch;10;0;Create;True;0;0;0;False;0;False;0;0;-90;90;0;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;525;986.4993,3512.944;Inherit;False;450;IsThereWorldLight;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;581;-2343.923,3136.528;Inherit;False;SSSA;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.GetLocalVarNode;1011;-1104.495,3229.523;Inherit;False;1005;ILMAColor;1;0;OBJECT;;False;1;COLOR;0
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;815;-838.2523,3435.599;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.GetLocalVarNode;1012;-861.4951,3196.523;Inherit;False;1007;ILMColorSetting;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;640;2336,3840;Inherit;False;581;SSSA;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;707;2295,4051;Inherit;False;Property;_GlobalLightPush;Global Light Push;16;0;Create;True;0;0;0;False;0;False;1;1;-1;3;0;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;706;2336,3904;Inherit;False;574;ILMG;1;0;OBJECT;;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RegisterLocalVarNode;581;-2343.923,3136.528;Inherit;False;SSSA;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.GetLocalVarNode;525;986.4993,3512.944;Inherit;False;450;IsThereWorldLight;1;0;OBJECT;;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;471;941.7625,3929.256;Inherit;False;Property;_ViewDirOffsetPitch;View Dir Offset Pitch;10;0;Create;True;0;0;0;False;0;False;0;0;-90;90;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;472;941.7625,4009.256;Inherit;False;Property;_ViewDirOffsetYaw;View Dir Offset Yaw;11;0;Create;True;0;0;0;False;0;False;0;0;-90;90;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RegisterLocalVarNode;576;-600.7415,2983.808;Inherit;False;ILMB;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;435;1021.762,3849.256;Inherit;False;Property;_FakeLightDirY;Fake Light Dir Y;9;0;Create;True;0;0;0;False;0;False;-135;-135;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.GetLocalVarNode;813;-1196.734,3364.463;Inherit;False;357;ILMA;1;0;OBJECT;;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RegisterLocalVarNode;574;-600.7415,2903.808;Inherit;False;ILMG;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.GetLocalVarNode;564;957.7625,3689.256;Inherit;False;563;FallbackLightDirection;1;0;OBJECT;;False;1;FLOAT;0
+Node;AmplifyShaderEditor.GetLocalVarNode;562;957.7625,3609.256;Inherit;False;561;LightDirectionSetting;1;0;OBJECT;;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RegisterLocalVarNode;580;-2393.363,2900.325;Inherit;False;BaseA;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.VectorFromMatrixNode;586;-1229.119,3467.486;Inherit;False;Row;0;1;0;FLOAT3x3;1,0,0,1,1,1,1,0,1;False;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;434;1021.762,3769.256;Inherit;False;Property;_FakeLightDirX;Fake Light Dir X;8;0;Create;True;0;0;0;False;0;False;35;35;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.LerpOp;1010;-852.4734,3293.306;Inherit;False;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
+Node;AmplifyShaderEditor.GetLocalVarNode;629;2336,3968;Inherit;False;576;ILMB;1;0;OBJECT;;False;1;FLOAT;0
+Node;AmplifyShaderEditor.FunctionNode;637;1422.762,3657.256;Inherit;False;Dot Creation;-1;;1475;fd90efbfe94791944bc1c5b55d8d67e4;0;7;12;FLOAT;0;False;17;FLOAT;0;False;16;FLOAT;0;False;29;FLOAT;0;False;28;FLOAT;0;False;33;FLOAT;0;False;34;FLOAT;0;False;3;FLOAT;0;FLOAT;42;FLOAT;52
+Node;AmplifyShaderEditor.GetLocalVarNode;639;2336,3776;Inherit;False;580;BaseA;1;0;OBJECT;;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;641;2293,4137;Inherit;False;Property;_RimlightSize;Rimlight Size;26;0;Create;True;0;0;0;False;0;False;0.4;0.4;0;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.CommentaryNode;555;-1765.585,4137.153;Inherit;False;1451.782;658.5377;;13;947;944;873;950;867;544;869;632;779;780;777;778;1071;Light Color Calculation;1,1,1,1;0;0
-Node;AmplifyShaderEditor.GetLocalVarNode;639;2336,3776;Inherit;False;580;BaseA;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.FunctionNode;637;1422.762,3657.256;Inherit;False;Dot Creation;-1;;1469;fd90efbfe94791944bc1c5b55d8d67e4;0;7;12;FLOAT;0;False;17;FLOAT;0;False;16;FLOAT;0;False;29;FLOAT;0;False;28;FLOAT;0;False;33;FLOAT;0;False;34;FLOAT;0;False;3;FLOAT;0;FLOAT;42;FLOAT;52
-Node;AmplifyShaderEditor.GetLocalVarNode;629;2336,3968;Inherit;False;576;ILMB;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.LerpOp;1010;-852.4734,3293.306;Inherit;False;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
-Node;AmplifyShaderEditor.RangedFloatNode;1125;3008,4160;Inherit;False;Property;_Shadow1Smoothness;Shadow 1 Smoothness;105;0;Create;True;0;0;0;False;0;False;0;0;0;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;707;2295,4051;Inherit;False;Property;_GlobalLightPush;Global Light Push;16;0;Create;True;0;0;0;False;0;False;1;1;-1;3;0;1;FLOAT;0
+Node;AmplifyShaderEditor.GetLocalVarNode;640;2336,3840;Inherit;False;581;SSSA;1;0;OBJECT;;False;1;FLOAT;0
+Node;AmplifyShaderEditor.GetLocalVarNode;1012;-861.4951,3196.523;Inherit;False;1007;ILMColorSetting;1;0;OBJECT;;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;815;-838.2523,3435.599;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.GetLocalVarNode;706;2336,3904;Inherit;False;574;ILMG;1;0;OBJECT;;False;1;FLOAT;0
+Node;AmplifyShaderEditor.VectorFromMatrixNode;587;-1222.119,3646.486;Inherit;False;Row;1;1;0;FLOAT3x3;1,0,0,1,1,1,1,0,1;False;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;758;3088,3968;Inherit;False;Property;_EnableRimlight;Enable Rimlight;27;1;[ToggleUI];Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;778;-738.5991,4407.015;Inherit;False;Property;_AmbientColor;Ambient Color;18;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.ColorNode;777;-738.5991,4197.015;Inherit;False;Property;_LightColor;Light Color;17;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;731;2992,4416;Inherit;False;Property;_Shadow2VertexRThreshold;Shadow 2 VertexR Threshold;24;0;Create;True;0;0;0;False;0;False;0.1;0.1;0;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.Compare;1008;-442.1735,3327.806;Inherit;False;0;4;0;FLOAT;0;False;1;FLOAT;1;False;2;COLOR;0,0,0,0;False;3;FLOAT3;0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.RangedFloatNode;746;3008,4032;Inherit;False;Property;_SpecularSize;Specular Size;20;0;Create;True;0;0;0;False;0;False;0.3;0.2;0;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.GetLocalVarNode;753;3083.087,3792.721;Inherit;False;580;BaseA;1;0;OBJECT;;False;1;FLOAT;0
+Node;AmplifyShaderEditor.FunctionNode;1057;2707.013,3668.041;Inherit;False;Final Dot Calculation;-1;;1478;966aa02f52a17a443a5106621d0d8d24;0;9;5;FLOAT;0;False;21;FLOAT;0;False;6;FLOAT;0;False;3;FLOAT;0;False;4;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;11;FLOAT;0;False;10;FLOAT;0;False;3;FLOAT;0;FLOAT;8;FLOAT;9
+Node;AmplifyShaderEditor.RangedFloatNode;711;3008,4096;Inherit;False;Property;_Shadow1Push;Shadow 1 Push;21;0;Create;True;0;0;0;False;0;False;0.5;0.5;-1;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.GetLocalVarNode;729;3092.385,3872.472;Inherit;False;574;ILMG;1;0;OBJECT;;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;923;3024,4608;Inherit;False;Property;_SpecularEmissiveToggle;Specular Emissive Toggle;60;1;[ToggleUI];Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1126;3008,4352;Inherit;False;Property;_Shadow2Smoothness;Shadow 2 Smoothness;106;0;Create;True;0;0;0;False;0;False;0;0;0;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;727;3008,4288;Inherit;False;Property;_Shadow2Push;Shadow 2 Push;23;0;Create;True;0;0;0;False;0;False;-1;-1;-1;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;716;2992,4224;Inherit;False;Property;_Shadow1VertexRThreshold;Shadow 1 VertexR Threshold;22;0;Create;True;0;0;0;False;0;False;0.5;0.51;0;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;922;3024,4544;Inherit;False;Property;_RimlightEmissiveToggle;Rimlight Emissive Toggle;55;1;[ToggleUI];Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;729;3092.385,3872.472;Inherit;False;574;ILMG;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;925;3008,4736;Inherit;False;Property;_Shadow1EmissiveToggle;Shadow 1 Emissive Toggle;70;1;[ToggleUI];Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1125;3008,4160;Inherit;False;Property;_Shadow1Smoothness;Shadow 1 Smoothness;105;0;Create;True;0;0;0;False;0;False;0;0;0;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;924;3040,4672;Inherit;False;Property;_BaseEmissiveToggle;Base Emissive Toggle;65;1;[ToggleUI];Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;926;3008,4800;Inherit;False;Property;_Shadow2EmissiveToggle;Shadow 2 Emissive Toggle;75;1;[ToggleUI];Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;732;2992,4480;Inherit;False;Property;_PermanentShadowThreshold;Permanent Shadow Threshold;25;0;Create;True;0;0;0;False;0;False;0.1;0.1;0;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;923;3024,4608;Inherit;False;Property;_SpecularEmissiveToggle;Specular Emissive Toggle;60;1;[ToggleUI];Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1126;3008,4352;Inherit;False;Property;_Shadow2Smoothness;Shadow 2 Smoothness;106;0;Create;True;0;0;0;False;0;False;0;0;0;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;711;3008,4096;Inherit;False;Property;_Shadow1Push;Shadow 1 Push;21;0;Create;True;0;0;0;False;0;False;0.5;0.5;-1;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.VectorFromMatrixNode;587;-1222.119,3646.486;Inherit;False;Row;1;1;0;FLOAT3x3;1,0,0,1,1,1,1,0,1;False;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.FunctionNode;1057;2707.013,3668.041;Inherit;False;Final Dot Calculation;-1;;1472;966aa02f52a17a443a5106621d0d8d24;0;9;5;FLOAT;0;False;21;FLOAT;0;False;6;FLOAT;0;False;3;FLOAT;0;False;4;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;11;FLOAT;0;False;10;FLOAT;0;False;3;FLOAT;0;FLOAT;8;FLOAT;9
-Node;AmplifyShaderEditor.GetLocalVarNode;753;3083.087,3792.721;Inherit;False;580;BaseA;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;746;3008,4032;Inherit;False;Property;_SpecularSize;Specular Size;20;0;Create;True;0;0;0;False;0;False;0.3;0.2;0;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;731;2992,4416;Inherit;False;Property;_Shadow2VertexRThreshold;Shadow 2 VertexR Threshold;24;0;Create;True;0;0;0;False;0;False;0.1;0.1;0;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.ColorNode;777;-738.5991,4197.015;Inherit;False;Property;_LightColor;Light Color;17;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.ColorNode;778;-738.5991,4407.015;Inherit;False;Property;_AmbientColor;Ambient Color;18;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;758;3088,3968;Inherit;False;Property;_EnableRimlight;Enable Rimlight;27;1;[ToggleUI];Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.Compare;1008;-442.1735,3327.806;Inherit;False;0;4;0;FLOAT;0;False;1;FLOAT;1;False;2;COLOR;0,0,0,0;False;3;FLOAT3;0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.RangedFloatNode;925;3008,4736;Inherit;False;Property;_Shadow1EmissiveToggle;Shadow 1 Emissive Toggle;70;1;[ToggleUI];Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RegisterLocalVarNode;339;-266.7255,3326.549;Inherit;False;Base;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.RangedFloatNode;1002;3616.589,3456.512;Inherit;False;Property;_Shadow1EmissionIntensity;Shadow 1 Emission Intensity;71;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1003;3628.589,3540.512;Inherit;False;Property;_Shadow2EmissionIntensity;Shadow 2 Emission Intensity;76;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1013;3610.625,3147.818;Inherit;False;Property;_ILMAlphaEmissionIntensity;ILM Alpha Emission Intensity;91;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;994;3633.195,3222.898;Inherit;False;Property;_RimlightEmissionIntensity;Rimlight Emission Intensity;56;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RegisterLocalVarNode;779;-533.5998,4199.015;Inherit;False;LightColor;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.GetLocalVarNode;1016;3728.264,3004.706;Inherit;False;357;ILMA;1;0;OBJECT;;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SamplerNode;1127;4072.674,3118.967;Inherit;True;Property;_EmissionMask;Emission Mask;107;0;Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;black;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.FunctionNode;965;3472,3680;Inherit;False;Ramp Creation - Guilty Gear Xrd;-1;;1479;92a8a58660488504fb4c65a454407910;0;19;1;FLOAT;0;False;3;FLOAT;0;False;2;FLOAT;0;False;5;FLOAT;0;False;7;FLOAT;0;False;80;FLOAT;0;False;8;FLOAT;0;False;9;FLOAT;0;False;121;FLOAT;0;False;10;FLOAT;0;False;11;FLOAT;0;False;120;FLOAT;0;False;12;FLOAT;0;False;13;FLOAT;0;False;97;FLOAT;0;False;101;FLOAT;0;False;104;FLOAT;0;False;107;FLOAT;0;False;110;FLOAT;0;False;10;FLOAT;100;FLOAT;103;FLOAT;106;FLOAT;109;FLOAT;112;FLOAT;76;FLOAT;69;FLOAT;62;FLOAT;0;FLOAT;44
 Node;AmplifyShaderEditor.RegisterLocalVarNode;780;-533.5998,4408.015;Inherit;False;AmbientColor;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;573;-600.7415,2823.808;Inherit;False;ILMR;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;1128;4515.674,3258.967;Inherit;False;Property;_EmissionMaskIntensity;Emission Mask Intensity;108;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1001;3659.589,3378.512;Inherit;False;Property;_BaseEmissionIntensity;Base Emission Intensity;66;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RegisterLocalVarNode;578;-953.1295,3642.289;Inherit;False;SSS;-1;True;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.RangedFloatNode;1017;3618.042,3075.314;Inherit;False;Property;_ILMAlphaLinesEmissionToggle;ILM Alpha Lines Emission Toggle;92;1;[ToggleUI];Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;1000;3623.496,3303.772;Inherit;False;Property;_SpecularEmissionIntensity;Specular Emission Intensity;61;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.FunctionNode;965;3472,3680;Inherit;False;Ramp Creation - Guilty Gear Xrd;-1;;1473;92a8a58660488504fb4c65a454407910;0;19;1;FLOAT;0;False;3;FLOAT;0;False;2;FLOAT;0;False;5;FLOAT;0;False;7;FLOAT;0;False;80;FLOAT;0;False;8;FLOAT;0;False;9;FLOAT;0;False;121;FLOAT;0;False;10;FLOAT;0;False;11;FLOAT;0;False;120;FLOAT;0;False;12;FLOAT;0;False;13;FLOAT;0;False;97;FLOAT;0;False;101;FLOAT;0;False;104;FLOAT;0;False;107;FLOAT;0;False;110;FLOAT;0;False;10;FLOAT;100;FLOAT;103;FLOAT;106;FLOAT;109;FLOAT;112;FLOAT;76;FLOAT;69;FLOAT;62;FLOAT;0;FLOAT;44
-Node;AmplifyShaderEditor.RegisterLocalVarNode;578;-953.1295,3642.289;Inherit;False;SSS;-1;True;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.GetLocalVarNode;1016;3728.264,3004.706;Inherit;False;357;ILMA;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;339;-266.7255,3326.549;Inherit;False;Base;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;779;-533.5998,4199.015;Inherit;False;LightColor;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.RangedFloatNode;994;3633.195,3222.898;Inherit;False;Property;_RimlightEmissionIntensity;Rimlight Emission Intensity;56;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1013;3610.625,3147.818;Inherit;False;Property;_ILMAlphaEmissionIntensity;ILM Alpha Emission Intensity;91;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SamplerNode;1127;4072.674,3118.967;Inherit;True;Property;_EmissionMask;Emission Mask;107;0;Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;black;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;1003;3628.589,3540.512;Inherit;False;Property;_Shadow2EmissionIntensity;Shadow 2 Emission Intensity;76;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1002;3616.589,3456.512;Inherit;False;Property;_Shadow1EmissionIntensity;Shadow 1 Emission Intensity;71;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1001;3659.589,3378.512;Inherit;False;Property;_BaseEmissionIntensity;Base Emission Intensity;66;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;888;4032,5088;Inherit;False;Property;_BaseTint;Base Tint;63;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;889;3952,5248;Inherit;False;Property;_BaseSaturation;Base Saturation;64;0;Create;True;0;0;0;False;0;False;1;1;0;4;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;898;3952,5824;Inherit;False;Property;_Shadow2Saturation;Shadow 2 Saturation;74;0;Create;True;0;0;0;False;0;False;1;1;0;4;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;896;4000,5600;Inherit;False;Property;_Shadow2Intensity;Shadow 2 Intensity;72;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.GetLocalVarNode;767;4016,4048;Inherit;False;339;Base;1;0;OBJECT;;False;1;COLOR;0
+Node;AmplifyShaderEditor.GetLocalVarNode;860;3984,4368;Inherit;False;780;AmbientColor;1;0;OBJECT;;False;1;COLOR;0
+Node;AmplifyShaderEditor.ColorNode;893;4016,5376;Inherit;False;Property;_Shadow1Tint;Shadow 1 Tint;68;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;883;3968,4960;Inherit;False;Property;_SpecularSaturation;Specular Saturation;59;0;Create;True;0;0;0;False;0;False;1;1;0;4;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;897;4016,5664;Inherit;False;Property;_Shadow2Tint;Shadow 2 Tint;73;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.GetLocalVarNode;859;4016,4288;Inherit;False;779;LightColor;1;0;OBJECT;;False;1;COLOR;0
+Node;AmplifyShaderEditor.RangedFloatNode;894;4000,5312;Inherit;False;Property;_Shadow1Intensity;Shadow 1 Intensity;67;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;882;3936,4672;Inherit;False;Property;_RimlightSaturation;Rimlight Saturation;54;0;Create;True;0;0;0;False;0;False;1;1;0;4;0;1;FLOAT;0
 Node;AmplifyShaderEditor.GetLocalVarNode;793;4016,4128;Inherit;False;578;SSS;1;0;OBJECT;;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.FunctionNode;1035;4243.784,3442.179;Inherit;False;Emission - Guilty Gear Xrd;-1;;1476;0804f3eb9e8a1224897e481e37ef96e3;0;15;25;FLOAT;0;False;26;FLOAT;0;False;17;FLOAT;0;False;22;FLOAT;0;False;20;FLOAT;0;False;6;FLOAT;0;False;7;FLOAT;0;False;8;FLOAT;0;False;9;FLOAT;0;False;10;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;4;FLOAT;0;False;5;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;885;4016,4736;Inherit;False;Property;_SpecularIntensity;Specular Intensity;57;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.ColorNode;884;4032,4800;Inherit;False;Property;_SpecularTint;Specular Tint;58;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.GetLocalVarNode;804;4016,4208;Inherit;False;573;ILMR;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;887;4048,5024;Inherit;False;Property;_BaseIntensity;Base Intensity;62;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.FunctionNode;1035;4243.784,3442.179;Inherit;False;Emission - Guilty Gear Xrd;-1;;1482;0804f3eb9e8a1224897e481e37ef96e3;0;15;25;FLOAT;0;False;26;FLOAT;0;False;17;FLOAT;0;False;22;FLOAT;0;False;20;FLOAT;0;False;6;FLOAT;0;False;7;FLOAT;0;False;8;FLOAT;0;False;9;FLOAT;0;False;10;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;4;FLOAT;0;False;5;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;892;3952,5536;Inherit;False;Property;_Shadow1Saturation;Shadow 1 Saturation;69;0;Create;True;0;0;0;False;0;False;1;1;0;4;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;880;3984,4448;Inherit;False;Property;_RimlightIntensity;Rimlight Intensity;52;0;Create;True;0;0;0;False;0;False;0.1;0.1;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.ColorNode;881;3984,4512;Inherit;False;Property;_RimlightTint;Rimlight Tint;53;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.RangedFloatNode;871;1073.175,3157.493;Inherit;False;Property;_LightColorSetting;Light Color Setting;13;1;[Enum];Create;True;0;2;Automatic RECOMMENDED;0;Forced Fake;1;0;False;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;882;3936,4672;Inherit;False;Property;_RimlightSaturation;Rimlight Saturation;54;0;Create;True;0;0;0;False;0;False;1;1;0;4;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;885;4016,4736;Inherit;False;Property;_SpecularIntensity;Specular Intensity;57;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;859;4016,4288;Inherit;False;779;LightColor;1;0;OBJECT;;False;1;COLOR;0
-Node;AmplifyShaderEditor.ColorNode;897;4016,5664;Inherit;False;Property;_Shadow2Tint;Shadow 2 Tint;73;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;883;3968,4960;Inherit;False;Property;_SpecularSaturation;Specular Saturation;59;0;Create;True;0;0;0;False;0;False;1;1;0;4;0;1;FLOAT;0
-Node;AmplifyShaderEditor.ColorNode;893;4016,5376;Inherit;False;Property;_Shadow1Tint;Shadow 1 Tint;68;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.GetLocalVarNode;860;3984,4368;Inherit;False;780;AmbientColor;1;0;OBJECT;;False;1;COLOR;0
-Node;AmplifyShaderEditor.GetLocalVarNode;767;4016,4048;Inherit;False;339;Base;1;0;OBJECT;;False;1;COLOR;0
-Node;AmplifyShaderEditor.RangedFloatNode;896;4000,5600;Inherit;False;Property;_Shadow2Intensity;Shadow 2 Intensity;72;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;898;3952,5824;Inherit;False;Property;_Shadow2Saturation;Shadow 2 Saturation;74;0;Create;True;0;0;0;False;0;False;1;1;0;4;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;894;4000,5312;Inherit;False;Property;_Shadow1Intensity;Shadow 1 Intensity;67;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;889;3952,5248;Inherit;False;Property;_BaseSaturation;Base Saturation;64;0;Create;True;0;0;0;False;0;False;1;1;0;4;0;1;FLOAT;0
-Node;AmplifyShaderEditor.ColorNode;888;4032,5088;Inherit;False;Property;_BaseTint;Base Tint;63;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.FunctionNode;968;4512,3808;Inherit;False;Color Creation - Guilty Gear Xrd;-1;;1477;6fd14c10126085c4a9f0335974d35a1f;0;26;6;FLOAT;0;False;29;FLOAT;0;False;39;FLOAT;0;False;41;FLOAT;0;False;7;COLOR;0,0,0,0;False;8;FLOAT;0;False;9;COLOR;0,0,0,0;False;10;FLOAT;0;False;94;FLOAT;0;False;11;COLOR;0,0,0,0;False;67;COLOR;0,0,0,0;False;75;FLOAT;1;False;76;COLOR;1,1,1,0;False;78;FLOAT;0;False;81;FLOAT;1;False;80;COLOR;1,1,1,0;False;79;FLOAT;0;False;83;FLOAT;1;False;82;COLOR;1,1,1,0;False;84;FLOAT;0;False;85;FLOAT;1;False;86;COLOR;1,1,1,0;False;87;FLOAT;0;False;89;FLOAT;1;False;88;COLOR;1,1,1,0;False;90;FLOAT;0;False;1;COLOR;105
+Node;AmplifyShaderEditor.RangedFloatNode;887;4048,5024;Inherit;False;Property;_BaseIntensity;Base Intensity;62;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.FunctionNode;968;4512,3808;Inherit;False;Color Creation - Guilty Gear Xrd;-1;;1483;6fd14c10126085c4a9f0335974d35a1f;0;26;6;FLOAT;0;False;29;FLOAT;0;False;39;FLOAT;0;False;41;FLOAT;0;False;7;COLOR;0,0,0,0;False;8;FLOAT;0;False;9;COLOR;0,0,0,0;False;10;FLOAT;0;False;94;FLOAT;0;False;11;COLOR;0,0,0,0;False;67;COLOR;0,0,0,0;False;75;FLOAT;1;False;76;COLOR;1,1,1,0;False;78;FLOAT;0;False;81;FLOAT;1;False;80;COLOR;1,1,1,0;False;79;FLOAT;0;False;83;FLOAT;1;False;82;COLOR;1,1,1,0;False;84;FLOAT;0;False;85;FLOAT;1;False;86;COLOR;1,1,1,0;False;87;FLOAT;0;False;89;FLOAT;1;False;88;COLOR;1,1,1,0;False;90;FLOAT;0;False;1;COLOR;105
 Node;AmplifyShaderEditor.RegisterLocalVarNode;920;4718.61,3473.063;Inherit;False;EmissionRampMask;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;872;1337.175,3156.493;Inherit;False;LightColorSetting;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.CommentaryNode;977;-383.4483,5722.681;Inherit;False;1110.669;779.1093;;10;987;1031;1033;981;985;979;978;980;983;1032;Debug;1,1,1,1;0;0
-Node;AmplifyShaderEditor.ColorNode;867;-1738.728,4444.135;Inherit;False;Property;_FakeGlobalLightColor;Fake Global Light Color;6;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;869;-1746.997,4618.438;Inherit;False;Property;_FakeGlobalLightIntensity;Fake Global Light Intensity;7;0;Create;True;0;0;0;False;0;False;0.4;0.4;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.LightAttenuation;632;-1716.909,4177.506;Inherit;False;0;1;FLOAT;0
+Node;AmplifyShaderEditor.GetLocalVarNode;544;-1734.444,4292.933;Inherit;False;450;IsThereWorldLight;1;0;OBJECT;;False;1;FLOAT;0
+Node;AmplifyShaderEditor.CommentaryNode;1019;5022.988,4153.521;Inherit;False;908.092;435.7986;;6;1026;1023;1021;1022;1024;1020;ILM Color Swap;1,1,1,1;0;0
+Node;AmplifyShaderEditor.RangedFloatNode;950;-1748.428,4699.634;Inherit;False;Property;_MinimumGlobalLightIntensity;Minimum Global Light Intensity;12;0;Create;True;0;0;0;False;0;False;0.4;0.4;0;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RegisterLocalVarNode;988;-703.5383,2747.413;Inherit;False;ILM;-1;True;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.GetLocalVarNode;873;-1722.37,4361.219;Inherit;False;872;LightColorSetting;1;0;OBJECT;;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;1025;4947.971,3801.074;Inherit;False;ColorOut;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.RangedFloatNode;869;-1746.997,4618.438;Inherit;False;Property;_FakeGlobalLightIntensity;Fake Global Light Intensity;7;0;Create;True;0;0;0;False;0;False;0.4;0.4;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;867;-1738.728,4444.135;Inherit;False;Property;_FakeGlobalLightColor;Fake Global Light Color;6;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.CommentaryNode;977;-383.4483,5722.681;Inherit;False;1110.669;779.1093;;10;987;1031;1033;981;985;979;978;980;983;1032;Debug;1,1,1,1;0;0
 Node;AmplifyShaderEditor.GetLocalVarNode;1071;-1432.968,4208.344;Inherit;False;920;EmissionRampMask;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;988;-703.5383,2747.413;Inherit;False;ILM;-1;True;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.RangedFloatNode;950;-1748.428,4699.634;Inherit;False;Property;_MinimumGlobalLightIntensity;Minimum Global Light Intensity;12;0;Create;True;0;0;0;False;0;False;0.4;0.4;0;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.CommentaryNode;1019;5022.988,4153.521;Inherit;False;908.092;435.7986;;6;1026;1023;1021;1022;1024;1020;ILM Color Swap;1,1,1,1;0;0
-Node;AmplifyShaderEditor.GetLocalVarNode;544;-1734.444,4292.933;Inherit;False;450;IsThereWorldLight;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.LightAttenuation;632;-1716.909,4177.506;Inherit;False;0;1;FLOAT;0
 Node;AmplifyShaderEditor.GetLocalVarNode;983;-347.8692,6215.467;Inherit;False;988;ILM;1;0;OBJECT;;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.FunctionNode;1123;-1427.66,4325.012;Inherit;False;Light Color Calculation;-1;;1483;5b8f5c3f2a647dc4d89d921c89ebb0e5;0;7;25;FLOAT;0;False;10;FLOAT;0;False;5;FLOAT;0;False;14;FLOAT;0;False;6;COLOR;0,0,0,0;False;7;FLOAT;0;False;19;FLOAT;0;False;2;COLOR;0;COLOR;16
+Node;AmplifyShaderEditor.FunctionNode;1123;-1427.66,4325.012;Inherit;False;Light Color Calculation;-1;;1489;5b8f5c3f2a647dc4d89d921c89ebb0e5;0;7;25;FLOAT;0;False;10;FLOAT;0;False;5;FLOAT;0;False;14;FLOAT;0;False;6;COLOR;0,0,0,0;False;7;FLOAT;0;False;19;FLOAT;0;False;2;COLOR;0;COLOR;16
 Node;AmplifyShaderEditor.GetLocalVarNode;1032;-336.8296,6297.702;Inherit;False;357;ILMA;1;0;OBJECT;;False;1;FLOAT;0
 Node;AmplifyShaderEditor.GetLocalVarNode;1020;5293.244,4382.505;Inherit;False;357;ILMA;1;0;OBJECT;;False;1;FLOAT;0
 Node;AmplifyShaderEditor.GetLocalVarNode;1026;5050.318,4392.323;Inherit;False;1025;ColorOut;1;0;OBJECT;;False;1;COLOR;0
 Node;AmplifyShaderEditor.GetLocalVarNode;1024;5227.393,4222.407;Inherit;False;1005;ILMAColor;1;0;OBJECT;;False;1;COLOR;0
-Node;AmplifyShaderEditor.GetLocalVarNode;980;-332.8692,6389.467;Inherit;False;580;BaseA;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;985;-311.8692,6132.467;Inherit;False;Property;_ILMChannel;ILM Channel;90;1;[Enum];Create;True;0;5;All Channels;0;Red;1;Green;2;Blue;3;Alpha;4;0;False;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;944;-974.9218,4293.536;Inherit;False;GlobalLightColor;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.RangedFloatNode;981;-291.8691,6048.467;Inherit;False;Property;_VertexChannel;Vertex Channel;49;1;[Enum];Create;True;0;5;All Channels;0;Red;1;Green;2;Blue;3;Alpha;4;0;False;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.CommentaryNode;1030;5960.892,4337.456;Inherit;False;469.1748;214.0239;;2;934;870;Apply Light Color;1,1,1,1;0;0
-Node;AmplifyShaderEditor.RangedFloatNode;979;-264.3643,5800.488;Inherit;False;Property;_DebugGroup;Debug Group;89;1;[Enum];Create;True;0;3;Vertex Colors;0;ILM Channels;1;Base Alpha;2;0;False;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.LerpOp;1021;5492.121,4309.517;Inherit;False;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
 Node;AmplifyShaderEditor.CommentaryNode;1028;7020.033,4323.582;Inherit;False;1015.608;553.5002;;6;948;928;932;933;1027;1062;Emission Combining;1,1,1,1;0;0
-Node;AmplifyShaderEditor.GetLocalVarNode;1022;5455.785,4204.521;Inherit;False;1007;ILMColorSetting;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.ColorNode;978;-296.3642,5880.488;Inherit;False;Property;_DebugColor;Debug Color;50;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.DynamicAppendNode;1031;-122.8295,6242.702;Inherit;False;FLOAT4;4;0;FLOAT3;0,0,0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT4;0
+Node;AmplifyShaderEditor.ColorNode;978;-296.3642,5880.488;Inherit;False;Property;_DebugColor;Debug Color;50;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.GetLocalVarNode;1022;5455.785,4204.521;Inherit;False;1007;ILMColorSetting;1;0;OBJECT;;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;947;-984.4599,4390.014;Inherit;False;EmissionLightColor;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.FunctionNode;1033;152.7226,6096.615;Inherit;False;Debug;-1;;1484;6f93fc90e278e9a449a8e28c4cbb4ee4;0;8;48;FLOAT;0;False;59;COLOR;0,0,0,0;False;47;FLOAT;0;False;50;FLOAT;0;False;54;COLOR;0,0,0,0;False;57;FLOAT;0;False;55;FLOAT;0;False;56;FLOAT;0;False;1;COLOR;0
-Node;AmplifyShaderEditor.RangedFloatNode;933;7116.064,4513.778;Inherit;False;Property;_EmissionIntensity;Emission Intensity;19;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;948;7070.499,4692.885;Inherit;False;947;EmissionLightColor;1;0;OBJECT;;False;1;COLOR;0
-Node;AmplifyShaderEditor.GetLocalVarNode;870;6010.892,4436.479;Inherit;False;944;GlobalLightColor;1;0;OBJECT;;False;1;COLOR;0
-Node;AmplifyShaderEditor.GetLocalVarNode;1027;7092.421,4621.094;Inherit;False;1025;ColorOut;1;0;OBJECT;;False;1;COLOR;0
+Node;AmplifyShaderEditor.LerpOp;1021;5492.121,4309.517;Inherit;False;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
+Node;AmplifyShaderEditor.CommentaryNode;1030;5960.892,4337.456;Inherit;False;469.1748;214.0239;;2;934;870;Apply Light Color;1,1,1,1;0;0
+Node;AmplifyShaderEditor.RangedFloatNode;981;-291.8691,6048.467;Inherit;False;Property;_VertexChannel;Vertex Channel;49;1;[Enum];Create;True;0;5;All Channels;0;Red;1;Green;2;Blue;3;Alpha;4;0;False;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RegisterLocalVarNode;944;-974.9218,4293.536;Inherit;False;GlobalLightColor;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.RangedFloatNode;985;-311.8692,6132.467;Inherit;False;Property;_ILMChannel;ILM Channel;90;1;[Enum];Create;True;0;5;All Channels;0;Red;1;Green;2;Blue;3;Alpha;4;0;False;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.GetLocalVarNode;980;-332.8692,6389.467;Inherit;False;580;BaseA;1;0;OBJECT;;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;979;-264.3643,5800.488;Inherit;False;Property;_DebugGroup;Debug Group;89;1;[Enum];Create;True;0;3;Vertex Colors;0;ILM Channels;1;Base Alpha;2;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.Compare;1023;5741.078,4392.133;Inherit;False;0;4;0;FLOAT;0;False;1;FLOAT;2;False;2;COLOR;0,0,0,0;False;3;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.GetLocalVarNode;1027;7092.421,4621.094;Inherit;False;1025;ColorOut;1;0;OBJECT;;False;1;COLOR;0
+Node;AmplifyShaderEditor.GetLocalVarNode;870;6010.892,4436.479;Inherit;False;944;GlobalLightColor;1;0;OBJECT;;False;1;COLOR;0
+Node;AmplifyShaderEditor.RangedFloatNode;933;7116.064,4513.778;Inherit;False;Property;_EmissionIntensity;Emission Intensity;19;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.FunctionNode;1033;152.7226,6096.615;Inherit;False;Debug;-1;;1490;6f93fc90e278e9a449a8e28c4cbb4ee4;0;8;48;FLOAT;0;False;59;COLOR;0,0,0,0;False;47;FLOAT;0;False;50;FLOAT;0;False;54;COLOR;0,0,0,0;False;57;FLOAT;0;False;55;FLOAT;0;False;56;FLOAT;0;False;1;COLOR;0
+Node;AmplifyShaderEditor.GetLocalVarNode;948;7070.499,4692.885;Inherit;False;947;EmissionLightColor;1;0;OBJECT;;False;1;COLOR;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;987;497.8569,6094.068;Inherit;False;Debug;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;934;6261.067,4387.456;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.CommentaryNode;1029;8253.921,4253.024;Inherit;False;468.2808;338.5957;;4;989;990;991;1124;Enable Debug;1,1,1,1;0;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;932;7383.619,4594.329;Inherit;False;3;3;0;FLOAT;0;False;1;COLOR;0,0,0,0;False;2;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.GetLocalVarNode;928;7078.896,4765.998;Inherit;False;920;EmissionRampMask;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.CommentaryNode;1051;2080,2816;Inherit;False;253;357;;4;1046;1049;1050;1052;Depth;1,1,1,1;0;0
-Node;AmplifyShaderEditor.CommentaryNode;915;5808.458,4724.881;Inherit;False;1167.994;700.8105;;9;1036;904;907;908;912;910;911;909;1053;Outline;1,1,1,1;0;0
-Node;AmplifyShaderEditor.GetLocalVarNode;990;8303.921,4476.618;Inherit;False;987;Debug;1;0;OBJECT;;False;1;COLOR;0
-Node;AmplifyShaderEditor.LerpOp;1062;7843.028,4368.882;Inherit;False;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
 Node;AmplifyShaderEditor.CommentaryNode;1045;1696,2816;Inherit;False;352;549;;7;1038;1039;1040;1041;1042;1043;1044;Stencil Buffer;1,1,1,1;0;0
 Node;AmplifyShaderEditor.RangedFloatNode;991;8335.162,4303.024;Inherit;False;Property;_EnableDebug;Enable Debug;88;1;[ToggleUI];Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.LerpOp;1062;7843.028,4368.882;Inherit;False;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
+Node;AmplifyShaderEditor.CommentaryNode;915;5808.458,4724.881;Inherit;False;1167.994;700.8105;;9;1036;904;907;908;912;910;911;909;1053;Outline;1,1,1,1;0;0
+Node;AmplifyShaderEditor.CommentaryNode;1051;2080,2816;Inherit;False;253;357;;4;1046;1049;1050;1052;Depth;1,1,1,1;0;0
+Node;AmplifyShaderEditor.GetLocalVarNode;990;8303.921,4476.618;Inherit;False;987;Debug;1;0;OBJECT;;False;1;COLOR;0
+Node;AmplifyShaderEditor.RangedFloatNode;1038;1744,2864;Inherit;False;Property;_Reference;Reference;93;1;[IntRange];Create;True;0;0;0;True;0;False;0;0;0;255;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1050;2128,3072;Inherit;False;Property;_Units;Units;103;0;Create;True;0;0;0;True;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1036;6352.914,4791.018;Inherit;False;Property;_EnableOutline;Enable Outline;77;1;[ToggleUI];Create;True;0;0;0;True;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;973;2680.509,2996.567;Inherit;False;Property;_EnableGlowMask;Enable GlowMask;84;1;[ToggleUI];Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.Compare;989;8540.201,4330.53;Inherit;False;0;4;0;FLOAT;0;False;1;FLOAT;0;False;2;COLOR;0,0,0,0;False;3;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.ColorNode;976;2667.509,3329.567;Inherit;False;Property;_GlowMaskTint;Glow Mask Tint;87;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;907;5856.458,5228.881;Inherit;False;Property;_OutlineEnableBaseColorMult;Outline Enable Base Color Mult;83;1;[ToggleUI];Create;True;0;0;0;True;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1042;1744,3120;Inherit;False;Property;_PassFront;Pass Front;97;1;[Enum];Create;True;0;9;Default;0;Keep;1;Zero;2;Replace;3;IncrSat;4;DecrSat;5;Invert;6;IncrWrap;7;DecrWrap;8;1;UnityEngine.Rendering.StencilOp;True;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1041;1744,3056;Inherit;False;Property;_Comparison;Comparison;96;1;[Enum];Create;True;0;9;Default;0;Greater;1;Greater or Equal;2;Less;3;Less or Equal;4;Equal;5;Not Equal;6;Always;7;Never;8;1;UnityEngine.Rendering.CompareFunction;True;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1054;8387.694,4637.716;Inherit;False;Property;_Opacity;Opacity;104;0;Create;True;0;0;0;True;0;False;1;0.273;0;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.GetLocalVarNode;904;5968.458,5316.881;Inherit;False;339;Base;1;0;OBJECT;;False;1;COLOR;0
+Node;AmplifyShaderEditor.RangedFloatNode;908;5894.458,5156.881;Inherit;False;Property;_OutlineColorIntensity;Outline Color Intensity;82;0;Create;True;0;0;0;True;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;909;5930.458,4983.881;Inherit;False;Property;_OutlineColor;Outline Color;81;0;Create;True;0;0;0;True;0;False;0,0,0,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.FunctionNode;1053;6272.546,4921.826;Inherit;False;ASWOutline;-1;;1491;ea9f2d47913480c4f9e91454af7efa45;0;7;33;FLOAT;0;False;47;FLOAT;0;False;127;FLOAT;0.5;False;35;COLOR;0,0,0,0;False;37;FLOAT;0;False;36;FLOAT;0;False;31;COLOR;0,0,0,0;False;2;COLOR;0;FLOAT4;109
+Node;AmplifyShaderEditor.RangedFloatNode;912;5936.458,4772.881;Inherit;False;Property;_OutlineThickness;Outline Thickness;78;0;Create;True;0;0;0;True;0;False;1;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1040;1745,2992;Inherit;False;Property;_WriteMask;Write Mask;95;1;[IntRange];Create;True;0;0;0;True;0;False;255;255;0;255;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;1046;2128,2880;Inherit;False;Property;_ZWriteMode;ZWrite Mode;101;1;[Enum];Create;True;0;2;Off;0;On;1;0;True;0;False;1;1;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;911;5856.458,4836.881;Inherit;False;Property;_EnableCameraDistanceMult;Enable Camera Distance Mult;79;1;[ToggleUI];Create;True;0;2;Disable;0;Enable;1;0;True;0;False;1;1;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;1052;2128,2944;Inherit;False;Property;_ZTestMode;ZTest Mode;100;1;[Enum];Create;True;0;0;1;UnityEngine.Rendering.CompareFunction;True;0;False;4;4;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;975;2660.509,3255.567;Inherit;False;Property;_GlowMaskMultSystem;Glow Mask Mult System;86;1;[Enum];Create;True;0;2;Base Color Lerped From Mask;0;Mask Color;1;0;False;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1044;1744,3248;Inherit;False;Property;_ZFailFront;ZFail Front;99;1;[Enum];Create;True;0;9;Default;0;Keep;1;Zero;2;Replace;3;IncrSat;4;DecrSat;5;Invert;6;IncrWrap;7;DecrWrap;8;1;UnityEngine.Rendering.StencilOp;True;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;1043;1744,3184;Inherit;False;Property;_FailFront;Fail Front;98;1;[Enum];Create;True;0;9;Default;0;Keep;1;Zero;2;Replace;3;IncrSat;4;DecrSat;5;Invert;6;IncrWrap;7;DecrWrap;8;1;UnityEngine.Rendering.StencilOp;True;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;912;5936.458,4772.881;Inherit;False;Property;_OutlineThickness;Outline Thickness;78;0;Create;True;0;0;0;True;0;False;1;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;1039;1744,2928;Inherit;False;Property;_ReadMask;Read Mask;94;1;[IntRange];Create;True;0;0;0;True;0;False;255;255;0;255;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1049;2128,3008;Inherit;False;Property;_Factor;Factor;102;0;Create;True;0;0;0;True;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;975;2660.509,3255.567;Inherit;False;Property;_GlowMaskMultSystem;Glow Mask Mult System;86;1;[Enum];Create;True;0;2;Base Color Lerped From Mask;0;Mask Color;1;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;970;1370.1,2684.252;Inherit;False;Property;_EditorVersion;Editor Version;0;1;[Enum];Create;True;0;2;Basic;0;Advanced;1;0;True;0;False;0;1;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SamplerNode;974;2639.509,3066.567;Inherit;True;Property;_GlowMask;Glow Mask;85;0;Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.RangedFloatNode;910;5865.458,4909.881;Inherit;False;Property;_DepthOffset;Depth Offset;80;0;Create;True;0;0;0;True;0;False;0.5;0.5;0;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;517;1313.557,2944.454;Inherit;False;IsTherePointLight;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;1058;3077.777,3617.62;Inherit;False;myVarName;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1040;1745,2992;Inherit;False;Property;_WriteMask;Write Mask;95;1;[IntRange];Create;True;0;0;0;True;0;False;255;255;0;255;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1044;1744,3248;Inherit;False;Property;_ZFailFront;ZFail Front;99;1;[Enum];Create;True;0;9;Default;0;Keep;1;Zero;2;Replace;3;IncrSat;4;DecrSat;5;Invert;6;IncrWrap;7;DecrWrap;8;1;UnityEngine.Rendering.StencilOp;True;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.FunctionNode;1053;6272.546,4921.826;Inherit;False;ASWOutline;-1;;1485;ea9f2d47913480c4f9e91454af7efa45;0;7;33;FLOAT;0;False;47;FLOAT;0;False;127;FLOAT;0.5;False;35;COLOR;0,0,0,0;False;37;FLOAT;0;False;36;FLOAT;0;False;31;COLOR;0,0,0,0;False;2;COLOR;0;FLOAT4;109
-Node;AmplifyShaderEditor.RangedFloatNode;1038;1744,2864;Inherit;False;Property;_Reference;Reference;93;1;[IntRange];Create;True;0;0;0;True;0;False;0;0;0;255;0;1;FLOAT;0
-Node;AmplifyShaderEditor.ColorNode;909;5930.458,4983.881;Inherit;False;Property;_OutlineColor;Outline Color;81;0;Create;True;0;0;0;True;0;False;0,0,0,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;908;5894.458,5156.881;Inherit;False;Property;_OutlineColorIntensity;Outline Color Intensity;82;0;Create;True;0;0;0;True;0;False;1;1;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;904;5968.458,5316.881;Inherit;False;339;Base;1;0;OBJECT;;False;1;COLOR;0
-Node;AmplifyShaderEditor.RangedFloatNode;1054;8387.694,4637.716;Inherit;False;Property;_Opacity;Opacity;104;0;Create;True;0;0;0;True;0;False;1;0.273;0;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1041;1744,3056;Inherit;False;Property;_Comparison;Comparison;96;1;[Enum];Create;True;0;9;Default;0;Greater;1;Greater or Equal;2;Less;3;Less or Equal;4;Equal;5;Not Equal;6;Always;7;Never;8;1;UnityEngine.Rendering.CompareFunction;True;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1042;1744,3120;Inherit;False;Property;_PassFront;Pass Front;97;1;[Enum];Create;True;0;9;Default;0;Keep;1;Zero;2;Replace;3;IncrSat;4;DecrSat;5;Invert;6;IncrWrap;7;DecrWrap;8;1;UnityEngine.Rendering.StencilOp;True;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.ColorNode;976;2667.509,3329.567;Inherit;False;Property;_GlowMaskTint;Glow Mask Tint;87;0;Create;True;0;0;0;False;0;False;1,1,1,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.Compare;989;8540.201,4330.53;Inherit;False;0;4;0;FLOAT;0;False;1;FLOAT;0;False;2;COLOR;0,0,0,0;False;3;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.RangedFloatNode;973;2680.509,2996.567;Inherit;False;Property;_EnableGlowMask;Enable GlowMask;84;1;[ToggleUI];Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1036;6352.914,4791.018;Inherit;False;Property;_EnableOutline;Enable Outline;77;1;[ToggleUI];Create;True;0;0;0;True;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1050;2128,3072;Inherit;False;Property;_Units;Units;103;0;Create;True;0;0;0;True;0;False;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;907;5856.458,5228.881;Inherit;False;Property;_OutlineEnableBaseColorMult;Outline Enable Base Color Mult;83;1;[ToggleUI];Create;True;0;0;0;True;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1049;2128,3008;Inherit;False;Property;_Factor;Factor;102;0;Create;True;0;0;0;True;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1104;8818.479,4367.882;Float;False;True;-1;2;ASWGuiltyGearXrdGUI;100;8;.Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.2;fd5163ddf7350f946aff871fd3d7e3fe;True;ForwardBase;0;0;ForwardBase;3;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;RenderType=Transparent=RenderType;Queue=Transparent=Queue=0;True;2;0;True;True;2;5;False;-1;10;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;True;True;True;255;True;1038;255;True;1039;255;True;1040;7;True;1041;1;True;1042;1;True;1043;1;True;1044;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;True;1;True;1046;True;3;True;1052;True;True;0;True;1049;0;True;1050;True;1;LightMode=ForwardBase;True;2;0;;0;0;Standard;0;0;5;True;True;False;False;True;False;;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1106;8861.479,4400.882;Float;False;False;-1;2;ASEMaterialInspector;100;8;New Amplify Shader;fd5163ddf7350f946aff871fd3d7e3fe;True;Deferred;0;2;Deferred;4;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;RenderType=Opaque=RenderType;True;2;0;False;True;0;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=Deferred;True;2;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1107;8861.479,4383.882;Float;False;False;-1;2;ASEMaterialInspector;100;8;New Amplify Shader;fd5163ddf7350f946aff871fd3d7e3fe;True;ShadowCaster;0;4;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;RenderType=Opaque=RenderType;True;2;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;True;1046;True;3;True;1052;False;True;1;LightMode=ShadowCaster;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1124;8635.465,4509.268;Float;False;False;-1;2;ASEMaterialInspector;100;8;New Amplify Shader;fd5163ddf7350f946aff871fd3d7e3fe;True;Outline;0;3;Outline;3;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;RenderType=Opaque=RenderType;True;2;0;False;True;0;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;CullMode=Front;True;2;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1104;8818.479,4367.882;Float;False;True;-1;2;ASWGuiltyGearXrdGUI;100;8;.Aerthas/Arc System Works/Game Select/Guilty Gear Xrd/Transparent v8.1.1;fd5163ddf7350f946aff871fd3d7e3fe;True;ForwardBase;0;0;ForwardBase;3;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;RenderType=Transparent=RenderType;Queue=Transparent=Queue=0;True;2;0;True;True;2;5;False;-1;10;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;True;True;True;255;True;1038;255;True;1039;255;True;1040;7;True;1041;1;True;1042;1;True;1043;1;True;1044;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;True;1;True;1046;True;3;True;1052;True;True;0;True;1049;0;True;1050;True;1;LightMode=ForwardBase;True;2;0;;0;0;Standard;0;0;5;True;True;False;False;True;False;;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1105;8818.479,4477.882;Float;False;False;-1;2;ASEMaterialInspector;100;8;New Amplify Shader;fd5163ddf7350f946aff871fd3d7e3fe;True;ForwardAdd;0;1;ForwardAdd;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;RenderType=Opaque=RenderType;True;2;0;False;True;4;1;False;-1;1;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;True;1;LightMode=ForwardAdd;False;0;;0;0;Standard;0;False;0
 WireConnection;762;0;296;1
 WireConnection;762;1;296;2
@@ -1960,11 +1990,11 @@ WireConnection;762;2;296;3
 WireConnection;763;0;297;1
 WireConnection;763;1;297;2
 WireConnection;763;2;297;3
+WireConnection;585;0;762;0
+WireConnection;585;1;763;0
 WireConnection;280;0;274;1
 WireConnection;280;1;274;2
 WireConnection;280;2;274;3
-WireConnection;585;0;762;0
-WireConnection;585;1;763;0
 WireConnection;764;67;585;0
 WireConnection;764;52;821;0
 WireConnection;764;16;822;0
@@ -1988,23 +2018,24 @@ WireConnection;764;46;854;0
 WireConnection;764;45;856;0
 WireConnection;764;101;857;0
 WireConnection;277;0;280;0
-WireConnection;292;0;277;0
-WireConnection;563;0;535;0
-WireConnection;1005;0;1004;0
-WireConnection;450;0;634;0
-WireConnection;561;0;533;0
+WireConnection;357;0;274;4
 WireConnection;993;0;992;0
 WireConnection;993;2;585;0
 WireConnection;993;3;764;0
-WireConnection;357;0;274;4
-WireConnection;586;0;993;0
-WireConnection;580;0;296;4
-WireConnection;574;0;292;1
-WireConnection;576;0;292;2
+WireConnection;561;0;533;0
+WireConnection;1005;0;1004;0
+WireConnection;563;0;535;0
+WireConnection;292;0;277;0
+WireConnection;450;0;634;0
 WireConnection;1007;0;1006;0
 WireConnection;581;0;297;4
-WireConnection;815;0;813;0
-WireConnection;815;1;586;0
+WireConnection;576;0;292;2
+WireConnection;574;0;292;1
+WireConnection;580;0;296;4
+WireConnection;586;0;993;0
+WireConnection;1010;0;1011;0
+WireConnection;1010;1;586;0
+WireConnection;1010;2;813;0
 WireConnection;637;12;525;0
 WireConnection;637;17;562;0
 WireConnection;637;16;564;0
@@ -2012,10 +2043,12 @@ WireConnection;637;29;434;0
 WireConnection;637;28;435;0
 WireConnection;637;33;471;0
 WireConnection;637;34;472;0
-WireConnection;1010;0;1011;0
-WireConnection;1010;1;586;0
-WireConnection;1010;2;813;0
+WireConnection;815;0;813;0
+WireConnection;815;1;586;0
 WireConnection;587;0;993;0
+WireConnection;1008;0;1012;0
+WireConnection;1008;2;1010;0
+WireConnection;1008;3;815;0
 WireConnection;1057;5;637;0
 WireConnection;1057;21;637;42
 WireConnection;1057;6;637;52
@@ -2025,11 +2058,8 @@ WireConnection;1057;1;706;0
 WireConnection;1057;2;629;0
 WireConnection;1057;11;707;0
 WireConnection;1057;10;641;0
-WireConnection;1008;0;1012;0
-WireConnection;1008;2;1010;0
-WireConnection;1008;3;815;0
-WireConnection;780;0;778;0
-WireConnection;573;0;292;0
+WireConnection;339;0;1008;0
+WireConnection;779;0;777;0
 WireConnection;965;1;1057;0
 WireConnection;965;3;1057;8
 WireConnection;965;2;1057;9
@@ -2049,9 +2079,9 @@ WireConnection;965;101;923;0
 WireConnection;965;104;924;0
 WireConnection;965;107;925;0
 WireConnection;965;110;926;0
+WireConnection;780;0;778;0
+WireConnection;573;0;292;0
 WireConnection;578;0;587;0
-WireConnection;339;0;1008;0
-WireConnection;779;0;777;0
 WireConnection;1035;25;1127;0
 WireConnection;1035;26;1128;0
 WireConnection;1035;17;1016;0
@@ -2093,8 +2123,8 @@ WireConnection;968;88;897;0
 WireConnection;968;90;898;0
 WireConnection;920;0;1035;0
 WireConnection;872;0;871;0
-WireConnection;1025;0;968;105
 WireConnection;988;0;277;0
+WireConnection;1025;0;968;105
 WireConnection;1123;25;1071;0
 WireConnection;1123;10;632;0
 WireConnection;1123;5;544;0
@@ -2102,22 +2132,22 @@ WireConnection;1123;14;873;0
 WireConnection;1123;6;867;0
 WireConnection;1123;7;869;0
 WireConnection;1123;19;950;0
-WireConnection;944;0;1123;0
-WireConnection;1021;0;1024;0
-WireConnection;1021;1;1026;0
-WireConnection;1021;2;1020;0
 WireConnection;1031;0;983;0
 WireConnection;1031;3;1032;0
 WireConnection;947;0;1123;16
+WireConnection;1021;0;1024;0
+WireConnection;1021;1;1026;0
+WireConnection;1021;2;1020;0
+WireConnection;944;0;1123;0
+WireConnection;1023;0;1022;0
+WireConnection;1023;2;1021;0
+WireConnection;1023;3;1026;0
 WireConnection;1033;48;979;0
 WireConnection;1033;59;978;0
 WireConnection;1033;47;981;0
 WireConnection;1033;50;985;0
 WireConnection;1033;54;1031;0
 WireConnection;1033;55;980;0
-WireConnection;1023;0;1022;0
-WireConnection;1023;2;1021;0
-WireConnection;1023;3;1026;0
 WireConnection;987;0;1033;0
 WireConnection;934;0;1023;0
 WireConnection;934;1;870;0
@@ -2127,8 +2157,9 @@ WireConnection;932;2;948;0
 WireConnection;1062;0;934;0
 WireConnection;1062;1;932;0
 WireConnection;1062;2;928;0
-WireConnection;517;0;634;15
-WireConnection;1058;0;1057;0
+WireConnection;989;0;991;0
+WireConnection;989;2;1062;0
+WireConnection;989;3;990;0
 WireConnection;1053;33;912;0
 WireConnection;1053;47;911;0
 WireConnection;1053;127;910;0
@@ -2136,10 +2167,9 @@ WireConnection;1053;35;909;0
 WireConnection;1053;37;908;0
 WireConnection;1053;36;907;0
 WireConnection;1053;31;904;0
-WireConnection;989;0;991;0
-WireConnection;989;2;1062;0
-WireConnection;989;3;990;0
+WireConnection;517;0;634;15
+WireConnection;1058;0;1057;0
 WireConnection;1104;0;989;0
 WireConnection;1104;1;1054;0
 ASEEND*/
-//CHKSM=252F291896CE685223B4201EAAA14AF4DA68DC85
+//CHKSM=A51D0FD54BBD6AD5061D9ADA906B500EAA6534A5
