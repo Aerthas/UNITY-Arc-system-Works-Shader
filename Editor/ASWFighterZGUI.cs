@@ -39,7 +39,7 @@ public class ASWFighterZGUI : ShaderGUI
   MaterialProperty _LightColor = null;
   MaterialProperty _AmbientColor = null;
 
-  MaterialProperty _Base = null;
+  MaterialProperty _MainTex = null;
   MaterialProperty _SSS = null;
   MaterialProperty _ILM = null;
   MaterialProperty _ILMColorSetting = null;
@@ -329,7 +329,7 @@ public class ASWFighterZGUI : ShaderGUI
 
       if (ASWStyles.DoFoldout(foldouts, mat, me, "Color Settings")){
         ASWStyles.PropertyGroup( () => {
-          me.TexturePropertySingleLine(Styles.baseText, _Base);
+          me.TexturePropertySingleLine(Styles.baseText, _MainTex);
           if(_EditorVersion.floatValue == 1){
             GUILayout.Space(-18);
             me.ShaderProperty(_EnableColorReplacer,"                                         Enable Color Replacer");

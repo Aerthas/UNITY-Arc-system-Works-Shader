@@ -38,7 +38,7 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
   MaterialProperty _LightColor = null;
   MaterialProperty _AmbientColor = null;
 
-  MaterialProperty _Base = null;
+  MaterialProperty _MainTex = null;
   MaterialProperty _SSS = null;
   MaterialProperty _ILM = null;
   MaterialProperty _EmissionMask = null;
@@ -315,7 +315,7 @@ public class ASWGuiltyGearXrdGUI : ShaderGUI
 
       if (ASWStyles.DoFoldout(foldouts, mat, me, "Texture Settings")){
         ASWStyles.PropertyGroup( () => {
-          me.TexturePropertySingleLine(Styles.baseText, _Base);
+          me.TexturePropertySingleLine(Styles.baseText, _MainTex);
           if(_EditorVersion.floatValue == 1){
             GUILayout.Space(-18);
             me.ShaderProperty(_EnableColorReplacer,"                                         Enable Color Replacer");
