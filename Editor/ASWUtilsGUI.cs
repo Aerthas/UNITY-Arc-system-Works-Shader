@@ -189,7 +189,7 @@ public class ASWUtilsMatcapGUI : ShaderGUI
   MaterialProperty _FakeGlobalLightIntensity = null;
   MaterialProperty _Opacity = null;
 
-  MaterialProperty _Base = null;
+  MaterialProperty _MainTex = null;
   MaterialProperty _Metal = null;
 
   MaterialProperty _EnableOutline = null;
@@ -276,7 +276,7 @@ public class ASWUtilsMatcapGUI : ShaderGUI
       }
       if (ASWStyles.DoFoldout(foldouts, mat, me, "Color Settings")){
         ASWStyles.PropertyGroup( () => {
-          me.TexturePropertySingleLine(Styles.baseText, _Base);
+          me.TexturePropertySingleLine(Styles.baseText, _MainTex);
           me.TexturePropertySingleLine(Styles.metalText, _Metal);
         });
       }
